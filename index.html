@@ -184,8 +184,7 @@
           <input type="text" name="description" placeholder="Description" value={form.description} onChange={handleChange} className="w-full p-2 rounded bg-gray-100 dark:bg-gray-700" required />
           <select name="category" value={form.category} onChange={handleChange} className="w-full p-2 rounded bg-gray-100 dark:bg-gray-700" required>
             <option value="">Select Category</option>
-            {["Income","Rent","EMI","Lunch","Errands","Entertainment","Home needs","Investment","Gym","P.S","Gold EMI","Emergency.D"].map(cat => (
-              <option key={cat} value={cat}>{cat}</option>
+            {["Rent & Utilities","Foods & cravings","Daily Living","Travel & Transport","Fitness & Health","Family Support","Entertainment & Subscriptions","Personal Care & Shopping","Investments","Personal EMIs","Emergency Funds"].map(cat => (<option key={cat} value={cat}>{cat}</option>
             ))}
           </select>
           <input type="number" name="amount" placeholder="Amount" value={form.amount} onChange={handleChange} className="w-full p-2 rounded bg-gray-100 dark:bg-gray-700" required />
