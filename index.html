@@ -6,8 +6,125 @@
   <title>MoneyWise</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Playfair+Display:wght@400;700&family=Merriweather:wght@300;400;700&family=Crimson+Text:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    body { font-family: 'Inter', sans-serif; }
+    body { 
+      font-family: 'Inter', sans-serif; 
+    }
+  
+    .dropdown-item {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 500;
+    }
+    
+    .dropdown-menu {
+      display: none;
+      position: fixed;
+      right: 16px;
+      top: 70px;
+      background: white;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      border-radius: 12px;
+      z-index: 9999;
+      min-width: 220px;
+      overflow: hidden;
+    }
+    
+    .dark .dropdown-menu {
+      background: #1f2937;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+    
+    .dropdown-menu.show {
+      display: block;
+    }
+    
+    .dropdown-item {
+      display: flex;
+      align-items: center;
+      padding: 0.875rem 1rem;
+      width: 100%;
+      text-align: left;
+      border-bottom: 1px solid #e5e7eb;
+      font-size: 0.9375rem;
+      transition: all 0.2s ease;
+    }
+    
+    .dark .dropdown-item {
+      border-color: #4b5563;
+    }
+    
+    .dropdown-item:hover {
+      background-color: #f3f4f6;
+      transform: translateX(2px);
+    }
+    
+    .dark .dropdown-item:hover {
+      background-color: #374151;
+    }
+    
+    .dropdown-item i {
+      width: 20px;
+      margin-right: 10px;
+      text-align: center;
+    }
+    
+    .quote-text {
+      font-family: 'Crimson Text', serif;
+      font-style: italic;
+      font-size: 1.25rem;
+      line-height: 1.6;
+    }
+    .quote-author {
+      font-family: 'Playfair Display', serif;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+    .quote-container {
+      background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+      border-left: 6px solid #8b5cf6;
+      position: relative;
+      overflow: hidden;
+    }
+    .dark .quote-container {
+      background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+      border-left: 6px solid #a78bfa;
+    }
+    .quote-icon {
+      position: absolute;
+      opacity: 0.1;
+      font-size: 8rem;
+      right: 20px;
+      top: 20px;
+      transform: rotate(15deg);
+    }
+    .quote-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #c4b5fd;
+      transition: all 0.3s ease;
+    }
+    .quote-indicator.active {
+      background-color: #8b5cf6;
+      transform: scale(1.2);
+    }
+    .fade-in {
+      animation: fadeIn 1s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .income-input {
+      transition: all 0.3s ease;
+    }
+    .income-input:focus {
+      box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.3);
+      border-color: #8b5cf6;
+    }
     canvas { max-height: 300px; }
   </style>
   <link rel="manifest" href="manifest.json">
@@ -24,107 +141,1181 @@
   <script type="text/babel">
     const { useState, useEffect } = React;
 
+    // Money quotes array
+    const moneyQuotes = [
+      {
+        text: "Money is multiplied in practical value depending on the number of W's you control in your life: what you do, when you do it, where you do it and with whom you do it. I call this the 'freedom multiplier.'",
+        author: "Timothy Ferriss"
+      },
+      {
+        text: "If you don't find a way to make money while you sleep, you will work until you die.",
+        author: "Warren Buffett"
+      },
+      {
+        text: "Financial freedom is available to those who learn about it and work for it.",
+        author: "Robert Kiyosaki"
+      },
+      {
+        text: "Making money is a hobby that will complement any other hobbies you have, beautifully.",
+        author: "Scott Alexander"
+      },
+      {
+        text: "Making money is easy. It is. The difficult thing in life is not making it, it's keeping it.",
+        author: "John McAfee"
+      },
+      {
+        text: "The time making money should be greater than the time that you are spending money.",
+        author: "Sophia Amoruso"
+      },
+      {
+        text: "Financial peace isn't the acquisition of stuff. It's learning to live on less than you make, so you can give money back and have money to invest. You can't win until you do this.",
+        author: "Dave Ramsey"
+      },
+      {
+        text: "A penny saved is a penny earned.",
+        author: "Benjamin Franklin"
+      },
+      {
+        text: "The quickest way to double your money is to fold it in half and put it in your back pocket.",
+        author: "Will Rogers"
+      },
+      {
+        text: "It's good to have money and the things that money can buy, but it's good, too, to check up once in a while",
+        author: "George Horace Lorimer"
+      },
+      {
+        text: "If you think nobody cares if you're alive, try missing a couple of car payments.",
+        author: "Earl Wilson"
+      },
+      {
+        text: "My father had an expression: Don't tell me what you value, show me your budget, and I'll tell you what you value.",
+        author: "Joe Biden"
+      },
+      {
+        text: "Buy when everyone else is selling and hold until everyone else is buying. That's not just a catchy slogan. It's the very essence of successful investing.",
+        author: "J. Paul Getty"
+      },
+      {
+        text: "Do not save what is left after spending; instead, spend what is left after saving.",
+        author: "Warren Buffett"
+      },
+      {
+        text: "While money can't buy happiness, it certainly lets you choose your own form of misery.",
+        author: "Groucho Marx"
+      }
+    ];
+
     function App({ currentUser, logoutUser }) {
-  const [manualIncome, setManualIncome] = useState(() => parseFloat(localStorage.getItem("manualIncome")) || 0);
+      const [customIncome, setCustomIncome] = useState(() => parseFloat(localStorage.getItem("customIncome")) || 0);
       const [transactions, setTransactions] = useState(() => JSON.parse(localStorage.getItem("transactions")) || []);
       const [darkMode, setDarkMode] = useState(() => localStorage.getItem("theme") === "dark");
-      const [filter, setFilter] = useState("monthly");
+      const [timeFilter, setTimeFilter] = useState("monthly");
       const [budgets, setBudgets] = useState(() => JSON.parse(localStorage.getItem("budgets")) || {});
+      const [personSettlements, setPersonSettlements] = useState(() => JSON.parse(localStorage.getItem("personSettlements")) || []);
+      const [autoBudgetSuggestions, setAutoBudgetSuggestions] = useState(() => JSON.parse(localStorage.getItem("autoBudgetSuggestions")) || {});
+      const [monthlyTrends, setMonthlyTrends] = useState(() => JSON.parse(localStorage.getItem("monthlyTrends")) || {});
+      const [personList, setPersonList] = useState(() => JSON.parse(localStorage.getItem("personList")) || ["Friend 1", "Friend 2", "Roommate", "Family Member"]);
+      const [transactionMonthFilter, setTransactionMonthFilter] = useState("all");
+      const [currentQuoteIndex, setCurrentQuoteIndex] = useState(0);
+      const [showDropdown, setShowDropdown] = useState(false);
+      const [activeView, setActiveView] = useState("home");
 
       useEffect(() => {
-    localStorage.setItem("manualIncome", manualIncome);
-
+        localStorage.setItem("customIncome", customIncome);
         localStorage.setItem("transactions", JSON.stringify(transactions));
         localStorage.setItem("budgets", JSON.stringify(budgets));
-      }, [transactions, budgets]);
+        localStorage.setItem("personSettlements", JSON.stringify(personSettlements));
+        localStorage.setItem("autoBudgetSuggestions", JSON.stringify(autoBudgetSuggestions));
+        localStorage.setItem("monthlyTrends", JSON.stringify(monthlyTrends));
+        localStorage.setItem("personList", JSON.stringify(personList));
+      }, [customIncome, transactions, budgets, personSettlements, autoBudgetSuggestions, monthlyTrends, personList]);
 
       useEffect(() => {
         document.documentElement.classList.toggle("dark", darkMode);
         localStorage.setItem("theme", darkMode ? "dark" : "light");
       }, [darkMode]);
 
+      // Set random quote on component mount and auto-rotate every 10 seconds
+      useEffect(() => {
+        const randomIndex = Math.floor(Math.random() * moneyQuotes.length);
+        setCurrentQuoteIndex(randomIndex);
+        
+        const quoteInterval = setInterval(() => {
+          setCurrentQuoteIndex(prevIndex => {
+            let nextIndex;
+            do {
+              nextIndex = Math.floor(Math.random() * moneyQuotes.length);
+            } while (nextIndex === prevIndex && moneyQuotes.length > 1);
+            return nextIndex;
+          });
+        }, 10000);
+        
+        return () => clearInterval(quoteInterval);
+      }, []);
+
+      // Calculate monthly trends and auto-budget suggestions
+      useEffect(() => {
+        const calculateMonthlyTrends = () => {
+          const trends = {};
+          const monthlyData = {};
+          
+          transactions.forEach(tx => {
+            if (tx.category.toLowerCase() !== "income") {
+              const date = new Date(tx.date);
+              const monthYear = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
+              
+              if (!monthlyData[monthYear]) {
+                monthlyData[monthYear] = {};
+              }
+              
+              if (!monthlyData[monthYear][tx.category]) {
+                monthlyData[monthYear][tx.category] = 0;
+              }
+              
+              monthlyData[monthYear][tx.category] += tx.amount;
+            }
+          });
+
+          Object.keys(monthlyData).sort().forEach(month => {
+            Object.keys(monthlyData[month]).forEach(category => {
+              if (!trends[category]) {
+                trends[category] = [];
+              }
+              trends[category].push({
+                month,
+                amount: monthlyData[month][category]
+              });
+            });
+          });
+
+          setMonthlyTrends(trends);
+        };
+
+        const calculateAutoBudget = () => {
+          const categoryTotals = {};
+          const categoryCounts = {};
+          
+          transactions.forEach(tx => {
+            if (tx.category.toLowerCase() !== "income") {
+              categoryTotals[tx.category] = (categoryTotals[tx.category] || 0) + tx.amount;
+              categoryCounts[tx.category] = (categoryCounts[tx.category] || 0) + 1;
+            }
+          });
+
+          const suggestions = {};
+          Object.keys(categoryTotals).forEach(category => {
+            const avgSpending = categoryTotals[category] / Math.max(categoryCounts[category], 1);
+            suggestions[category] = Math.round(avgSpending * 1.1);
+          });
+
+          setAutoBudgetSuggestions(suggestions);
+        };
+
+        calculateMonthlyTrends();
+        calculateAutoBudget();
+      }, [transactions]);
+
       function addTransaction(tx) {
+        if (tx.groupPay === "Yes" && tx.groupDetails && tx.groupDetails.people && tx.groupDetails.people.length > 0) {
+          const totalPeople = tx.groupDetails.people.length;
+          const totalAmount = tx.amount;
+          
+          tx.groupDetails.people.forEach(person => {
+            if (!person.includeMe) {
+              const newSettlement = {
+                id: Date.now() + Math.random(),
+                description: tx.description,
+                date: tx.date,
+                totalAmount: totalAmount,
+                perPersonAmount: person.amount,
+                numPeople: totalPeople,
+                paidBy: currentUser,
+                personName: person.name,
+                paid: false,
+                category: tx.category,
+                transactionId: Date.now()
+              };
+              setPersonSettlements(prev => [...prev, newSettlement]);
+            }
+          });
+        }
         setTransactions([...transactions, tx]);
       }
 
       function deleteTransaction(index) {
+        const txToDelete = transactions[index];
+        
+        if (txToDelete.groupPay === "Yes") {
+          setPersonSettlements(prev => 
+            prev.filter(settlement => !settlement.description.includes(txToDelete.description))
+          );
+        }
+        
         const newTx = [...transactions];
         newTx.splice(index, 1);
         setTransactions(newTx);
       }
 
       function exportToCSV() {
-        let csv = "Date,Description,Category,Amount,Group Pay,Necessity\n";
+        let csv = "Date,Description,Category,Amount,Group Pay,Necessity,Number of People,Total People,Persons Involved,Amount Per Person\n";
         transactions.forEach(tx => {
-          csv += `${tx.date},${tx.description},${tx.category},${tx.amount},${tx.groupPay},${tx.necessity}\n`;
+          if (tx.groupPay === "Yes" && tx.groupDetails) {
+            const peopleList = tx.groupDetails.people.map(p => p.name).join(';');
+            const amountsList = tx.groupDetails.people.map(p => p.amount.toFixed(2)).join(';');
+            csv += `${tx.date},${tx.description},${tx.category},${tx.amount},${tx.groupPay},${tx.necessity},${tx.groupDetails.people.length},${tx.groupDetails.totalPeople || tx.groupDetails.people.length},${peopleList},${amountsList}\n`;
+          } else {
+            csv += `${tx.date},${tx.description},${tx.category},${tx.amount},${tx.groupPay},${tx.necessity},1,1,${currentUser},${tx.amount}\n`;
+          }
         });
+        
+        csv += "\n\nBUDGET SUMMARY\n";
+        csv += "Category,Budget Set,Amount Spent,Remaining,Percentage Used\n";
+        
+        const categories = [...new Set(transactions.map(t => t.category))].filter(cat => cat.toLowerCase() !== "income");
+        categories.forEach(cat => {
+          const spent = transactions.filter(t => t.category === cat).reduce((sum, t) => sum + t.amount, 0);
+          const budget = budgets[cat] || 0;
+          const remaining = budget - spent;
+          const percentageUsed = budget > 0 ? (spent / budget * 100).toFixed(2) : 0;
+          csv += `${cat},${budget},${spent.toFixed(2)},${remaining.toFixed(2)},${percentageUsed}%\n`;
+        });
+        
+        csv += "\n\nNEEDS VS WANTS SUMMARY\n";
+        const needsTotal = transactions.filter(tx => tx.necessity === "Needs").reduce((sum, tx) => sum + tx.amount, 0);
+        const wantsTotal = transactions.filter(tx => tx.necessity === "Wants").reduce((sum, tx) => sum + tx.amount, 0);
+        const investmentTotal = transactions.filter(tx => tx.necessity === "Investment").reduce((sum, tx) => sum + tx.amount, 0);
+        csv += `Needs Total:,${needsTotal.toFixed(2)}\n`;
+        csv += `Wants Total:,${wantsTotal.toFixed(2)}\n`;
+        csv += `Investment Total:,${investmentTotal.toFixed(2)}\n`;
+        csv += `Total Expenses:,${(needsTotal + wantsTotal + investmentTotal).toFixed(2)}\n`;
+        
+        csv += "\n\nMONTHLY TRENDS\n";
+        csv += "Category,Month,Amount\n";
+        Object.keys(monthlyTrends).forEach(category => {
+          monthlyTrends[category].forEach(trend => {
+            csv += `${category},${trend.month},${trend.amount.toFixed(2)}\n`;
+          });
+        });
+        
         const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-        saveAs(blob, 'transactions.csv');
+        saveAs(blob, 'moneywise_report.csv');
       }
 
-      const calculatedIncome = transactions.filter(tx => tx.category.toLowerCase() === "income").reduce((acc, tx) => acc + tx.amount, 0);
-  const totalIncome = manualIncome + calculatedIncome;
+      const calculatedIncome = transactions
+        .filter(tx => tx.category.toLowerCase() === "income")
+        .reduce((acc, tx) => acc + tx.amount, 0);
+      
+      const totalIncome = customIncome + calculatedIncome;
+
+      const totalExpenses = transactions
+        .filter(tx => tx.category.toLowerCase() !== "income")
+        .reduce((acc, tx) => acc + tx.amount, 0);
+
+      const moneyOwedToYou = personSettlements
+        .filter(settlement => !settlement.paid)
+        .reduce((acc, settlement) => acc + settlement.perPersonAmount, 0);
+      
+      const remainingIncome = totalIncome - totalExpenses + moneyOwedToYou;
 
       function updateBudget(category, amount) {
         setBudgets({ ...budgets, [category]: parseFloat(amount) });
       }
 
+      function markAsPaid(id) {
+        setPersonSettlements(personSettlements.map(settlement => 
+          settlement.id === id ? { ...settlement, paid: true } : settlement
+        ));
+      }
+
+      function deleteSettlement(id) {
+        setPersonSettlements(personSettlements.filter(settlement => settlement.id !== id));
+      }
+
+      function applyAutoBudgetSuggestion(category) {
+        if (autoBudgetSuggestions[category]) {
+          setBudgets({ ...budgets, [category]: autoBudgetSuggestions[category] });
+        }
+      }
+
+      function addPerson(name) {
+        if (name && !personList.includes(name)) {
+          setPersonList([...personList, name]);
+        }
+      }
+
+      function removePerson(name) {
+        setPersonList(personList.filter(p => p !== name));
+      }
+
+      const getTransactionMonths = () => {
+        const months = transactions.reduce((acc, tx) => {
+          const date = new Date(tx.date);
+          const monthYear = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
+          if (!acc.includes(monthYear)) {
+            acc.push(monthYear);
+          }
+          return acc;
+        }, []);
+        return months.sort().reverse();
+      };
+
+      const filteredTransactions = transactionMonthFilter === "all" 
+        ? transactions 
+        : transactions.filter(tx => {
+            const date = new Date(tx.date);
+            const monthYear = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
+            return monthYear === transactionMonthFilter;
+          });
+
+      const renderActiveView = () => {
+        switch (activeView) {
+          case "transactionLog":
+            return <TransactionTable 
+              transactions={filteredTransactions} 
+              onDelete={deleteTransaction} 
+              monthFilter={transactionMonthFilter}
+              setMonthFilter={setTransactionMonthFilter}
+              availableMonths={getTransactionMonths()}
+              currentUser={currentUser}
+            />;
+          case "personSettlements":
+            return <PersonSettlements 
+              settlements={personSettlements} 
+              onMarkAsPaid={markAsPaid} 
+              onDelete={deleteSettlement}
+            />;
+          case "budgetPlanner":
+            return <BudgetPlanner 
+              budgets={budgets} 
+              onUpdate={updateBudget} 
+              transactions={transactions} 
+              autoSuggestions={autoBudgetSuggestions}
+              onApplySuggestion={applyAutoBudgetSuggestion}
+            />;
+          case "monthlySuggestions":
+            return <AutoBudgetSuggestions 
+              suggestions={autoBudgetSuggestions}
+              budgets={budgets}
+              onApplySuggestion={applyAutoBudgetSuggestion}
+              monthlyTrends={monthlyTrends}
+            />;
+          case "expenseBreakdown":
+            return <PieChart transactions={transactions} />;
+          case "budgetCompletion":
+            return <BudgetCompletionVisualization transactions={transactions} budgets={budgets} />;
+          default:
+            return (
+              <div className="space-y-4">
+                <div className="quote-container p-6 rounded-xl shadow-lg">
+                  <div className="relative z-10">
+                    <div className="flex items-center mb-4">
+                      <div className="mr-3 p-2 bg-purple-100 dark:bg-purple-900/30 rounded-full">
+                        <span className="text-2xl text-purple-600 dark:text-purple-300">💭</span>
+                      </div>
+                      <h3 className="text-xl font-bold text-purple-800 dark:text-purple-200">Money Wisdom</h3>
+                    </div>
+                    
+                    <div className="fade-in mb-6">
+                      <p className="quote-text text-gray-800 dark:text-gray-100 mb-4">
+                        "{moneyQuotes[currentQuoteIndex].text}"
+                      </p>
+                      <div className="flex justify-between items-center">
+                        <p className="quote-author text-purple-700 dark:text-purple-300">
+                          — {moneyQuotes[currentQuoteIndex].author}
+                        </p>
+                        <div className="flex space-x-2">
+                          {moneyQuotes.map((_, index) => (
+                            <div 
+                              key={index}
+                              className={`quote-indicator ${index === currentQuoteIndex ? 'active' : ''}`}
+                              onClick={() => setCurrentQuoteIndex(index)}
+                            ></div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="quote-icon">💸</div>
+                </div>
+                
+                <div>
+                  <EnhancedTransactionForm 
+                    onSubmit={addTransaction} 
+                    personList={personList} 
+                    addPerson={addPerson} 
+                    removePerson={removePerson} 
+                    currentUser={currentUser} 
+                  />
+                </div>
+                
+                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 p-6 rounded-xl shadow-lg">
+                  <h3 className="font-bold text-xl text-blue-800 dark:text-blue-200 mb-4">💰 Income & Balance Summary</h3>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+                    <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Set Your Income
+                      </label>
+                      <div className="flex items-center">
+                        <span className="mr-2 text-gray-600 dark:text-gray-400">₹</span>
+                        <input
+                          type="number"
+                          value={customIncome}
+                          onChange={e => setCustomIncome(parseFloat(e.target.value) || 0)}
+                          className="income-input w-full p-2 rounded border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 focus:outline-none"
+                          placeholder="Enter your income"
+                          step="0.01"
+                          min="0"
+                        />
+                      </div>
+                      <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                        Your customizable monthly income
+                      </div>
+                    </div>
+                    
+                    <div className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 p-4 rounded-lg shadow">
+                      <div className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Income</div>
+                      <div className="text-2xl font-bold text-green-700 dark:text-green-300 mt-1">₹{totalIncome.toFixed(2)}</div>
+                      <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                        Custom: ₹{customIncome.toFixed(2)} + Transactions: ₹{calculatedIncome.toFixed(2)}
+                      </div>
+                    </div>
+                    
+                    <div className="bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-900/20 dark:to-pink-900/20 p-4 rounded-lg shadow">
+                      <div className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Expenses</div>
+                      <div className="text-2xl font-bold text-red-700 dark:text-red-300 mt-1">₹{totalExpenses.toFixed(2)}</div>
+                      <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                        {transactions.filter(tx => tx.category.toLowerCase() !== "income").length} transactions
+                      </div>
+                    </div>
+                    
+                    <div className={`p-4 rounded-lg shadow ${remainingIncome >= 0 ? 'bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20' : 'bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20'}`}>
+                      <div className="text-sm font-medium text-gray-600 dark:text-gray-400">Remaining Balance</div>
+                      <div className={`text-2xl font-bold mt-1 ${remainingIncome >= 0 ? 'text-blue-700 dark:text-blue-300' : 'text-amber-700 dark:text-amber-300'}`}>
+                        ₹{remainingIncome.toFixed(2)}
+                      </div>
+                      <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                        {remainingIncome >= 0 ? '✓ Positive balance' : '⚠️ Overspending'}
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <div className="bg-gradient-to-r from-purple-50 to-violet-50 dark:from-purple-900/20 dark:to-violet-900/20 p-4 rounded-lg shadow">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <div className="text-sm font-medium text-gray-600 dark:text-gray-400">Money Owed to You</div>
+                          <div className="text-xl font-bold text-purple-700 dark:text-purple-300 mt-1">
+                            ₹{moneyOwedToYou.toFixed(2)}
+                          </div>
+                          <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                            From {personSettlements.filter(s => !s.paid).length} pending settlements
+                          </div>
+                        </div>
+                        {moneyOwedToYou > 0 && (
+                          <div className="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-full">
+                            <span className="text-lg">💸</span>
+                          </div>
+                        )}
+                      </div>
+                      {moneyOwedToYou > 0 && (
+                        <div className="text-xs text-purple-600 dark:text-purple-400 mt-2">
+                          This amount will be added to your balance when collected
+                        </div>
+                      )}
+                    </div>
+                    
+                    <div className="bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 p-4 rounded-lg shadow">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <div className="text-sm font-medium text-gray-600 dark:text-gray-400">Available Now</div>
+                          <div className="text-xl font-bold text-emerald-700 dark:text-emerald-300 mt-1">
+                            ₹{(totalIncome - totalExpenses).toFixed(2)}
+                          </div>
+                          <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                            Income minus expenses (excluding settlements)
+                          </div>
+                        </div>
+                        <div className="p-2 bg-emerald-100 dark:bg-emerald-900/30 rounded-full">
+                          <span className="text-lg">💰</span>
+                        </div>
+                      </div>
+                      <div className="text-xs text-emerald-600 dark:text-emerald-400 mt-2">
+                        Amount you can spend right now
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            
+                <div>
+                  <HEORCostDriversDashboard transactions={transactions} budgets={budgets} />
+                </div>
+              </div>
+            );
+        }
+      };
+
       return (
         <div>
-          <Navbar darkMode={darkMode} toggleDark={() => setDarkMode(!darkMode)} exportTx={exportToCSV} />
-          <main className="p-4 space-y-4">
-            <div className="bg-white dark:bg-gray-800 p-4 rounded shadow">
-              <h2 className="font-semibold text-xl">Total Income: ₹{totalIncome.toFixed(2)}</h2>
-              <label className="text-sm block mt-2">Manual Income (editable):</label>
-              <input
-                type="number"
-                value={manualIncome}
-                onChange={e => setManualIncome(parseFloat(e.target.value))}
-                className="p-2 rounded bg-gray-100 dark:bg-gray-700 w-full mt-1"
-              />
-            </div>
-            <TransactionForm onSubmit={addTransaction} />
-            <TransactionTable transactions={transactions} onDelete={deleteTransaction} />
-            <BudgetPlanner budgets={budgets} onUpdate={updateBudget} transactions={transactions} />
-            <PieChart transactions={transactions} />
-            <TimeSpentChart transactions={transactions} filter={filter} setFilter={setFilter} />
+          <Navbar 
+            currentUser={currentUser} 
+            logoutUser={logoutUser}
+            showDropdown={showDropdown}
+            setShowDropdown={setShowDropdown}
+            setActiveView={setActiveView}
+            exportToCSV={exportToCSV}
+          />
+          <main className="p-4">
+            {renderActiveView()}
           </main>
-<Footer />
+          <Footer />
         </div>
       );
     }
 
-    const Navbar = ({ darkMode, toggleDark, exportTx, logoutUser, currentUser }) => (
-      <nav className="sticky top-0 z-10 bg-white dark:bg-gray-800 p-4 shadow-md flex justify-between items-center">
+    const Navbar = ({ currentUser, logoutUser, showDropdown, setShowDropdown, setActiveView, exportToCSV }) => (
+      <nav className="sticky top-0 z-50 bg-white dark:bg-gray-800 p-4 shadow-md flex justify-between items-center">
         <div className="font-bold text-lg">MoneyWise</div>
-        <div className="flex gap-3 items-center">
-      <span className="text-sm">👤 {currentUser}</span>
-          <button onClick={exportTx} className="px-3 py-1 bg-green-600 text-white rounded">Export CSV</button>
-          <button onClick={toggleDark} className="p-2 bg-gray-200 dark:bg-gray-700 rounded-full">
-            {darkMode ? "🌙" : "☀️"}
+        <div className="flex gap-3 items-center relative">
+          <button 
+            onClick={() => setActiveView("home")}
+            className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition text-sm"
+          >
+            Home
           </button>
-        <button onClick={logoutUser} className="px-2 py-1 bg-red-500 text-white rounded">Logout</button>
-      </div>
+          <span className="text-xs sm:text-sm px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">👤 {currentUser}</span>
+          
+          <div className="relative">
+            <button 
+              onClick={() => setShowDropdown(!showDropdown)}
+              className="p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition"
+            >
+              <i className="fas fa-bars"></i>
+            </button>
+            <div className={`dropdown-menu ${showDropdown ? 'show' : ''}`}>
+              <button className="dropdown-item" onClick={() => { setActiveView("transactionLog"); setShowDropdown(false); }}>
+                <i className="fas fa-receipt mr-2"></i> Transaction Log
+              </button>
+              <button className="dropdown-item" onClick={() => { setActiveView("personSettlements"); setShowDropdown(false); }}>
+                <i className="fas fa-users mr-2"></i> Person-wise Settlements
+              </button>
+              <button className="dropdown-item" onClick={() => { setActiveView("budgetPlanner"); setShowDropdown(false); }}>
+                <i className="fas fa-chart-pie mr-2"></i> Budget Planner
+              </button>
+              <button className="dropdown-item" onClick={() => { setActiveView("monthlySuggestions"); setShowDropdown(false); }}>
+                <i className="fas fa-lightbulb mr-2"></i> Monthly Budget Suggestions
+              </button>
+              <button className="dropdown-item" onClick={() => { setActiveView("expenseBreakdown"); setShowDropdown(false); }}>
+                <i className="fas fa-chart-pie mr-2"></i> Expense Breakdown
+              </button>
+              <button className="dropdown-item" onClick={() => { setActiveView("budgetCompletion"); setShowDropdown(false); }}>
+                <i className="fas fa-tasks mr-2"></i> Budget Completion
+              </button>
+              <button className="dropdown-item" onClick={exportToCSV}>
+                <i className="fas fa-file-export mr-2"></i> Export CSV
+              </button>
+              <button className="dropdown-item" onClick={() => { 
+                window.open('https://www.linkedin.com/in/subhra-prasad-chakraborty-3b91aa285?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app', '_blank');
+                setShowDropdown(false);
+              }}>
+                <i className="fas fa-envelope mr-2"></i> Contact Us
+              </button>
+              <button className="dropdown-item" onClick={() => { logoutUser(); setShowDropdown(false); }}>
+                <i className="fas fa-sign-out-alt mr-2"></i> Logout
+              </button>
+            </div>
+          </div>
+        </div>
       </nav>
     );
 
-    const BudgetPlanner = ({ budgets, onUpdate, transactions }) => {
+    const EnhancedTransactionForm = ({ onSubmit, personList, addPerson, removePerson, currentUser }) => {
+      const [form, setForm] = useState({ 
+        date: new Date().toISOString().split('T')[0], 
+        description: "", 
+        category: "", 
+        amount: "", 
+        groupPay: "No", 
+        necessity: "Needs",
+        groupDetails: {
+          splitType: "equal",
+          includeMe: true,
+          totalPeople: 2,
+          people: [
+            { id: Date.now() + 1, name: currentUser, amount: 0, includeMe: true, isCustomName: false },
+            { id: Date.now() + 2, name: "Friend 1", amount: 0, includeMe: false, isCustomName: false }
+          ]
+        }
+      });
+      
+      const [newPersonName, setNewPersonName] = useState("");
+      
+      const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
+      
+      const handleGroupDetailsChange = (field, value) => {
+        setForm({
+          ...form,
+          groupDetails: {
+            ...form.groupDetails,
+            [field]: value
+          }
+        });
+      };
+      
+      const handlePersonChange = (index, field, value) => {
+        const newPeople = [...form.groupDetails.people];
+        newPeople[index] = {
+          ...newPeople[index],
+          [field]: value
+        };
+        
+        handleGroupDetailsChange('people', newPeople);
+      };
+      
+      const handleSplitTypeChange = (type) => {
+        const totalAmount = parseFloat(form.amount) || 0;
+        const peopleCount = form.groupDetails.people.length;
+        const newPeople = [...form.groupDetails.people];
+        
+        if (type === 'equal') {
+          const equalAmount = totalAmount / peopleCount;
+          newPeople.forEach((person, index) => {
+            newPeople[index] = {
+              ...person,
+              amount: equalAmount
+            };
+          });
+        }
+        
+        setForm({
+          ...form,
+          groupDetails: {
+            ...form.groupDetails,
+            splitType: type,
+            people: newPeople
+          }
+        });
+      };
+      
+      const handleAddPerson = () => {
+        if (newPersonName.trim()) {
+          const totalAmount = parseFloat(form.amount) || 0;
+          const peopleCount = form.groupDetails.people.length + 1;
+          const newPerson = {
+            id: Date.now(),
+            name: newPersonName.trim(),
+            amount: form.groupDetails.splitType === 'equal' ? totalAmount / peopleCount : 0,
+            includeMe: false,
+            isCustomName: true
+          };
+          
+          const newPeople = [...form.groupDetails.people, newPerson];
+          
+          if (!personList.includes(newPersonName.trim())) {
+            addPerson(newPersonName.trim());
+          }
+          
+          if (form.groupDetails.splitType === 'equal') {
+            const equalAmount = totalAmount / newPeople.length;
+            newPeople.forEach((person, index) => {
+              newPeople[index] = {
+                ...person,
+                amount: equalAmount
+              };
+            });
+          }
+          
+          setForm({
+            ...form,
+            groupDetails: {
+              ...form.groupDetails,
+              people: newPeople,
+              totalPeople: newPeople.length
+            }
+          });
+          setNewPersonName("");
+        }
+      };
+      
+      const handleRemovePerson = (id) => {
+        const newPeople = form.groupDetails.people.filter(person => person.id !== id);
+        const totalAmount = parseFloat(form.amount) || 0;
+        
+        if (form.groupDetails.splitType === 'equal') {
+          const equalAmount = totalAmount / newPeople.length;
+          newPeople.forEach((person, index) => {
+            newPeople[index] = {
+              ...person,
+              amount: equalAmount
+            };
+          });
+        }
+        
+        setForm({
+          ...form,
+          groupDetails: {
+            ...form.groupDetails,
+            people: newPeople,
+            totalPeople: newPeople.length
+          }
+        });
+      };
+      
+      const handleIncludeMeToggle = () => {
+        const includeMe = !form.groupDetails.includeMe;
+        const totalAmount = parseFloat(form.amount) || 0;
+        
+        let newPeople = [...form.groupDetails.people];
+        
+        if (includeMe) {
+          if (!newPeople.some(p => p.includeMe)) {
+            newPeople.unshift({
+              id: Date.now(),
+              name: currentUser,
+              amount: form.groupDetails.splitType === 'equal' ? totalAmount / (newPeople.length + 1) : 0,
+              includeMe: true,
+              isCustomName: false
+            });
+          }
+        } else {
+          newPeople = newPeople.filter(person => !person.includeMe);
+        }
+        
+        if (form.groupDetails.splitType === 'equal' && newPeople.length > 0) {
+          const equalAmount = totalAmount / newPeople.length;
+          newPeople.forEach((person, index) => {
+            newPeople[index] = {
+              ...person,
+              amount: equalAmount
+            };
+          });
+        }
+        
+        setForm({
+          ...form,
+          groupDetails: {
+            ...form.groupDetails,
+            includeMe,
+            people: newPeople,
+            totalPeople: newPeople.length
+          }
+        });
+      };
+      
+      const handleTotalPeopleChange = (count) => {
+        const currentCount = form.groupDetails.people.length;
+        const totalAmount = parseFloat(form.amount) || 0;
+        
+        let newPeople = [...form.groupDetails.people];
+        
+        if (count > currentCount) {
+          for (let i = currentCount; i < count; i++) {
+            const existingNames = newPeople.map(p => p.name);
+            let newName = `Person ${i + 1}`;
+            let nameIndex = 1;
+            
+            while (existingNames.includes(newName)) {
+              newName = `Person ${i + 1 + nameIndex}`;
+              nameIndex++;
+            }
+            
+            newPeople.push({
+              id: Date.now() + i,
+              name: newName,
+              amount: form.groupDetails.splitType === 'equal' ? totalAmount / (i + 1) : 0,
+              includeMe: false,
+              isCustomName: false
+            });
+          }
+        } else if (count < currentCount) {
+          const peopleToRemove = currentCount - count;
+          let removedCount = 0;
+          
+          for (let i = newPeople.length - 1; i >= 0 && removedCount < peopleToRemove; i--) {
+            if (!newPeople[i].includeMe) {
+              newPeople.splice(i, 1);
+              removedCount++;
+            }
+          }
+        }
+        
+        if (form.groupDetails.splitType === 'equal' && newPeople.length > 0) {
+          const equalAmount = totalAmount / newPeople.length;
+          newPeople.forEach((person, index) => {
+            newPeople[index] = {
+              ...person,
+              amount: equalAmount
+            };
+          });
+        }
+        
+        setForm({
+          ...form,
+          groupDetails: {
+            ...form.groupDetails,
+            people: newPeople,
+            totalPeople: newPeople.length
+          }
+        });
+      };
+      
+      const calculateTotal = () => {
+        if (form.groupDetails.splitType === 'custom') {
+          return form.groupDetails.people.reduce((sum, person) => sum + (parseFloat(person.amount) || 0), 0);
+        }
+        return form.groupDetails.people.reduce((sum, person) => sum + (parseFloat(person.amount) || 0), 0);
+      };
+      
+      const handleSubmit = e => {
+        e.preventDefault();
+        if (!form.date || !form.description || !form.category || form.amount <= 0) {
+          return alert("All basic fields are required");
+        }
+        
+        if (form.groupPay === "Yes") {
+          if (form.groupDetails.people.length === 0) {
+            return alert("Please add at least one person for group payment");
+          }
+          
+          const totalCalculated = calculateTotal();
+          const enteredAmount = parseFloat(form.amount);
+          
+          if (Math.abs(totalCalculated - enteredAmount) > 0.01) {
+            return alert(`Amount mismatch! Entered: ₹${enteredAmount.toFixed(2)}, Calculated: ₹${totalCalculated.toFixed(2)}. Please adjust the amounts.`);
+          }
+          
+          const finalPeople = form.groupDetails.people.map(person => ({
+            ...person,
+            amount: parseFloat(person.amount) || 0
+          }));
+          
+          const transactionData = { 
+            ...form, 
+            amount: enteredAmount,
+            groupDetails: {
+              ...form.groupDetails,
+              people: finalPeople,
+              totalPeople: finalPeople.length
+            }
+          };
+          
+          onSubmit(transactionData);
+        } else {
+          const transactionData = { 
+            ...form, 
+            amount: parseFloat(form.amount),
+            groupDetails: null
+          };
+          
+          onSubmit(transactionData);
+        }
+        
+        setForm({ 
+          date: new Date().toISOString().split('T')[0], 
+          description: "", 
+          category: "", 
+          amount: "", 
+          groupPay: "No", 
+          necessity: "Needs",
+          groupDetails: {
+            splitType: "equal",
+            includeMe: true,
+            totalPeople: 2,
+            people: [
+              { id: Date.now() + 1, name: currentUser, amount: 0, includeMe: true, isCustomName: false },
+              { id: Date.now() + 2, name: "Friend 1", amount: 0, includeMe: false, isCustomName: false }
+            ]
+          }
+        });
+      };
+      
+      useEffect(() => {
+        if (form.groupPay === "Yes" && form.groupDetails.splitType === "equal") {
+          const totalAmount = parseFloat(form.amount) || 0;
+          const peopleCount = form.groupDetails.people.length;
+          
+          if (peopleCount > 0) {
+            const equalAmount = totalAmount / peopleCount;
+            const newPeople = form.groupDetails.people.map(person => ({
+              ...person,
+              amount: equalAmount
+            }));
+            
+            setForm({
+              ...form,
+              groupDetails: {
+                ...form.groupDetails,
+                people: newPeople
+              }
+            });
+          }
+        }
+      }, [form.amount, form.groupPay]);
+      
+      return (
+        <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 p-4 rounded shadow space-y-3">
+          <h2 className="font-semibold text-lg mb-2">Add Transaction</h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div>
+              <label className="block text-sm mb-1">Date</label>
+              <input type="date" name="date" value={form.date} onChange={handleChange} className="w-full p-2 rounded bg-gray-100 dark:bg-gray-700" required />
+            </div>
+            
+            <div>
+              <label className="block text-sm mb-1">Description</label>
+              <input type="text" name="description" placeholder="Description" value={form.description} onChange={handleChange} className="w-full p-2 rounded bg-gray-100 dark:bg-gray-700" required />
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div>
+              <label className="block text-sm mb-1">Category</label>
+              <select name="category" value={form.category} onChange={handleChange} className="w-full p-2 rounded bg-gray-100 dark:bg-gray-700" required>
+                <option value="">Select Category</option>
+                {["Rent & Utilities","Foods & cravings","Daily Living","Travel & Transport","Fitness & Health","Family Support","Entertainment & Subscriptions","Personal Care & Shopping","Investments","Personal EMIs","Emergency Funds"].map(cat => (
+                  <option key={cat} value={cat}>{cat}</option>
+                ))}
+              </select>
+            </div>
+            
+            <div>
+              <label className="block text-sm mb-1">Total Amount (₹)</label>
+              <input type="number" step="0.01" name="amount" placeholder="Total Amount" value={form.amount} onChange={handleChange} className="w-full p-2 rounded bg-gray-100 dark:bg-gray-700" required />
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div>
+              <label className="block text-sm mb-1">Group Payment</label>
+              <select name="groupPay" value={form.groupPay} onChange={handleChange} className="w-full p-2 rounded bg-gray-100 dark:bg-gray-700">
+                <option value="No">No - Personal</option>
+                <option value="Yes">Yes - Shared</option>
+              </select>
+            </div>
+            
+            <div>
+              <label className="block text-sm mb-1">Necessity Type</label>
+              <select name="necessity" value={form.necessity} onChange={handleChange} className="w-full p-2 rounded bg-gray-100 dark:bg-gray-700">
+                <option value="Needs">Needs</option>
+                <option value="Wants">Wants</option>
+                <option value="Investment">Investment</option>
+              </select>
+            </div>
+          </div>
+          
+          {form.groupPay === "Yes" && (
+            <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded space-y-4">
+              <h3 className="font-medium text-lg">👥 Group Payment Details</h3>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm mb-2">Split Type</label>
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() => handleSplitTypeChange('equal')}
+                      className={`px-3 py-2 rounded flex-1 ${form.groupDetails.splitType === 'equal' ? 'bg-blue-500 text-white' : 'bg-gray-200 dark:bg-gray-700'}`}
+                    >
+                      Equal Split
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleSplitTypeChange('custom')}
+                      className={`px-3 py-2 rounded flex-1 ${form.groupDetails.splitType === 'custom' ? 'bg-blue-500 text-white' : 'bg-gray-200 dark:bg-gray-700'}`}
+                    >
+                      Custom Split
+                    </button>
+                  </div>
+                </div>
+                
+                <div>
+                  <label className="block text-sm mb-2">Total Number of People</label>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => handleTotalPeopleChange(Math.max(1, form.groupDetails.totalPeople - 1))}
+                      className="px-3 py-1 bg-gray-200 dark:bg-gray-700 rounded"
+                    >
+                      -
+                    </button>
+                    <input
+                      type="number"
+                      min="1"
+                      value={form.groupDetails.totalPeople}
+                      onChange={(e) => handleTotalPeopleChange(parseInt(e.target.value) || 1)}
+                      className="w-16 p-2 text-center rounded bg-gray-100 dark:bg-gray-700"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => handleTotalPeopleChange(form.groupDetails.totalPeople + 1)}
+                      className="px-3 py-1 bg-gray-200 dark:bg-gray-700 rounded"
+                    >
+                      +
+                    </button>
+                    <span className="text-sm ml-2">{form.groupDetails.people.length} configured</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="includeMe"
+                  checked={form.groupDetails.includeMe}
+                  onChange={handleIncludeMeToggle}
+                  className="rounded"
+                />
+                <label htmlFor="includeMe" className="text-sm">
+                  Include myself ({currentUser}) in the split
+                </label>
+              </div>
+              
+              <div className="space-y-3">
+                <label className="block text-sm font-medium">People & Amounts</label>
+                
+                {form.groupDetails.people.map((person, index) => (
+                  <div key={person.id} className="flex flex-col md:flex-row gap-2 p-3 bg-white dark:bg-gray-800 rounded border">
+                    <div className="flex-1">
+                      <label className="block text-xs mb-1">Person {index + 1}</label>
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          value={person.name}
+                          onChange={(e) => handlePersonChange(index, 'name', e.target.value)}
+                          className="flex-1 p-2 rounded bg-gray-100 dark:bg-gray-700 text-sm"
+                          placeholder="Name"
+                          disabled={person.includeMe}
+                        />
+                        {!person.includeMe && (
+                          <button
+                            type="button"
+                            onClick={() => handleRemovePerson(person.id)}
+                            className="px-2 py-1 bg-red-500 text-white rounded text-sm hover:bg-red-600"
+                          >
+                            Remove
+                          </button>
+                        )}
+                      </div>
+                      {person.includeMe && (
+                        <div className="text-xs text-green-600 dark:text-green-400 mt-1">(You)</div>
+                      )}
+                    </div>
+                    
+                    <div className="w-32">
+                      <label className="block text-xs mb-1">Amount (₹)</label>
+                      <input
+                        type="number"
+                        step="0.01"
+                        value={person.amount.toFixed(2)}
+                        onChange={(e) => handlePersonChange(index, 'amount', parseFloat(e.target.value) || 0)}
+                        className="w-full p-2 rounded bg-gray-100 dark:bg-gray-700 text-sm"
+                        disabled={form.groupDetails.splitType === 'equal'}
+                      />
+                    </div>
+                  </div>
+                ))}
+                
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={newPersonName}
+                    onChange={(e) => setNewPersonName(e.target.value)}
+                    placeholder="Add specific person name"
+                    className="flex-1 p-2 rounded bg-gray-100 dark:bg-gray-700 text-sm"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleAddPerson}
+                    className="px-3 py-2 bg-green-500 text-white rounded text-sm hover:bg-green-600"
+                  >
+                    Add Person
+                  </button>
+                </div>
+              </div>
+              
+              <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <div className="font-medium">Summary</div>
+                    <div className="text-sm">
+                      Total: ₹{form.amount || 0}<br/>
+                      People: {form.groupDetails.people.length}<br/>
+                      Split: {form.groupDetails.splitType === 'equal' ? 'Equal' : 'Custom'}
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="font-bold text-lg">
+                      ₹{calculateTotal().toFixed(2)}
+                    </div>
+                    <div className="text-sm">
+                      {Math.abs(calculateTotal() - (parseFloat(form.amount) || 0)) > 0.01 ? (
+                        <span className="text-red-600">Amounts don't match!</span>
+                      ) : (
+                        <span className="text-green-600">✓ Amounts match</span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          
+          <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition">Add Transaction</button>
+        </form>
+      );
+    };
+
+    const BudgetPlanner = ({ budgets, onUpdate, transactions, autoSuggestions, onApplySuggestion }) => {
       const categories = [...new Set(transactions.map(t => t.category))].filter(cat => cat.toLowerCase() !== "income");
 
       return (
         <div className="bg-white dark:bg-gray-800 p-4 rounded shadow">
-          <h2 className="font-semibold text-lg mb-2">Budget Planner</h2>
+          <h2 className="font-semibold text-lg mb-3">Budget Planner</h2>
           {categories.map(cat => {
             const spent = transactions.filter(t => t.category === cat).reduce((sum, t) => sum + t.amount, 0);
             const budget = budgets[cat] || 0;
+            const remaining = budget - spent;
+            const percentageUsed = budget > 0 ? Math.min(100, (spent/budget)*100) : 0;
+            
             return (
-              <div key={cat} className="mb-3">
-                <label className="block mb-1">{cat} Budget: ₹</label>
-                <input type="number" className="p-1 rounded bg-gray-100 dark:bg-gray-700 w-full mb-1" value={budget} onChange={e => onUpdate(cat, e.target.value)} />
-                <div className="w-full bg-gray-300 rounded h-2">
-                  <div className="h-2 rounded bg-blue-500" style={{ width: `${Math.min(100, (spent/budget)*100)}%` }}></div>
+              <div key={cat} className="mb-4 p-3 bg-gray-50 dark:bg-gray-700 rounded">
+                <div className="flex justify-between items-center mb-2">
+                  <label className="font-medium">{cat}</label>
+                  {autoSuggestions[cat] && budget === 0 && (
+                    <button 
+                      onClick={() => onApplySuggestion(cat)}
+                      className="text-xs px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+                    >
+                      Apply Suggestion: ₹{autoSuggestions[cat]}
+                    </button>
+                  )}
                 </div>
-                <p className="text-sm">Spent ₹{spent.toFixed(2)} / ₹{budget}</p>
+                <div className="flex gap-2 mb-2">
+                  <input 
+                    type="number" 
+                    className="p-2 rounded bg-gray-100 dark:bg-gray-800 w-full" 
+                    value={budget} 
+                    placeholder="Set budget"
+                    onChange={e => onUpdate(cat, e.target.value)} 
+                  />
+                </div>
+                <div className="w-full bg-gray-300 dark:bg-gray-600 rounded h-3 mb-1">
+                  <div 
+                    className="h-3 rounded" 
+                    style={{ 
+                      width: `${percentageUsed}%`,
+                      backgroundColor: percentageUsed > 90 ? '#EF4444' : percentageUsed > 70 ? '#F59E0B' : '#10B981'
+                    }}
+                  ></div>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span>Spent: ₹{spent.toFixed(2)}</span>
+                  <span className={remaining < 0 ? 'text-red-500' : 'text-green-500'}>
+                    Remaining: ₹{remaining.toFixed(2)}
+                  </span>
+                  <span>{percentageUsed.toFixed(1)}%</span>
+                </div>
               </div>
             );
           })}
@@ -132,9 +1323,416 @@
       );
     };
 
+    const AutoBudgetSuggestions = ({ suggestions, budgets, onApplySuggestion, monthlyTrends }) => {
+      const [selectedCategory, setSelectedCategory] = useState(Object.keys(suggestions)[0] || '');
+
+      if (Object.keys(suggestions).length === 0) {
+        return (
+          <div className="bg-white dark:bg-gray-800 p-4 rounded shadow">
+            <h2 className="font-semibold text-lg mb-2">Auto-Budget Suggestions</h2>
+            <p className="text-gray-500 dark:text-gray-400">Add more transactions to get budget suggestions</p>
+          </div>
+        );
+      }
+
+      return (
+        <div className="bg-white dark:bg-gray-800 p-4 rounded shadow">
+          <h2 className="font-semibold text-lg mb-3">📊 Monthly Auto-Budget Suggestions</h2>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">Based on your spending patterns</p>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div className="space-y-3">
+              <h3 className="font-medium">Suggested Budgets</h3>
+              {Object.entries(suggestions).map(([category, suggestedAmount]) => {
+                const currentBudget = budgets[category] || 0;
+                return (
+                  <div key={category} className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded border border-blue-100 dark:border-blue-800">
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <div className="font-medium">{category}</div>
+                        <div className="text-sm text-gray-600 dark:text-gray-400">
+                          Suggested: ₹{suggestedAmount}
+                          {currentBudget > 0 && (
+                            <span className="ml-2">
+                              (Current: ₹{currentBudget})
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                      <button 
+                        onClick={() => onApplySuggestion(category)}
+                        className={`px-3 py-1 rounded text-sm ${currentBudget > 0 ? 'bg-gray-200 dark:bg-gray-700' : 'bg-blue-500 text-white hover:bg-blue-600'}`}
+                      >
+                        {currentBudget > 0 ? 'Update' : 'Apply'}
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            
+            <div>
+              <h3 className="font-medium mb-2">Monthly Trends</h3>
+              <select 
+                value={selectedCategory} 
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                className="w-full p-2 rounded bg-gray-100 dark:bg-gray-700 mb-3"
+              >
+                {Object.keys(suggestions).map(cat => (
+                  <option key={cat} value={cat}>{cat}</option>
+                ))}
+              </select>
+              
+              {monthlyTrends[selectedCategory] && monthlyTrends[selectedCategory].length > 0 ? (
+                <div className="space-y-2">
+                  <h4 className="font-medium text-sm">Monthly Spending for {selectedCategory}</h4>
+                  {monthlyTrends[selectedCategory].map((trend, index) => (
+                    <div key={index} className="p-2 bg-gray-50 dark:bg-gray-700 rounded">
+                      <div className="flex justify-between">
+                        <span>{trend.month}</span>
+                        <span className="font-medium">₹{trend.amount.toFixed(2)}</span>
+                      </div>
+                      <div className="w-full bg-gray-300 dark:bg-gray-600 rounded h-2 mt-1">
+                        <div 
+                          className="h-2 rounded bg-purple-500" 
+                          style={{ 
+                            width: `${Math.min(100, (trend.amount / Math.max(...monthlyTrends[selectedCategory].map(t => t.amount))) * 100)}%` 
+                          }}
+                        ></div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-gray-500 dark:text-gray-400 text-sm">No monthly trend data available</p>
+              )}
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    const PersonSettlements = ({ settlements, onMarkAsPaid, onDelete }) => {
+      const [filterPerson, setFilterPerson] = useState("all");
+      
+      const personNames = [...new Set(settlements.map(s => s.personName))];
+      
+      const filteredSettlements = filterPerson === "all" 
+        ? settlements 
+        : settlements.filter(s => s.personName === filterPerson);
+      
+      const pendingSettlements = filteredSettlements.filter(s => !s.paid);
+      const completedSettlements = filteredSettlements.filter(s => s.paid);
+      
+      const personTotals = {};
+      settlements.forEach(s => {
+        if (!s.paid) {
+          personTotals[s.personName] = (personTotals[s.personName] || 0) + s.perPersonAmount;
+        }
+      });
+
+      return (
+        <div className="bg-white dark:bg-gray-800 p-4 rounded shadow">
+          <div className="flex justify-between items-center mb-3">
+            <h2 className="font-semibold text-lg">👥 Person-wise Settlements</h2>
+            <select 
+              value={filterPerson} 
+              onChange={(e) => setFilterPerson(e.target.value)}
+              className="p-2 rounded bg-gray-100 dark:bg-gray-700 text-sm"
+            >
+              <option value="all">All Persons</option>
+              {personNames.map(name => (
+                <option key={name} value={name}>{name}</option>
+              ))}
+            </select>
+          </div>
+          
+          {pendingSettlements.length === 0 ? (
+            <p className="text-gray-500 dark:text-gray-400 p-2">No pending settlements</p>
+          ) : (
+            <div className="space-y-3 mb-4">
+              <h3 className="font-medium text-red-600 dark:text-red-400">Pending Payments</h3>
+              {pendingSettlements.map(settlement => (
+                <div key={settlement.id} className="p-3 bg-red-50 dark:bg-red-900/20 rounded border border-red-100 dark:border-red-800">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <div className="font-medium">{settlement.description}</div>
+                      <div className="text-sm text-gray-600 dark:text-gray-400">
+                        Date: {settlement.date} • With: {settlement.personName}
+                      </div>
+                      <div className="text-sm">
+                        Total: ₹{settlement.totalAmount.toFixed(2)} • 
+                        {settlement.numPeople} people • 
+                        Each pays: ₹{settlement.perPersonAmount.toFixed(2)}
+                      </div>
+                      <div className="text-sm text-blue-600 dark:text-blue-400">
+                        Category: {settlement.category}
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      <button 
+                        onClick={() => onMarkAsPaid(settlement.id)}
+                        className="px-3 py-1 bg-green-500 text-white rounded text-sm hover:bg-green-600"
+                      >
+                        Mark Paid
+                      </button>
+                      <button 
+                        onClick={() => onDelete(settlement.id)}
+                        className="px-3 py-1 bg-red-500 text-white rounded text-sm hover:bg-red-600"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {completedSettlements.length > 0 && (
+            <div className="space-y-3">
+              <h3 className="font-medium text-green-600 dark:text-green-400">Completed Payments</h3>
+              {completedSettlements.map(settlement => (
+                <div key={settlement.id} className="p-3 bg-green-50 dark:bg-green-900/20 rounded border border-green-100 dark:border-green-800 opacity-75">
+                  <div className="flex justify-between">
+                    <div>
+                      <div className="font-medium line-through">{settlement.description}</div>
+                      <div className="text-sm text-gray-600 dark:text-gray-400">
+                        Date: {settlement.date} • With: {settlement.personName}
+                      </div>
+                    </div>
+                    <span className="text-green-600 dark:text-green-400">✓ Paid</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+          
+          <div className="mt-3">
+            <h4 className="font-medium mb-2">Person-wise Summary</h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+              {Object.entries(personTotals).map(([person, amount]) => (
+                <div key={person} className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded">
+                  <div className="font-medium">{person}</div>
+                  <div className="text-lg font-bold text-red-600">₹{amount.toFixed(2)}</div>
+                  <div className="text-sm text-gray-600">pending</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    const HEORCostDriversDashboard = ({ transactions, budgets }) => {
+      const categorySpending = {};
+      const categoryBudgets = {};
+      const categoryNeedsWants = {};
+      
+      transactions.forEach(tx => {
+        if (tx.category.toLowerCase() !== "income") {
+          categorySpending[tx.category] = (categorySpending[tx.category] || 0) + tx.amount;
+          
+          if (!categoryNeedsWants[tx.category]) {
+            categoryNeedsWants[tx.category] = { needs: 0, wants: 0, investment: 0 };
+          }
+          categoryNeedsWants[tx.category][tx.necessity.toLowerCase()] += tx.amount;
+        }
+      });
+
+      Object.keys(budgets).forEach(cat => {
+        categoryBudgets[cat] = budgets[cat];
+      });
+
+      const allCategories = [...new Set([...Object.keys(categorySpending), ...Object.keys(categoryBudgets)])];
+      
+      const totalSpending = Object.values(categorySpending).reduce((a, b) => a + b, 0);
+
+      return (
+        <div className="bg-white dark:bg-gray-800 p-4 rounded shadow">
+          <h2 className="font-semibold text-lg mb-3">📈 Cost Drivers Dashboard</h2>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+            Analysis of your spending drivers
+          </p>
+          
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b dark:border-gray-700">
+                  <th className="text-left p-2">Category</th>
+                  <th className="text-left p-2">Total Spent</th>
+                  <th className="text-left p-2">Budget</th>
+                  <th className="text-left p-2">% of Total</th>
+                  <th className="text-left p-2">Variance</th>
+                  <th className="text-left p-2">Needs/Wants Split</th>
+                </tr>
+              </thead>
+              <tbody>
+                {allCategories.map(cat => {
+                  const spent = categorySpending[cat] || 0;
+                  const budget = categoryBudgets[cat] || 0;
+                  const variance = budget > 0 ? ((spent - budget) / budget * 100).toFixed(1) : 'N/A';
+                  const percentOfTotal = totalSpending > 0 ? ((spent / totalSpending) * 100).toFixed(1) : 0;
+                  const needsWantsData = categoryNeedsWants[cat] || { needs: 0, wants: 0, investment: 0 };
+                  const totalCat = needsWantsData.needs + needsWantsData.wants + needsWantsData.investment;
+                  
+                  return (
+                    <tr key={cat} className="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
+                      <td className="p-2 font-medium">{cat}</td>
+                      <td className="p-2">₹{spent.toFixed(2)}</td>
+                      <td className="p-2">₹{budget.toFixed(2)}</td>
+                      <td className="p-2">
+                        <div className="flex items-center">
+                          <div className="w-16 bg-gray-200 dark:bg-gray-700 rounded h-2 mr-2">
+                            <div 
+                              className="h-2 rounded bg-blue-500" 
+                              style={{ width: `${Math.min(100, percentOfTotal)}%` }}
+                            ></div>
+                          </div>
+                          {percentOfTotal}%
+                        </div>
+                      </td>
+                      <td className="p-2">
+                        <span className={variance > 0 ? 'text-red-500' : 'text-green-500'}>
+                          {variance === 'N/A' ? 'N/A' : `${variance}%`}
+                        </span>
+                      </td>
+                      <td className="p-2">
+                        <div className="flex space-x-1">
+                          {needsWantsData.needs > 0 && (
+                            <span className="text-xs px-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-300 rounded">
+                              N: {(needsWantsData.needs/totalCat*100).toFixed(0)}%
+                            </span>
+                          )}
+                          {needsWantsData.wants > 0 && (
+                            <span className="text-xs px-1 bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-300 rounded">
+                              W: {(needsWantsData.wants/totalCat*100).toFixed(0)}%
+                            </span>
+                          )}
+                          {needsWantsData.investment > 0 && (
+                            <span className="text-xs px-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-300 rounded">
+                              I: {(needsWantsData.investment/totalCat*100).toFixed(0)}%
+                            </span>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+          
+          <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="p-3 bg-gray-50 dark:bg-gray-700 rounded">
+              <div className="text-sm text-gray-600 dark:text-gray-400">Total Spending</div>
+              <div className="font-bold text-xl">₹{totalSpending.toFixed(2)}</div>
+            </div>
+            <div className="p-3 bg-gray-50 dark:bg-gray-700 rounded">
+              <div className="text-sm text-gray-600 dark:text-gray-400">Categories with Overspending</div>
+              <div className="font-bold text-xl text-red-500">
+                {allCategories.filter(cat => {
+                  const spent = categorySpending[cat] || 0;
+                  const budget = categoryBudgets[cat] || 0;
+                  return spent > budget && budget > 0;
+                }).length}
+              </div>
+            </div>
+            <div className="p-3 bg-gray-50 dark:bg-gray-700 rounded">
+              <div className="text-sm text-gray-600 dark:text-gray-400">Budget Utilization</div>
+              <div className="font-bold text-xl">
+                {totalSpending > 0 && Object.values(categoryBudgets).reduce((a, b) => a + b, 0) > 0 
+                  ? ((totalSpending / Object.values(categoryBudgets).reduce((a, b) => a + b, 0)) * 100).toFixed(1)
+                  : 0}%
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    const BudgetCompletionVisualization = ({ transactions, budgets }) => {
+      const categories = [...new Set(transactions.map(t => t.category))].filter(cat => cat.toLowerCase() !== "income");
+      
+      const totalBudget = categories.reduce((sum, cat) => sum + (budgets[cat] || 0), 0);
+      const totalSpent = categories.reduce((sum, cat) => {
+        const spent = transactions.filter(t => t.category === cat).reduce((s, t) => s + t.amount, 0);
+        return sum + spent;
+      }, 0);
+      
+      const needsTotal = transactions.filter(tx => tx.necessity === "Needs").reduce((sum, tx) => sum + tx.amount, 0);
+      const wantsTotal = transactions.filter(tx => tx.necessity === "Wants").reduce((sum, tx) => sum + tx.amount, 0);
+      const investmentTotal = transactions.filter(tx => tx.necessity === "Investment").reduce((sum, tx) => sum + tx.amount, 0);
+      
+      const totalExpenses = needsTotal + wantsTotal + investmentTotal;
+
+      return (
+        <div className="bg-white dark:bg-gray-800 p-4 rounded shadow">
+          <h2 className="font-semibold text-lg mb-3">📋 Budget Completion Dashboard</h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+            <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded">
+              <div className="text-sm text-gray-600 dark:text-gray-400">Total Budget</div>
+              <div className="font-bold text-2xl">₹{totalBudget.toFixed(2)}</div>
+            </div>
+            <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded">
+              <div className="text-sm text-gray-600 dark:text-gray-400">Total Spent</div>
+              <div className="font-bold text-2xl">₹{totalSpent.toFixed(2)}</div>
+              <div className="text-sm">{totalBudget > 0 ? ((totalSpent/totalBudget)*100).toFixed(1) : 0}% utilized</div>
+            </div>
+            <div className="p-4 bg-purple-50 dark:bg-purple-900/20 rounded">
+              <div className="text-sm text-gray-600 dark:text-gray-400">Needs Total</div>
+              <div className="font-bold text-2xl">₹{needsTotal.toFixed(2)}</div>
+              <div className="text-sm">{totalExpenses > 0 ? ((needsTotal/totalExpenses)*100).toFixed(1) : 0}% of expenses</div>
+            </div>
+            <div className="p-4 bg-orange-50 dark:bg-orange-900/20 rounded">
+              <div className="text-sm text-gray-600 dark:text-gray-400">Wants Total</div>
+              <div className="font-bold text-2xl">₹{wantsTotal.toFixed(2)}</div>
+              <div className="text-sm">{totalExpenses > 0 ? ((wantsTotal/totalExpenses)*100).toFixed(1) : 0}% of expenses</div>
+            </div>
+          </div>
+          
+          <div className="mb-4">
+            <h3 className="font-medium mb-2">Budget vs Actual by Category</h3>
+            <div className="space-y-2">
+              {categories.map(cat => {
+                const spent = transactions.filter(t => t.category === cat).reduce((sum, t) => sum + t.amount, 0);
+                const budget = budgets[cat] || 0;
+                const percentage = budget > 0 ? (spent / budget * 100) : 0;
+                
+                return (
+                  <div key={cat} className="space-y-1">
+                    <div className="flex justify-between text-sm">
+                      <span>{cat}</span>
+                      <span>₹{spent.toFixed(2)} / ₹{budget.toFixed(2)} ({percentage.toFixed(1)}%)</span>
+                    </div>
+                    <div className="w-full bg-gray-200 dark:bg-gray-700 rounded h-2">
+                      <div 
+                        className="h-2 rounded" 
+                        style={{ 
+                          width: `${Math.min(100, percentage)}%`,
+                          backgroundColor: percentage > 100 ? '#EF4444' : percentage > 80 ? '#F59E0B' : '#10B981'
+                        }}
+                      ></div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      );
+    };
+
     const PieChart = ({ transactions }) => {
       useEffect(() => {
-        const ctx = document.getElementById("expensePie").getContext("2d");
+        const canvas = document.getElementById("expensePie");
+        if (!canvas) return;
+        
+        if (window.expensePieChart) {
+          window.expensePieChart.destroy();
+        }
+        
         const categories = {};
         transactions.forEach(t => {
           if (t.category.toLowerCase() !== "income") {
@@ -142,140 +1740,147 @@
           }
         });
 
-        const chart = new Chart(ctx, {
+        window.expensePieChart = new Chart(canvas.getContext("2d"), {
           type: 'doughnut',
           data: {
             labels: Object.keys(categories),
             datasets: [{
               data: Object.values(categories),
-              backgroundColor: ["#4B7BEC", "#2E7D32", "#F9A825", "#e57373", "#ba68c8", "#64b5f6", "#FF8A65"]
+              backgroundColor: ["#4B7BEC", "#2E7D32", "#F9A825", "#e57373", "#ba68c8", "#64b5f6", "#FF8A65", "#4DB6AC", "#FFB74D", "#7986CB"]
             }]
           },
           options: {
             responsive: true,
-            plugins: { legend: { position: 'bottom' } }
+            plugins: { 
+              legend: { position: 'bottom' },
+              tooltip: {
+                callbacks: {
+                  label: function(context) {
+                    const label = context.label || '';
+                    const value = context.raw || 0;
+                    const total = Object.values(categories).reduce((a, b) => a + b, 0);
+                    const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                    return `${label}: ₹${value.toFixed(2)} (${percentage}%)`;
+                  }
+                }
+              }
+            }
           }
         });
 
-        return () => chart.destroy();
+        return () => {
+          if (window.expensePieChart) {
+            window.expensePieChart.destroy();
+          }
+        };
       }, [transactions]);
 
       return (
         <div className="bg-white dark:bg-gray-800 p-4 rounded shadow">
-          <h2 className="font-semibold text-lg mb-2">Expense Breakdown (Pie)</h2>
+          <h2 className="font-semibold text-lg mb-2">Expense Breakdown by Category</h2>
           <canvas id="expensePie"></canvas>
         </div>
       );
     };
 
-    const TransactionForm = ({ onSubmit }) => {
-      const [form, setForm] = useState({ date: "", description: "", category: "", amount: "", groupPay: "No", necessity: "Needs" });
-      const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
-      const handleSubmit = e => {
-        e.preventDefault();
-        if (!form.date || !form.description || !form.category || form.amount <= 0) return alert("All fields required");
-        onSubmit({ ...form, amount: parseFloat(form.amount) });
-        setForm({ date: "", description: "", category: "", amount: "", groupPay: "No", necessity: "Needs" });
-      };
-      return (
-        <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 p-4 rounded shadow space-y-2">
-          <h2 className="font-semibold text-lg mb-2">Add Transaction</h2>
-          <input type="date" name="date" value={form.date} onChange={handleChange} className="w-full p-2 rounded bg-gray-100 dark:bg-gray-700" required />
-          <input type="text" name="description" placeholder="Description" value={form.description} onChange={handleChange} className="w-full p-2 rounded bg-gray-100 dark:bg-gray-700" required />
-          <select name="category" value={form.category} onChange={handleChange} className="w-full p-2 rounded bg-gray-100 dark:bg-gray-700" required>
-            <option value="">Select Category</option>
-            {["Rent & Utilities","Foods & cravings","Daily Living","Travel & Transport","Fitness & Health","Family Support","Entertainment & Subscriptions","Personal Care & Shopping","Investments","Personal EMIs","Emergency Funds"].map(cat => (<option key={cat} value={cat}>{cat}</option>
-            ))}
-          </select>
-          <input type="number" name="amount" placeholder="Amount" value={form.amount} onChange={handleChange} className="w-full p-2 rounded bg-gray-100 dark:bg-gray-700" required />
-          <select name="groupPay" value={form.groupPay} onChange={handleChange} className="w-full p-2 rounded bg-gray-100 dark:bg-gray-700">
-            <option value="No">Group Pay: No</option>
-            <option value="Yes">Group Pay: Yes</option>
-          </select>
-          <select name="necessity" value={form.necessity} onChange={handleChange} className="w-full p-2 rounded bg-gray-100 dark:bg-gray-700">
-            <option value="Needs">Needs</option>
-            <option value="Wants">Wants</option>
-            <option value="Investment">Investment</option>
-          </select>
-          <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">Add</button>
-        </form>
-      );
-    };
-
-    const TransactionTable = ({ transactions, onDelete }) => (
+    const TransactionTable = ({ transactions, onDelete, monthFilter, setMonthFilter, availableMonths, currentUser }) => (
       <div className="bg-white dark:bg-gray-800 p-4 rounded shadow overflow-auto">
-        <h2 className="font-semibold text-lg mb-2">Transaction Log</h2>
-        <table className="table-auto w-full text-left">
-          <thead>
-            <tr><th>Date</th><th>Description</th><th>Category</th><th>Amount</th><th></th></tr>
-          </thead>
-          <tbody>
-            {transactions.map((tx, idx) => (
-              <tr key={idx} className="border-t">
-                <td>{tx.date}</td>
-                <td>{tx.description}</td>
-                <td>{tx.category}</td>
-                <td className="text-green-600">₹{tx.amount.toFixed(2)}</td>
-                <td><button onClick={() => onDelete(idx)} className="text-red-500">Delete</button></td>
-              </tr>
+        <div className="flex justify-between items-center mb-3">
+          <h2 className="font-semibold text-lg">Transaction Log</h2>
+          <select 
+            value={monthFilter} 
+            onChange={(e) => setMonthFilter(e.target.value)}
+            className="p-2 rounded bg-gray-100 dark:bg-gray-700 text-sm"
+          >
+            <option value="all">All Months</option>
+            {availableMonths.map(month => (
+              <option key={month} value={month}>
+                {new Date(month + '-01').toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+              </option>
             ))}
-          </tbody>
-        </table>
+          </select>
+        </div>
+        
+        {transactions.length === 0 ? (
+          <p className="text-gray-500 dark:text-gray-400 p-2">No transactions for selected month</p>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="table-auto w-full text-left">
+              <thead>
+                <tr className="border-b dark:border-gray-700">
+                  <th className="p-2">Date</th>
+                  <th className="p-2">Description</th>
+                  <th className="p-2">Category</th>
+                  <th className="p-2">Amount</th>
+                  <th className="p-2">Details</th>
+                  <th className="p-2"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {transactions.map((tx, idx) => (
+                  <tr key={idx} className="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
+                    <td className="p-2">{tx.date}</td>
+                    <td className="p-2">
+                      <div className="font-medium">{tx.description}</div>
+                      {tx.groupPay === "Yes" && tx.groupDetails && (
+                        <div className="text-xs text-blue-600 dark:text-blue-400 mt-1">
+                          <div>{tx.groupDetails.people.length} people</div>
+                          {tx.groupDetails.splitType === 'equal' ? (
+                            <div>Equal split: ₹{(tx.amount / tx.groupDetails.people.length).toFixed(2)} each</div>
+                          ) : (
+                            <div>Custom split</div>
+                          )}
+                        </div>
+                      )}
+                    </td>
+                    <td className="p-2">
+                      <div>{tx.category}</div>
+                      <div className={`text-xs px-1 rounded ${tx.necessity === 'Needs' ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-300' : tx.necessity === 'Wants' ? 'bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-300' : 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-300'}`}>
+                        {tx.necessity}
+                      </div>
+                    </td>
+                    <td className="p-2 font-medium text-green-600 dark:text-green-400">₹{tx.amount.toFixed(2)}</td>
+                    <td className="p-2">
+                      {tx.groupPay === "Yes" && tx.groupDetails ? (
+                        <div className="text-xs">
+                          <div className={`px-2 py-1 rounded mb-1 ${tx.groupPay === 'Yes' ? 'bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-300' : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300'}`}>
+                            Group: {tx.groupDetails.splitType}
+                          </div>
+                          <div className="text-gray-600 dark:text-gray-400">
+                            Includes you: {tx.groupDetails.includeMe ? 'Yes' : 'No'}
+                          </div>
+                        </div>
+                      ) : (
+                        <span className={`text-xs px-2 py-1 rounded ${tx.groupPay === 'Yes' ? 'bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-300' : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300'}`}>
+                          Personal
+                        </span>
+                      )}
+                    </td>
+                    <td className="p-2">
+                      <button 
+                        onClick={() => onDelete(idx)} 
+                        className="px-3 py-1 bg-red-500 text-white rounded text-sm hover:bg-red-600"
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+        
+        {transactions.length > 0 && (
+          <div className="mt-3 p-3 bg-gray-50 dark:bg-gray-700 rounded text-sm">
+            <div className="font-medium">Month Summary:</div>
+            <div>Total Transactions: {transactions.length}</div>
+            <div>Total Amount: ₹{transactions.reduce((sum, tx) => sum + tx.amount, 0).toFixed(2)}</div>
+            <div>Group Payments: {transactions.filter(tx => tx.groupPay === "Yes").length}</div>
+          </div>
+        )}
       </div>
     );
-
-    const TimeSpentChart = ({ transactions, filter, setFilter }) => {
-      useEffect(() => {
-        const ctx = document.getElementById("timespent").getContext("2d");
-        const dailyTotals = {};
-        const now = new Date();
-
-        const filtered = transactions.filter(tx => {
-          const txDate = new Date(tx.date);
-          const diffTime = now - txDate;
-          if (filter === "weekly") return diffTime <= 7 * 24 * 60 * 60 * 1000;
-          if (filter === "monthly") return diffTime <= 30 * 24 * 60 * 60 * 1000;
-          if (filter === "yearly") return diffTime <= 365 * 24 * 60 * 60 * 1000;
-          return true;
-        });
-
-        filtered.forEach(tx => {
-          const day = new Date(tx.date).toISOString().split("T")[0];
-          dailyTotals[day] = (dailyTotals[day] || 0) + tx.amount;
-        });
-
-        const chart = new Chart(ctx, {
-          type: 'bar',
-          data: {
-            labels: Object.keys(dailyTotals),
-            datasets: [{ label: 'Spending by Day', data: Object.values(dailyTotals), backgroundColor: '#F9A825' }]
-          },
-          options: {
-            responsive: true,
-            scales: { y: { beginAtZero: true } },
-            plugins: { legend: { display: false } }
-          }
-        });
-
-        return () => chart.destroy();
-      }, [transactions, filter]);
-
-      return (
-        <div className="bg-white dark:bg-gray-800 p-4 rounded shadow">
-          <div className="flex justify-between items-center mb-2">
-            <h2 className="font-semibold text-lg">Time Spent Analysis</h2>
-            <select value={filter} onChange={e => setFilter(e.target.value)} className="bg-gray-100 dark:bg-gray-700 p-1 rounded">
-              <option value="weekly">Weekly</option>
-              <option value="monthly">Monthly</option>
-              <option value="yearly">Yearly</option>
-            </select>
-          </div>
-          <canvas id="timespent"></canvas>
-        </div>
-      );
-    };
-
-    
 
     function LoginForm({ onLogin }) {
       const [mode, setMode] = useState("email");
@@ -322,23 +1927,23 @@
 
     const Footer = () => (
       <footer className="text-center text-sm py-4 bg-gray-200 dark:bg-gray-800 mt-4">
-        <p>Connect on <a href="https://www.linkedin.com/in/subhra-prasad-chakraborty-3b91aa285?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank" className="text-blue-500 underline">LinkedIn</a></p>
+        <p>Connect on <a href="https://www.linkedin.com/in/subhra-prasad-chakraborty-3b91aa285?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank" className="text-blue-500 underline">LinkedIn</a> | Email: subhraprasadc@gmail.com  </p>
       </footer>
     );
 
-const Root = () => {
-  const [currentUser, setCurrentUser] = React.useState(() => localStorage.getItem("currentUser"));
+    const Root = () => {
+      const [currentUser, setCurrentUser] = React.useState(() => localStorage.getItem("currentUser"));
 
-  const logoutUser = () => {
-    localStorage.removeItem("currentUser");
-    setCurrentUser(null);
-  };
+      const logoutUser = () => {
+        localStorage.removeItem("currentUser");
+        setCurrentUser(null);
+      };
 
-  return currentUser ? <App currentUser={currentUser} logoutUser={logoutUser} /> : <LoginForm onLogin={setCurrentUser} />;
-};
+      return currentUser ? <App currentUser={currentUser} logoutUser={logoutUser} /> : <LoginForm onLogin={setCurrentUser} />;
+    };
 
-ReactDOM.render(<Root />, document.getElementById("root"));
-</script>
+    ReactDOM.render(<Root />, document.getElementById("root"));
+  </script>
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
