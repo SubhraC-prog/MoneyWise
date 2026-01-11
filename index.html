@@ -768,15 +768,7 @@ textarea {
               budgets={budgets}
               setBudgets={setBudgets}
             />
-            
-            {selectedMonth !== "all" && (
-              <MonthlySummary 
-                selectedMonth={selectedMonth}
-                transactions={transactions}
-                budgets={getCurrentBudgets()}
-                filterByMonth={filterByMonth}
-              />
-            )}
+          
             
             <div className="mt-4">
               {(() => {
@@ -3479,6 +3471,7 @@ textarea {
                       </button>
                     </div>
                     
+
                     <div className="flex justify-center my-4">
                       <svg width="120" height="120" className="transform -rotate-90">
                         <circle cx="60" cy="60" r="50" stroke="#e5e7eb" strokeWidth="8" fill="none" />
