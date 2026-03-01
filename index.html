@@ -3937,7 +3937,22 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
 
     // ============ INSIGHTS & ADVANCED ANALYTICS FUNCTIONS ============
     function calculateInsights(transactions, budgets, customIncome) {
-      const filteredTx = transactions.filter(tx => tx.category.toLowerCase() !== "income");
+      // normalize incoming transactions to avoid missing-property errors when using legacy data
+      const normalized = transactions.map(tx => ({
+        category: tx.category || '',
+        amount: parseFloat(tx.amount) || 0,
+        description: tx.description || '',
+        date: tx.date || (new Date()).toISOString().split('T')[0],
+        necessity: tx.necessity || 'Needs',
+        happinessScore: typeof tx.happinessScore === 'number' ? tx.happinessScore : 0,
+        paid: !!tx.paid,
+        paidDate: tx.paidDate || null,
+        perPersonAmount: parseFloat(tx.perPersonAmount) || 0,
+        numPeople: parseInt(tx.numPeople) || 0,
+        personName: tx.personName || '',
+        category: tx.category || ''
+      }));
+      const filteredTx = normalized.filter(tx => tx.category.toLowerCase() !== "income");
       
       // Hidden Leaks - Small recurring expenses
       const hiddenLeaks = {};
@@ -4210,6 +4225,8 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
       else if (presentBiasScore > 25) presentBiasCategory = 'Moderate';
       
       // 6. Spending Probability Prediction
+      // define helper date for calculations
+      const today = new Date();
       const todaySecond = new Date();
       const dayOfWeekNum = todaySecond.getDay();
       const isWeekend = dayOfWeekNum === 0 || dayOfWeekNum === 6;
@@ -4322,7 +4339,22 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
       // NEW CODE START - Ensure insights container exists with null check
       const insightsContainer = typeof document !== 'undefined' ? document.getElementById("insights-section") : null;
       
-      const insights = calculateInsights(transactions, budgets, customIncome);
+      let insights;
+      try {
+        insights = calculateInsights(transactions, budgets, customIncome);
+      } catch (err) {
+        console.error('Insights calculation failed', err);
+        insights = {};
+      }
+      
+      // if insights is empty, bail out with an error message
+      if (!insights || Object.keys(insights).length === 0) {
+        return (
+          <div className="p-4 text-red-500 bg-white dark:bg-gray-800 rounded shadow">
+            <p>Unable to generate insights at the moment. Please check console for errors.</p>
+          </div>
+        );
+      }
       
       // "Can I Afford This?" Simulator
       const handleAffordAnalysis = () => {
@@ -5279,15 +5311,47 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
       const [missedMonths, setMissedMonths] = useState(0);
       const [activeTab, setActiveTab] = useState('dashboard');
       
-      const filteredTx = transactions.filter(tx => tx.category.toLowerCase() !== "income");
-      const totalIncome = customIncome + transactions.filter(tx => tx.category.toLowerCase() === "income").reduce((sum, tx) => sum + tx.amount, 0);
+      // normalize and filter transactions to avoid missing field issues
+      const normTx = transactions.map(tx => ({
+        category: tx.category || '',
+        amount: parseFloat(tx.amount) || 0,
+        description: tx.description || '',
+        date: tx.date || (new Date()).toISOString().split('T')[0],
+        necessity: tx.necessity || 'Needs',
+        happinessScore: typeof tx.happinessScore === 'number' ? tx.happinessScore : 0,
+        paid: !!tx.paid,
+        paidDate: tx.paidDate || null,
+      }));
+      const filteredTx = normTx.filter(tx => tx.category.toLowerCase() !== "income");
+      const totalIncome = customIncome + normTx.filter(tx => tx.category.toLowerCase() === "income").reduce((sum, tx) => sum + tx.amount, 0);
       const totalSpent = filteredTx.reduce((sum, tx) => sum + tx.amount, 0);
       
-      const insights = calculateInsights(transactions, budgets, customIncome);
-      const score = financialAIEngine.calculateFinancialScore(insights);
-      const roadmap = financialAIEngine.generateRoadmap(insights, userAge, aiCoachTarget);
-      const behavioralTips = financialAIEngine.behavioralCorrection(insights, impulseThreshold);
-      const adjustment = financialAIEngine.adaptiveAdjustment(insights, missedMonths);
+      let insights;
+      try {
+        insights = calculateInsights(transactions, budgets, customIncome);
+      } catch (err) {
+        console.error('Insights calculation failed', err);
+        insights = {};
+      }
+      if (!insights || Object.keys(insights).length === 0) {
+        return (
+          <div className="p-4 text-red-500 bg-white dark:bg-gray-800 rounded shadow">
+            <p>Unable to initialize AI coach data. Please check console for errors.</p>
+          </div>
+        );
+      }
+      let score = { total: 0, breakdown: {} };
+      let roadmap = { shortTerm: [], mediumTerm: [], longTerm: [] };
+      let behavioralTips = [];
+      let adjustment = null;
+      try {
+        score = financialAIEngine.calculateFinancialScore(insights);
+        roadmap = financialAIEngine.generateRoadmap(insights, userAge, aiCoachTarget);
+        behavioralTips = financialAIEngine.behavioralCorrection(insights, impulseThreshold);
+        adjustment = financialAIEngine.adaptiveAdjustment(insights, missedMonths);
+      } catch (e) {
+        console.error('AI engine error', e);
+      }
       
       // Simulate missed months based on savings rate trend
       useEffect(() => {
