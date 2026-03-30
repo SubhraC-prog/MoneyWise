@@ -768,7 +768,19 @@ textarea {
       const [darkMode, setDarkMode] = useState(() => localStorage.getItem("theme") === "dark");
       const [budgets, setBudgets] = useState(() => {
         const saved = localStorage.getItem("budgets");
-        return saved ? JSON.parse(saved) : {};
+        let parsed = {};
+        try {
+          parsed = saved ? JSON.parse(saved) : {};
+        } catch (e) {
+          parsed = {};
+        }
+        // Migrate old global budgets to current month
+        if (parsed && typeof parsed === 'object' && Object.keys(parsed).length > 0 && !Object.keys(parsed).some(key => key.includes('-'))) {
+          const currentMonth = new Date().toISOString().slice(0, 7);
+          parsed = { [currentMonth]: parsed };
+          localStorage.setItem("budgets", JSON.stringify(parsed));
+        }
+        return parsed;
       });
       const [personSettlements, setPersonSettlements] = useState(() => {
         const saved = localStorage.getItem("personSettlements");
@@ -2891,7 +2903,15 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
       const categories = [...new Set(transactions.map(t => t.category))].filter(cat => cat.toLowerCase() !== "income");
 
       const copyFromPreviousMonth = () => {
+        if (selectedMonth === "all") {
+          alert("Please select a specific month to copy budgets from the previous month.");
+          return;
+        }
         const currentDate = new Date(selectedMonth + '-01');
+        if (isNaN(currentDate.getTime())) {
+          alert("Invalid month selected.");
+          return;
+        }
         currentDate.setMonth(currentDate.getMonth() - 1);
         const prevMonth = currentDate.toISOString().slice(0, 7);
         const prevBudgets = budgets[prevMonth] || {};
@@ -3980,9 +4000,9 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
           personName: tx.personName || '',
           category: tx.category || ''
         })).filter(tx => {
-          // Filter out transactions with invalid dates to prevent mobile-specific issues
+          // Skip transactions with completely invalid dates, but allow processing to handle them gracefully
           const date = new Date(tx.date);
-          return !isNaN(date.getTime());
+          return !isNaN(date.getTime()) || tx.date; // Allow if date exists, even if invalid, to handle in calculations
         });
         const filteredTx = normalized.filter(tx => tx.category.toLowerCase() !== "income");
         
@@ -3990,6 +4010,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
         const isCurrentMonth = (tx) => {
           if (selectedMonth === "all") return true;
           const date = new Date(tx.date);
+          if (isNaN(date.getTime())) return false; // Skip invalid dates
           const month = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
           return month === selectedMonth;
         };
@@ -4011,6 +4032,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
         const monthlyData = {};
         filteredTx.forEach(tx => {
           const date = new Date(tx.date);
+          if (isNaN(date.getTime())) return; // Skip invalid dates
           const month = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
           monthlyData[month] = (monthlyData[month] || 0) + tx.amount;
         });
@@ -4026,6 +4048,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
         const categoryMonthly = {};
         filteredTx.forEach(tx => {
           const date = new Date(tx.date);
+          if (isNaN(date.getTime())) return; // Skip invalid dates
           const month = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
           if (!categoryMonthly[tx.category]) categoryMonthly[tx.category] = {};
           categoryMonthly[tx.category][month] = (categoryMonthly[tx.category][month] || 0) + tx.amount;
@@ -4239,6 +4262,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
         const incomeMonths = {};
         transactions.filter(tx => tx.category.toLowerCase() === "income").forEach(tx => {
           const date = new Date(tx.date);
+          if (isNaN(date.getTime())) return; // Skip invalid dates
           const month = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
           incomeMonths[month] = (incomeMonths[month] || 0) + tx.amount;
         });
@@ -4246,6 +4270,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
         const expenseMonths = {};
         filteredTx.forEach(tx => {
           const date = new Date(tx.date);
+          if (isNaN(date.getTime())) return; // Skip invalid dates
           const month = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
           expenseMonths[month] = (expenseMonths[month] || 0) + tx.amount;
         });
@@ -4327,6 +4352,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
         
         // NEW CODE END
         
+        console.log('Calculated insights for month:', selectedMonth, 'total transactions:', filteredTx.length, 'current month tx:', currentMonthTx.length);
         return {
           hiddenLeaks: leaksList,
           leaksTotal,
