@@ -3937,392 +3937,447 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
 
     // ============ INSIGHTS & ADVANCED ANALYTICS FUNCTIONS ============
     function calculateInsights(transactions, budgets, customIncome) {
-      // normalize incoming transactions to avoid missing-property errors when using legacy data
-      const normalized = transactions.map(tx => ({
-        category: tx.category || '',
-        amount: parseFloat(tx.amount) || 0,
-        description: tx.description || '',
-        date: tx.date || (new Date()).toISOString().split('T')[0],
-        necessity: tx.necessity || 'Needs',
-        happinessScore: typeof tx.happinessScore === 'number' ? tx.happinessScore : 0,
-        paid: !!tx.paid,
-        paidDate: tx.paidDate || null,
-        perPersonAmount: parseFloat(tx.perPersonAmount) || 0,
-        numPeople: parseInt(tx.numPeople) || 0,
-        personName: tx.personName || '',
-        category: tx.category || ''
-      }));
-      const filteredTx = normalized.filter(tx => tx.category.toLowerCase() !== "income");
-      
-      // Hidden Leaks - Small recurring expenses
-      const hiddenLeaks = {};
-      filteredTx.forEach(tx => {
-        if (tx.amount < 500) {
-          hiddenLeaks[tx.description] = (hiddenLeaks[tx.description] || 0) + tx.amount;
-        }
-      });
-      const leaksList = Object.entries(hiddenLeaks).sort((a, b) => b[1] - a[1]).slice(0, 5);
-      const leaksTotal = leaksList.reduce((sum, [_, amount]) => sum + amount, 0);
-      
-      // Monthly Trend - % change
-      const monthlyData = {};
-      filteredTx.forEach(tx => {
-        const date = new Date(tx.date);
-        const month = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
-        monthlyData[month] = (monthlyData[month] || 0) + tx.amount;
-      });
-      const sortedMonths = Object.keys(monthlyData).sort();
-      let monthlyTrendPercent = 0;
-      if (sortedMonths.length > 1) {
-        const prev = monthlyData[sortedMonths[sortedMonths.length - 2]];
-        const curr = monthlyData[sortedMonths[sortedMonths.length - 1]];
-        monthlyTrendPercent = prev > 0 ? ((curr - prev) / prev * 100) : 0;
-      }
-      
-      // Category Trends - Top 3 movers
-      const categoryMonthly = {};
-      filteredTx.forEach(tx => {
-        const date = new Date(tx.date);
-        const month = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
-        if (!categoryMonthly[tx.category]) categoryMonthly[tx.category] = {};
-        categoryMonthly[tx.category][month] = (categoryMonthly[tx.category][month] || 0) + tx.amount;
-      });
-      
-      const categoryTrends = Object.entries(categoryMonthly).map(([cat, months]) => {
-        const sortedMonthKeys = Object.keys(months).sort();
-        if (sortedMonthKeys.length < 2) return null;
-        const prev = months[sortedMonthKeys[sortedMonthKeys.length - 2]];
-        const curr = months[sortedMonthKeys[sortedMonthKeys.length - 1]];
-        const change = prev > 0 ? ((curr - prev) / prev * 100) : 0;
-        return { category: cat, change, prev, curr };
-      }).filter(Boolean).sort((a, b) => Math.abs(b.change) - Math.abs(a.change)).slice(0, 3);
-      
-      // Lifestyle Inflation
-      const monthlyExpenses = Object.values(monthlyData).sort();
-      const avgMonthly = monthlyExpenses.reduce((a, b) => a + b, 0) / monthlyExpenses.length;
-      const latestMonth = monthlyExpenses[monthlyExpenses.length - 1];
-      const lifestyleStatus = latestMonth > avgMonthly * 1.15 ? 'WARNING' : 'OK';
-      
-      // Budget Usage - Per-category progress bars
-      const totalIncome = customIncome + transactions.filter(tx => tx.category.toLowerCase() === "income").reduce((sum, tx) => sum + tx.amount, 0);
-      const budgetUsage = Object.entries(budgets || {}).map(([cat, budget]) => {
-        const spent = filteredTx.filter(tx => tx.category === cat).reduce((sum, tx) => sum + tx.amount, 0);
-        return { category: cat, budget, spent, percent: budget > 0 ? (spent / budget * 100) : 0 };
-      });
-      
-      // Overspend Prediction
-      const totalBudget = Object.values(budgets || {}).reduce((a, b) => a + b, 0);
-      const totalSpent = filteredTx.reduce((sum, tx) => sum + tx.amount, 0);
-      let overspendStatus = 'GREEN';
-      if (totalBudget > 0 && totalSpent > totalBudget * 0.9) overspendStatus = 'YELLOW';
-      if (totalBudget > 0 && totalSpent > totalBudget) overspendStatus = 'RED';
-      
-      // Pattern Detection - Days/merchants analysis
-      const dayOfWeek = {};
-      const merchantAnalysis = {};
-      filteredTx.forEach(tx => {
-        const date = new Date(tx.date);
-        const day = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][date.getDay()];
-        dayOfWeek[day] = (dayOfWeek[day] || 0) + tx.amount;
-        merchantAnalysis[tx.description] = (merchantAnalysis[tx.description] || 0) + 1;
-      });
-      const busiestDay = Object.keys(dayOfWeek).reduce((a, b) => dayOfWeek[a] > dayOfWeek[b] ? a : b, 'N/A');
-      const topMerchant = Object.keys(merchantAnalysis).reduce((a, b) => merchantAnalysis[a] > merchantAnalysis[b] ? a : b, 'N/A');
-      
-      // Savings Rate
-      const totalExpensesAll = filteredTx.reduce((sum, tx) => sum + tx.amount, 0);
-      const savingsRate = totalIncome > 0 ? ((totalIncome - totalExpensesAll) / totalIncome * 100) : 0;
-      
-      // Savings Streak - Day counter
-      const recentDays = {};
-      filteredTx.forEach(tx => {
-        const date = tx.date;
-        recentDays[date] = true;
-      });
-      let streak = 0;
-      const todayFirst = new Date();
-      for (let i = 0; i < 365; i++) {
-        const date = new Date(todayFirst);
-        date.setDate(date.getDate() - i);
-        const dateStr = date.toISOString().split('T')[0];
-        if (recentDays[dateStr]) {
-          streak++;
-        } else if (i > 0) {
-          break;
-        }
-      }
-      
-      // Daily Average
-      const daysWithTransactions = Object.keys(recentDays).length || 1;
-      const dailyAverage = totalExpensesAll / daysWithTransactions;
-      const runwayDays = totalIncome > 0 ? Math.floor((totalIncome - totalExpensesAll) / dailyAverage) : 0;
-      
-      // Expense Ratio
-      const needsExpense = filteredTx.filter(tx => tx.necessity === 'Needs').reduce((sum, tx) => sum + tx.amount, 0);
-      const expenseRatio = totalIncome > 0 ? (needsExpense / totalIncome * 100) : 0;
-      
-      // Subscriptions
-      const subscriptions = filteredTx.filter(tx => 
-        tx.description.toLowerCase().includes('sub') || 
-        tx.description.toLowerCase().includes('netflix') ||
-        tx.description.toLowerCase().includes('spotify') ||
-        tx.description.toLowerCase().includes('premium')
-      );
-      
-      // EMI Stress
-      const emiExpense = filteredTx.filter(tx => tx.category === 'Personal EMIs').reduce((sum, tx) => sum + tx.amount, 0);
-      const emiStress = totalIncome > 0 ? (emiExpense / totalIncome * 100) : 0;
-      let emiStatus = 'SAFE';
-      if (emiStress > 30) emiStatus = 'RISK';
-      else if (emiStress > 20) emiStatus = 'MODERATE';
-      
-      // NEW: Happiness Score Analysis for Wants
-      const wantsTransactions = filteredTx.filter(tx => tx.necessity === 'Wants' && tx.happinessScore);
-      const avgHappinessScore = wantsTransactions.length > 0 
-        ? wantsTransactions.reduce((sum, tx) => sum + tx.happinessScore, 0) / wantsTransactions.length 
-        : 0;
-      
-      const wantsByHappiness = {};
-      wantsTransactions.forEach(tx => {
-        if (!wantsByHappiness[tx.happinessScore]) {
-          wantsByHappiness[tx.happinessScore] = { count: 0, total: 0 };
-        }
-        wantsByHappiness[tx.happinessScore].count++;
-        wantsByHappiness[tx.happinessScore].total += tx.amount;
-      });
-      
-      // NEW: Savings Goals Progress
-      const savingsGoals = JSON.parse(localStorage.getItem("moneywise_goals") || "[]");
-      const totalGoalsTarget = savingsGoals.reduce((sum, goal) => sum + goal.targetAmount, 0);
-      const totalGoalsCurrent = savingsGoals.reduce((sum, goal) => sum + goal.currentAmount, 0);
-      const goalsProgress = totalGoalsTarget > 0 ? (totalGoalsCurrent / totalGoalsTarget * 100) : 0;
-      
-      // NEW: Happiness-ROI Analysis
-      const happinessROI = wantsTransactions.map(tx => ({
-        description: tx.description,
-        amount: tx.amount,
-        happiness: tx.happinessScore,
-        roi: tx.happinessScore / (tx.amount / 1000) // Happiness per ₹1000
-      })).sort((a, b) => b.roi - a.roi);
-      
-      // NEW: Correlation between happiness and spending
-      let happinessSpendingCorrelation = 0;
-      if (wantsTransactions.length >= 3) {
-        const amounts = wantsTransactions.map(tx => tx.amount);
-        const happiness = wantsTransactions.map(tx => tx.happinessScore);
-        const avgAmount = amounts.reduce((a, b) => a + b, 0) / amounts.length;
-        const avgHappiness = happiness.reduce((a, b) => a + b, 0) / happiness.length;
+      try {
+        // normalize incoming transactions to avoid missing-property errors when using legacy data
+        const normalized = transactions.map(tx => ({
+          category: tx.category || '',
+          amount: parseFloat(tx.amount) || 0,
+          description: tx.description || '',
+          date: tx.date || (new Date()).toISOString().split('T')[0],
+          necessity: tx.necessity || 'Needs',
+          happinessScore: typeof tx.happinessScore === 'number' ? tx.happinessScore : 0,
+          paid: !!tx.paid,
+          paidDate: tx.paidDate || null,
+          perPersonAmount: parseFloat(tx.perPersonAmount) || 0,
+          numPeople: parseInt(tx.numPeople) || 0,
+          personName: tx.personName || '',
+          category: tx.category || ''
+        })).filter(tx => {
+          // Filter out transactions with invalid dates to prevent mobile-specific issues
+          const date = new Date(tx.date);
+          return !isNaN(date.getTime());
+        });
+        const filteredTx = normalized.filter(tx => tx.category.toLowerCase() !== "income");
         
-        const numerator = amounts.reduce((sum, amount, i) => 
-          sum + (amount - avgAmount) * (happiness[i] - avgHappiness), 0);
-        const denom1 = Math.sqrt(amounts.reduce((sum, amount) => 
-          sum + Math.pow(amount - avgAmount, 2), 0));
-        const denom2 = Math.sqrt(happiness.reduce((sum, h) => 
-          sum + Math.pow(h - avgHappiness, 2), 0));
+        // Hidden Leaks - Small recurring expenses
+        const hiddenLeaks = {};
+        filteredTx.forEach(tx => {
+          if (tx.amount < 500) {
+            hiddenLeaks[tx.description] = (hiddenLeaks[tx.description] || 0) + tx.amount;
+          }
+        });
+        const leaksList = Object.entries(hiddenLeaks).sort((a, b) => b[1] - a[1]).slice(0, 5);
+        const leaksTotal = leaksList.reduce((sum, [_, amount]) => sum + amount, 0);
         
-        happinessSpendingCorrelation = denom1 && denom2 ? numerator / (denom1 * denom2) : 0;
-      }
-      
-      // Financial Score
-      const scoreFactors = {
-        savings: savingsRate > 20 ? 20 : savingsRate > 10 ? 15 : savingsRate > 0 ? 10 : 5,
-        budget: totalBudget > 0 ? 15 : 5,
-        overspend: totalSpent <= totalBudget ? 20 : totalSpent <= totalBudget * 1.1 ? 10 : 0,
-        needs: expenseRatio < 50 ? 15 : expenseRatio < 70 ? 10 : 5,
-        emi: emiStatus === 'SAFE' ? 15 : emiStatus === 'MODERATE' ? 8 : 3,
-        subscriptions: subscriptions.length < 3 ? 10 : 5,
-        goals: goalsProgress > 75 ? 15 : goalsProgress > 50 ? 10 : goalsProgress > 25 ? 5 : 0,
-        happiness: avgHappinessScore > 4 ? 10 : avgHappinessScore > 3 ? 7 : avgHappinessScore > 2 ? 4 : 0,
-        runway: runwayDays > 90 ? 10 : runwayDays > 30 ? 7 : runwayDays > 7 ? 4 : 0
-      };
-      const healthScore = Math.min(100, Object.values(scoreFactors).reduce((a, b) => a + b, 0));
-      
-      // AI Coach Score with detailed breakdown
-      const aiCoachScore = {
-        total: healthScore,
-        breakdown: scoreFactors,
-        interpretation: {
-          savings: scoreFactors.savings >= 15 ? "Excellent savings rate" : scoreFactors.savings >= 10 ? "Good savings rate" : "Needs improvement",
-          budget: scoreFactors.budget >= 15 ? "Well-planned budget" : "Consider setting budgets",
-          overspend: scoreFactors.overspend >= 20 ? "Great at staying within budget" : "Watch for overspending",
-          needs: scoreFactors.needs >= 15 ? "Healthy needs-to-income ratio" : "Fixed costs may be high",
-          emi: scoreFactors.emi >= 15 ? "Debt is well managed" : "EMI burden is concerning",
-          subscriptions: scoreFactors.subscriptions >= 10 ? "Subscriptions under control" : "Review subscription costs",
-          goals: scoreFactors.goals >= 15 ? "Excellent goal progress" : scoreFactors.goals >= 10 ? "Good progress" : "Start saving towards goals",
-          happiness: scoreFactors.happiness >= 10 ? "Great happiness-to-spending ratio" : "Review wants spending for better ROI",
-          runway: scoreFactors.runway >= 10 ? "Strong emergency fund" : "Build emergency buffer"
+        // Monthly Trend - % change
+        const monthlyData = {};
+        filteredTx.forEach(tx => {
+          const date = new Date(tx.date);
+          const month = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
+          monthlyData[month] = (monthlyData[month] || 0) + tx.amount;
+        });
+        const sortedMonths = Object.keys(monthlyData).sort();
+        let monthlyTrendPercent = 0;
+        if (sortedMonths.length > 1) {
+          const prev = monthlyData[sortedMonths[sortedMonths.length - 2]];
+          const curr = monthlyData[sortedMonths[sortedMonths.length - 1]];
+          monthlyTrendPercent = prev > 0 ? ((curr - prev) / prev * 100) : 0;
         }
-      };
-      
-      // NEW CODE START - Additional insights calculations
-      
-      // 1. Marginal Utility Spending Score (uses happiness scores recorded on Wants transactions)
-      // removed marginalUtility since Happiness ROI covers same information
-      
-      // 2. Opportunity Cost (for spends > ₹10,000)
-      const opportunityCosts = filteredTx
-        .filter(tx => tx.amount > 10000)
-        .map(tx => ({
-          ...tx,
-          futureValue: tx.amount * Math.pow(1.12, 10)
-        }));
-      
-      // 3. Diminishing Returns Detector
-      const categoryMonthlySpend = {};
-      filteredTx.forEach(tx => {
-        const date = new Date(tx.date);
-        const month = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
-        if (!categoryMonthlySpend[tx.category]) categoryMonthlySpend[tx.category] = [];
-        categoryMonthlySpend[tx.category].push({ month, amount: tx.amount });
-      });
-      
-      const diminishingReturns = {};
-      Object.keys(categoryMonthlySpend).forEach(cat => {
-        const spends = categoryMonthlySpend[cat].sort((a, b) => a.month.localeCompare(b.month));
-        if (spends.length >= 2) {
-          const avgIncrease = (spends[spends.length-1].amount - spends[0].amount) / spends.length;
-          if (avgIncrease < 0) {
-            diminishingReturns[cat] = true;
+        
+        // Category Trends - Top 3 movers
+        const categoryMonthly = {};
+        filteredTx.forEach(tx => {
+          const date = new Date(tx.date);
+          const month = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
+          if (!categoryMonthly[tx.category]) categoryMonthly[tx.category] = {};
+          categoryMonthly[tx.category][month] = (categoryMonthly[tx.category][month] || 0) + tx.amount;
+        });
+        
+        const categoryTrends = Object.entries(categoryMonthly).map(([cat, months]) => {
+          const sortedMonthKeys = Object.keys(months).sort();
+          if (sortedMonthKeys.length < 2) return null;
+          const prev = months[sortedMonthKeys[sortedMonthKeys.length - 2]];
+          const curr = months[sortedMonthKeys[sortedMonthKeys.length - 1]];
+          const change = prev > 0 ? ((curr - prev) / prev * 100) : 0;
+          return { category: cat, change, prev, curr };
+        }).filter(Boolean).sort((a, b) => Math.abs(b.change) - Math.abs(a.change)).slice(0, 3);
+        
+        // Lifestyle Inflation
+        const monthlyExpenses = Object.values(monthlyData).sort();
+        const avgMonthly = monthlyExpenses.reduce((a, b) => a + b, 0) / monthlyExpenses.length;
+        const latestMonth = monthlyExpenses[monthlyExpenses.length - 1];
+        const lifestyleStatus = latestMonth > avgMonthly * 1.15 ? 'WARNING' : 'OK';
+        
+        // Budget Usage - Per-category progress bars
+        const totalIncome = customIncome + transactions.filter(tx => tx.category.toLowerCase() === "income").reduce((sum, tx) => sum + tx.amount, 0);
+        const budgetUsage = Object.entries(budgets || {}).map(([cat, budget]) => {
+          const spent = filteredTx.filter(tx => tx.category === cat).reduce((sum, tx) => sum + tx.amount, 0);
+          return { category: cat, budget, spent, percent: budget > 0 ? (spent / budget * 100) : 0 };
+        });
+        
+        // Overspend Prediction
+        const totalBudget = Object.values(budgets || {}).reduce((a, b) => a + b, 0);
+        const totalSpent = filteredTx.reduce((sum, tx) => sum + tx.amount, 0);
+        let overspendStatus = 'GREEN';
+        if (totalBudget > 0 && totalSpent > totalBudget * 0.9) overspendStatus = 'YELLOW';
+        if (totalBudget > 0 && totalSpent > totalBudget) overspendStatus = 'RED';
+        
+        // Pattern Detection - Days/merchants analysis
+        const dayOfWeek = {};
+        const merchantAnalysis = {};
+        filteredTx.forEach(tx => {
+          const date = new Date(tx.date);
+          const day = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][date.getDay()];
+          dayOfWeek[day] = (dayOfWeek[day] || 0) + tx.amount;
+          merchantAnalysis[tx.description] = (merchantAnalysis[tx.description] || 0) + 1;
+        });
+        const busiestDay = Object.keys(dayOfWeek).reduce((a, b) => dayOfWeek[a] > dayOfWeek[b] ? a : b, 'N/A');
+        const topMerchant = Object.keys(merchantAnalysis).reduce((a, b) => merchantAnalysis[a] > merchantAnalysis[b] ? a : b, 'N/A');
+        
+        // Savings Rate
+        const totalExpensesAll = filteredTx.reduce((sum, tx) => sum + tx.amount, 0);
+        const savingsRate = totalIncome > 0 ? ((totalIncome - totalExpensesAll) / totalIncome * 100) : 0;
+        
+        // Savings Streak - Day counter
+        const recentDays = {};
+        filteredTx.forEach(tx => {
+          const date = tx.date;
+          recentDays[date] = true;
+        });
+        let streak = 0;
+        const todayFirst = new Date();
+        for (let i = 0; i < 365; i++) {
+          const date = new Date(todayFirst);
+          date.setDate(date.getDate() - i);
+          const dateStr = date.toISOString().split('T')[0];
+          if (recentDays[dateStr]) {
+            streak++;
+          } else if (i > 0) {
+            break;
           }
         }
-      });
-      
-      // 4. Income Elasticity of Lifestyle
-      const incomeMonths = {};
-      transactions.filter(tx => tx.category.toLowerCase() === "income").forEach(tx => {
-        const date = new Date(tx.date);
-        const month = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
-        incomeMonths[month] = (incomeMonths[month] || 0) + tx.amount;
-      });
-      
-      const expenseMonths = {};
-      filteredTx.forEach(tx => {
-        const date = new Date(tx.date);
-        const month = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
-        expenseMonths[month] = (expenseMonths[month] || 0) + tx.amount;
-      });
-      
-      let incomeElasticity = 0;
-      if (Object.keys(incomeMonths).length > 1 && Object.keys(expenseMonths).length > 1) {
-        const incomeGrowth = (incomeMonths[Object.keys(incomeMonths).sort()[0]] || 0) > 0 
-          ? ((incomeMonths[Object.keys(incomeMonths).sort().reverse()[0]] - incomeMonths[Object.keys(incomeMonths).sort()[0]]) / incomeMonths[Object.keys(incomeMonths).sort()[0]])
+        
+        // Daily Average
+        const daysWithTransactions = Object.keys(recentDays).length || 1;
+        const dailyAverage = totalExpensesAll / daysWithTransactions;
+        const runwayDays = totalIncome > 0 ? Math.floor((totalIncome - totalExpensesAll) / dailyAverage) : 0;
+        
+        // Expense Ratio
+        const needsExpense = filteredTx.filter(tx => tx.necessity === 'Needs').reduce((sum, tx) => sum + tx.amount, 0);
+        const expenseRatio = totalIncome > 0 ? (needsExpense / totalIncome * 100) : 0;
+        
+        // Subscriptions
+        const subscriptions = filteredTx.filter(tx => 
+          tx.description.toLowerCase().includes('sub') || 
+          tx.description.toLowerCase().includes('netflix') ||
+          tx.description.toLowerCase().includes('spotify') ||
+          tx.description.toLowerCase().includes('premium')
+        );
+        
+        // EMI Stress
+        const emiExpense = filteredTx.filter(tx => tx.category === 'Personal EMIs').reduce((sum, tx) => sum + tx.amount, 0);
+        const emiStress = totalIncome > 0 ? (emiExpense / totalIncome * 100) : 0;
+        let emiStatus = 'SAFE';
+        if (emiStress > 30) emiStatus = 'RISK';
+        else if (emiStress > 20) emiStatus = 'MODERATE';
+        
+        // NEW: Happiness Score Analysis for Wants
+        const wantsTransactions = filteredTx.filter(tx => tx.necessity === 'Wants' && tx.happinessScore);
+        const avgHappinessScore = wantsTransactions.length > 0 
+          ? wantsTransactions.reduce((sum, tx) => sum + tx.happinessScore, 0) / wantsTransactions.length 
           : 0;
-        const expenseGrowth = (expenseMonths[Object.keys(expenseMonths).sort()[0]] || 0) > 0
-          ? ((expenseMonths[Object.keys(expenseMonths).sort().reverse()[0]] - expenseMonths[Object.keys(expenseMonths).sort()[0]]) / expenseMonths[Object.keys(expenseMonths).sort()[0]])
-          : 0;
-        incomeElasticity = incomeGrowth > 0 ? expenseGrowth / incomeGrowth : 0;
+        
+        const wantsByHappiness = {};
+        wantsTransactions.forEach(tx => {
+          if (!wantsByHappiness[tx.happinessScore]) {
+            wantsByHappiness[tx.happinessScore] = { count: 0, total: 0 };
+          }
+          wantsByHappiness[tx.happinessScore].count++;
+          wantsByHappiness[tx.happinessScore].total += tx.amount;
+        });
+        
+        // NEW: Savings Goals Progress
+      let savingsGoals = [];
+      try {
+        savingsGoals = JSON.parse(localStorage.getItem("moneywise_goals") || "[]");
+      } catch (e) {
+        console.warn('Failed to load goals from localStorage:', e);
+        savingsGoals = [];
       }
-      
-      // 5. Time Preference (Present Bias) Score
-      const impulsePurchases = filteredTx.filter(tx => 
-        tx.necessity === 'Wants' && tx.amount > 2000
-      ).length;
-      const majorPurchases = filteredTx.filter(tx => tx.amount > 5000).length;
-      const presentBiasScore = majorPurchases > 0 ? (impulsePurchases / majorPurchases) * 100 : 0;
-      
-      let presentBiasCategory = 'Low';
-      if (presentBiasScore > 50) presentBiasCategory = 'High';
-      else if (presentBiasScore > 25) presentBiasCategory = 'Moderate';
-      
-      // 6. Spending Probability Prediction
-      // define helper date for calculations
-      const today = new Date();
-      const todaySecond = new Date();
-      const dayOfWeekNum = todaySecond.getDay();
-      const isWeekend = dayOfWeekNum === 0 || dayOfWeekNum === 6;
-      
-      const salaryDate = new Date();
-      salaryDate.setDate(1); // Assume salary on 1st
-      const daysSinceSalary = Math.floor((todaySecond - salaryDate) / (1000 * 60 * 60 * 24));
-      const within3DaysAfterSalary = daysSinceSalary >= 0 && daysSinceSalary <= 3;
-      
-      const lastImpulse = filteredTx
-        .filter(tx => tx.necessity === 'Wants')
-        .sort((a, b) => new Date(b.date) - new Date(a.date))[0];
-      const daysSinceLastImpulse = lastImpulse 
-        ? Math.floor((today - new Date(lastImpulse.date)) / (1000 * 60 * 60 * 24))
-        : 365;
-      const recentImpulse = daysSinceLastImpulse <= 7;
-      
-      let spendProbability = 0;
-      let probabilityFactors = 0;
-      if (isWeekend) { spendProbability += 25; probabilityFactors++; }
-      if (within3DaysAfterSalary) { spendProbability += 30; probabilityFactors++; }
-      if (recentImpulse) { spendProbability += 15; probabilityFactors++; }
-      if (probabilityFactors > 0) spendProbability = Math.min(90, spendProbability * probabilityFactors);
-      
-      
-      // 8. Long-Term Wealth Probability
-      const savingsRatePercent = savingsRate / 100;
-      const currentSavings = totalIncome - totalExpensesAll;
-      const projectedCorpus = currentSavings * (Math.pow(1.10, 30) - 1) / 0.10; // 10% return
-      
-      // 9. Asset Allocation Analyzer (simplified)
-      const investmentSpends = filteredTx.filter(tx => tx.necessity === 'Investment').reduce((sum, tx) => sum + tx.amount, 0);
-      const totalAssets = totalIncome - totalExpensesAll + investmentSpends;
-      const idealAllocation = {
-        equity: 60,
-        debt: 30,
-        cash: 10
-      };
-      const currentAllocation = {
-        equity: totalAssets > 0 ? (investmentSpends * 0.7 / totalAssets) * 100 : 0,
-        debt: totalAssets > 0 ? (investmentSpends * 0.2 / totalAssets) * 100 : 0,
-        cash: totalAssets > 0 ? ((totalIncome - totalExpensesAll) / totalAssets) * 100 : 0
-      };
-      
-      const allocationDeviation = Math.sqrt(
-        Math.pow(currentAllocation.equity - idealAllocation.equity, 2) +
-        Math.pow(currentAllocation.debt - idealAllocation.debt, 2) +
-        Math.pow(currentAllocation.cash - idealAllocation.cash, 2)
-      );
-      
-      // NEW CODE END
-      
-      return {
-        hiddenLeaks: leaksList,
-        leaksTotal,
-        monthlyTrendPercent,
-        categoryTrends,
-        lifestyleStatus,
-        budgetUsage,
-        overspendStatus,
-        busiestDay,
-        topMerchant,
-        savingsRate: savingsRate.toFixed(1),
-        streak,
-        dailyAverage: dailyAverage.toFixed(2),
-        runwayDays,
-        expenseRatio: expenseRatio.toFixed(1),
-        subscriptions,
-        emiStress: emiStress.toFixed(1),
-        emiStatus,
-        healthScore: Math.round(healthScore),
-        needsExpense,
-        totalSpent,
-        totalIncome,
-        totalBudget,
-        aiCoachScore,
-        // NEW CODE START - Return additional insights
-        opportunityCosts,
-        diminishingReturns,
-        incomeElasticity,
-        presentBiasScore: presentBiasScore.toFixed(1),
-        presentBiasCategory,
-        spendProbability: Math.round(spendProbability),
-        projectedCorpus,
-        allocationDeviation: Math.round(allocationDeviation * 10) / 10,
-        currentAllocation,
-        idealAllocation,
-        // new metrics for happiness/goals
-        avgHappinessScore: avgHappinessScore.toFixed(1),
-        wantsByHappiness,
-        goalsProgress: goalsProgress.toFixed(1),
-        happinessROI: happinessROI.slice(0, 5),
-        happinessSpendingCorrelation,
-        wantsTransactions: wantsTransactions.length
+      const totalGoalsTarget = savingsGoals.reduce((sum, goal) => sum + (parseFloat(goal.targetAmount) || 0), 0);
+      const totalGoalsCurrent = savingsGoals.reduce((sum, goal) => sum + (parseFloat(goal.currentAmount) || 0), 0);
+        
+        // NEW: Happiness-ROI Analysis
+        const happinessROI = wantsTransactions.map(tx => ({
+          description: tx.description,
+          amount: tx.amount,
+          happiness: tx.happinessScore,
+          roi: tx.happinessScore / (tx.amount / 1000) // Happiness per ₹1000
+        })).sort((a, b) => b.roi - a.roi);
+        
+        // NEW: Correlation between happiness and spending
+        let happinessSpendingCorrelation = 0;
+        if (wantsTransactions.length >= 3) {
+          const amounts = wantsTransactions.map(tx => tx.amount);
+          const happiness = wantsTransactions.map(tx => tx.happinessScore);
+          const avgAmount = amounts.reduce((a, b) => a + b, 0) / amounts.length;
+          const avgHappiness = happiness.reduce((a, b) => a + b, 0) / happiness.length;
+          
+          const numerator = amounts.reduce((sum, amount, i) => 
+            sum + (amount - avgAmount) * (happiness[i] - avgHappiness), 0);
+          const denom1 = Math.sqrt(amounts.reduce((sum, amount) => 
+            sum + Math.pow(amount - avgAmount, 2), 0));
+          const denom2 = Math.sqrt(happiness.reduce((sum, h) => 
+            sum + Math.pow(h - avgHappiness, 2), 0));
+          
+          happinessSpendingCorrelation = denom1 && denom2 ? numerator / (denom1 * denom2) : 0;
+        }
+        
+        // Financial Score
+        const scoreFactors = {
+          savings: savingsRate > 20 ? 20 : savingsRate > 10 ? 15 : savingsRate > 0 ? 10 : 5,
+          budget: totalBudget > 0 ? 15 : 5,
+          overspend: totalSpent <= totalBudget ? 20 : totalSpent <= totalBudget * 1.1 ? 10 : 0,
+          needs: expenseRatio < 50 ? 15 : expenseRatio < 70 ? 10 : 5,
+          emi: emiStatus === 'SAFE' ? 15 : emiStatus === 'MODERATE' ? 8 : 3,
+          subscriptions: subscriptions.length < 3 ? 10 : 5,
+          goals: goalsProgress > 75 ? 15 : goalsProgress > 50 ? 10 : goalsProgress > 25 ? 5 : 0,
+          happiness: avgHappinessScore > 4 ? 10 : avgHappinessScore > 3 ? 7 : avgHappinessScore > 2 ? 4 : 0,
+          runway: runwayDays > 90 ? 10 : runwayDays > 30 ? 7 : runwayDays > 7 ? 4 : 0
+        };
+        const healthScore = Math.min(100, Object.values(scoreFactors).reduce((a, b) => a + b, 0));
+        
+        // AI Coach Score with detailed breakdown
+        const aiCoachScore = {
+          total: healthScore,
+          breakdown: scoreFactors,
+          interpretation: {
+            savings: scoreFactors.savings >= 15 ? "Excellent savings rate" : scoreFactors.savings >= 10 ? "Good savings rate" : "Needs improvement",
+            budget: scoreFactors.budget >= 15 ? "Well-planned budget" : "Consider setting budgets",
+            overspend: scoreFactors.overspend >= 20 ? "Great at staying within budget" : "Watch for overspending",
+            needs: scoreFactors.needs >= 15 ? "Healthy needs-to-income ratio" : "Fixed costs may be high",
+            emi: scoreFactors.emi >= 15 ? "Debt is well managed" : "EMI burden is concerning",
+            subscriptions: scoreFactors.subscriptions >= 10 ? "Subscriptions under control" : "Review subscription costs",
+            goals: scoreFactors.goals >= 15 ? "Excellent goal progress" : scoreFactors.goals >= 10 ? "Good progress" : "Start saving towards goals",
+            happiness: scoreFactors.happiness >= 10 ? "Great happiness-to-spending ratio" : "Review wants spending for better ROI",
+            runway: scoreFactors.runway >= 10 ? "Strong emergency fund" : "Build emergency buffer"
+          }
+        };
+        
+        // NEW CODE START - Additional insights calculations
+        
+        // 1. Marginal Utility Spending Score (uses happiness scores recorded on Wants transactions)
+        // removed marginalUtility since Happiness ROI covers same information
+        
+        // 2. Opportunity Cost (for spends > ₹10,000)
+        const opportunityCosts = filteredTx
+          .filter(tx => tx.amount > 10000)
+          .map(tx => ({
+            ...tx,
+            futureValue: tx.amount * Math.pow(1.12, 10)
+          }));
+        
+        // 3. Diminishing Returns Detector
+        const categoryMonthlySpend = {};
+        filteredTx.forEach(tx => {
+          const date = new Date(tx.date);
+          const month = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
+          if (!categoryMonthlySpend[tx.category]) categoryMonthlySpend[tx.category] = [];
+          categoryMonthlySpend[tx.category].push({ month, amount: tx.amount });
+        });
+        
+        const diminishingReturns = {};
+        Object.keys(categoryMonthlySpend).forEach(cat => {
+          const spends = categoryMonthlySpend[cat].sort((a, b) => a.month.localeCompare(b.month));
+          if (spends.length >= 2) {
+            const avgIncrease = (spends[spends.length-1].amount - spends[0].amount) / spends.length;
+            if (avgIncrease < 0) {
+              diminishingReturns[cat] = true;
+            }
+          }
+        });
+        
+        // 4. Income Elasticity of Lifestyle
+        const incomeMonths = {};
+        transactions.filter(tx => tx.category.toLowerCase() === "income").forEach(tx => {
+          const date = new Date(tx.date);
+          const month = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
+          incomeMonths[month] = (incomeMonths[month] || 0) + tx.amount;
+        });
+        
+        const expenseMonths = {};
+        filteredTx.forEach(tx => {
+          const date = new Date(tx.date);
+          const month = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
+          expenseMonths[month] = (expenseMonths[month] || 0) + tx.amount;
+        });
+        
+        let incomeElasticity = 0;
+        if (Object.keys(incomeMonths).length > 1 && Object.keys(expenseMonths).length > 1) {
+          const incomeGrowth = (incomeMonths[Object.keys(incomeMonths).sort()[0]] || 0) > 0 
+            ? ((incomeMonths[Object.keys(incomeMonths).sort().reverse()[0]] - incomeMonths[Object.keys(incomeMonths).sort()[0]]) / incomeMonths[Object.keys(incomeMonths).sort()[0]])
+            : 0;
+          const expenseGrowth = (expenseMonths[Object.keys(expenseMonths).sort()[0]] || 0) > 0
+            ? ((expenseMonths[Object.keys(expenseMonths).sort().reverse()[0]] - expenseMonths[Object.keys(expenseMonths).sort()[0]]) / expenseMonths[Object.keys(expenseMonths).sort()[0]])
+            : 0;
+          incomeElasticity = incomeGrowth > 0 ? expenseGrowth / incomeGrowth : 0;
+        }
+        
+        // 5. Time Preference (Present Bias) Score
+        const impulsePurchases = filteredTx.filter(tx => 
+          tx.necessity === 'Wants' && tx.amount > 2000
+        ).length;
+        const majorPurchases = filteredTx.filter(tx => tx.amount > 5000).length;
+        const presentBiasScore = majorPurchases > 0 ? (impulsePurchases / majorPurchases) * 100 : 0;
+        
+        let presentBiasCategory = 'Low';
+        if (presentBiasScore > 50) presentBiasCategory = 'High';
+        else if (presentBiasScore > 25) presentBiasCategory = 'Moderate';
+        
+        // 6. Spending Probability Prediction
+        // define helper date for calculations
+        const today = new Date();
+        const todaySecond = new Date();
+        const dayOfWeekNum = todaySecond.getDay();
+        const isWeekend = dayOfWeekNum === 0 || dayOfWeekNum === 6;
+        
+        const salaryDate = new Date();
+        salaryDate.setDate(1); // Assume salary on 1st
+        const daysSinceSalary = Math.floor((todaySecond - salaryDate) / (1000 * 60 * 60 * 24));
+        const within3DaysAfterSalary = daysSinceSalary >= 0 && daysSinceSalary <= 3;
+        
+        const lastImpulse = filteredTx
+          .filter(tx => tx.necessity === 'Wants')
+          .sort((a, b) => new Date(b.date) - new Date(a.date))[0];
+        const daysSinceLastImpulse = lastImpulse 
+          ? Math.floor((today - new Date(lastImpulse.date)) / (1000 * 60 * 60 * 24))
+          : 365;
+        const recentImpulse = daysSinceLastImpulse <= 7;
+        
+        let spendProbability = 0;
+        let probabilityFactors = 0;
+        if (isWeekend) { spendProbability += 25; probabilityFactors++; }
+        if (within3DaysAfterSalary) { spendProbability += 30; probabilityFactors++; }
+        if (recentImpulse) { spendProbability += 15; probabilityFactors++; }
+        if (probabilityFactors > 0) spendProbability = Math.min(90, spendProbability * probabilityFactors);
+        
+        
+        // 8. Long-Term Wealth Probability
+        const savingsRatePercent = savingsRate / 100;
+        const currentSavings = totalIncome - totalExpensesAll;
+        const projectedCorpus = currentSavings * (Math.pow(1.10, 30) - 1) / 0.10; // 10% return
+        
+        // 9. Asset Allocation Analyzer (simplified)
+        const investmentSpends = filteredTx.filter(tx => tx.necessity === 'Investment').reduce((sum, tx) => sum + tx.amount, 0);
+        const totalAssets = totalIncome - totalExpensesAll + investmentSpends;
+        const idealAllocation = {
+          equity: 60,
+          debt: 30,
+          cash: 10
+        };
+        const currentAllocation = {
+          equity: totalAssets > 0 ? (investmentSpends * 0.7 / totalAssets) * 100 : 0,
+          debt: totalAssets > 0 ? (investmentSpends * 0.2 / totalAssets) * 100 : 0,
+          cash: totalAssets > 0 ? ((totalIncome - totalExpensesAll) / totalAssets) * 100 : 0
+        };
+        
+        const allocationDeviation = Math.sqrt(
+          Math.pow(currentAllocation.equity - idealAllocation.equity, 2) +
+          Math.pow(currentAllocation.debt - idealAllocation.debt, 2) +
+          Math.pow(currentAllocation.cash - idealAllocation.cash, 2)
+        );
+        
         // NEW CODE END
-      };
+        
+        return {
+          hiddenLeaks: leaksList,
+          leaksTotal,
+          monthlyTrendPercent,
+          categoryTrends,
+          lifestyleStatus,
+          budgetUsage,
+          overspendStatus,
+          busiestDay,
+          topMerchant,
+          savingsRate: savingsRate.toFixed(1),
+          streak,
+          dailyAverage: dailyAverage.toFixed(2),
+          runwayDays,
+          expenseRatio: expenseRatio.toFixed(1),
+          subscriptions,
+          emiStress: emiStress.toFixed(1),
+          emiStatus,
+          healthScore: Math.round(healthScore),
+          needsExpense,
+          totalSpent,
+          totalIncome,
+          totalBudget,
+          aiCoachScore,
+          // NEW CODE START - Return additional insights
+          opportunityCosts,
+          diminishingReturns,
+          incomeElasticity,
+          presentBiasScore: presentBiasScore.toFixed(1),
+          presentBiasCategory,
+          spendProbability: Math.round(spendProbability),
+          projectedCorpus,
+          allocationDeviation: Math.round(allocationDeviation * 10) / 10,
+          currentAllocation,
+          idealAllocation,
+          // new metrics for happiness/goals
+          avgHappinessScore: avgHappinessScore.toFixed(1),
+          wantsByHappiness,
+          goalsProgress: goalsProgress.toFixed(1),
+          happinessROI: happinessROI.slice(0, 5),
+          happinessSpendingCorrelation,
+          wantsTransactions: wantsTransactions.length
+          // NEW CODE END
+        };
+      } catch (error) {
+        console.error('Error in calculateInsights:', error);
+        // Return default insights to prevent white screen
+        return {
+          hiddenLeaks: [],
+          leaksTotal: 0,
+          monthlyTrendPercent: 0,
+          categoryTrends: [],
+          lifestyleStatus: 'OK',
+          budgetUsage: [],
+          overspendStatus: 'GREEN',
+          busiestDay: 'N/A',
+          topMerchant: 'N/A',
+          savingsRate: '0.0',
+          streak: 0,
+          dailyAverage: '0.00',
+          runwayDays: 0,
+          expenseRatio: '0.0',
+          subscriptions: [],
+          emiStress: '0.0',
+          emiStatus: 'SAFE',
+          healthScore: 0,
+          needsExpense: 0,
+          totalSpent: 0,
+          totalIncome: 0,
+          totalBudget: 0,
+          aiCoachScore: { total: 0, breakdown: {}, interpretation: {} },
+          opportunityCosts: [],
+          diminishingReturns: {},
+          incomeElasticity: 0,
+          presentBiasScore: '0.0',
+          presentBiasCategory: 'Low',
+          spendProbability: 0,
+          projectedCorpus: 0,
+          allocationDeviation: 0,
+          currentAllocation: { equity: 0, debt: 0, cash: 0 },
+          idealAllocation: { equity: 60, debt: 30, cash: 10 },
+          avgHappinessScore: '0.0',
+          wantsByHappiness: {},
+          goalsProgress: '0.0',
+          happinessROI: [],
+          happinessSpendingCorrelation: 0,
+          wantsTransactions: 0
+        };
+      }
     }
 
     function InsightsPanel({ transactions, budgets, customIncome }) {
@@ -4339,13 +4394,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
       // NEW CODE START - Ensure insights container exists with null check
       const insightsContainer = typeof document !== 'undefined' ? document.getElementById("insights-section") : null;
       
-      let insights;
-      try {
-        insights = calculateInsights(transactions, budgets, customIncome);
-      } catch (err) {
-        console.error('Insights calculation failed', err);
-        insights = {};
-      }
+      let insights = calculateInsights(transactions, budgets, customIncome);
       
       // if insights is empty, bail out with an error message
       if (!insights || Object.keys(insights).length === 0) {
