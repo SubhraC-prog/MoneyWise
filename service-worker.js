@@ -1,4 +1,4 @@
-const CACHE_NAME = 'moneywise-cache-v14'; 
+const CACHE_NAME = 'moneywise-cache-v15'; 
 
 const ASSETS = [
   './index.html',
