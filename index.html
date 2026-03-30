@@ -756,6 +756,62 @@ textarea {
       }
     ];
 
+    // Error Boundary Component for better error handling
+    class ErrorBoundary extends React.Component {
+      constructor(props) {
+        super(props);
+        this.state = { hasError: false, error: null, errorInfo: null };
+      }
+
+      static getDerivedStateFromError(error) {
+        return { hasError: true };
+      }
+
+      componentDidCatch(error, errorInfo) {
+        this.setState({
+          error: error,
+          errorInfo: errorInfo
+        });
+        console.error('Error Boundary caught an error:', error, errorInfo);
+      }
+
+      render() {
+        if (this.state.hasError) {
+          return (
+            <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex items-center justify-center p-4">
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 max-w-md w-full">
+                <div className="text-center">
+                  <div className="text-6xl mb-4">⚠️</div>
+                  <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Something went wrong</h2>
+                  <p className="text-gray-600 dark:text-gray-400 mb-4">
+                    The app encountered an unexpected error. Your data is safe and has been automatically backed up.
+                  </p>
+                  <button
+                    onClick={() => window.location.reload()}
+                    className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 w-full"
+                  >
+                    Reload App
+                  </button>
+                  <details className="mt-4 text-left">
+                    <summary className="cursor-pointer text-sm text-gray-500 hover:text-gray-700">
+                      Technical Details
+                    </summary>
+                    <pre className="text-xs mt-2 p-2 bg-gray-100 dark:bg-gray-700 rounded overflow-auto">
+                      {this.state.error && this.state.error.toString()}
+                      {this.state.errorInfo && this.state.errorInfo.componentStack}
+                    </pre>
+                  </details>
+                </div>
+              </div>
+            </div>
+          );
+        }
+
+        return this.props.children;
+      }
+    }
+
+    // Main App Component
     function App({ currentUser, logoutUser }) {
       // Enhanced Data Persistence with Version Control and Backup
       const DATA_VERSION = "2.0";
@@ -1497,12 +1553,6 @@ textarea {
                       selectedMonth={selectedMonth}
                     />;
                   case "insights":
-                    console.log('Rendering InsightsPanel with:', {
-                      transactionsCount: transactions.length,
-                      budgets,
-                      customIncome,
-                      selectedMonth
-                    });
                     return <InsightsPanel 
                       transactions={transactions}
                       budgets={budgets}
@@ -1527,6 +1577,7 @@ textarea {
                       loanDetails={loanDetails}
                       setLoanDetails={setLoanDetails}
                       impulseThreshold={impulseThreshold}
+                      selectedMonth={selectedMonth}
                     />;
                   // NEW CODE END
                   default:
@@ -4535,50 +4586,6 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
         // NEW CODE END
         
         console.log('Calculated insights for month:', selectedMonth, 'total transactions:', filteredTx.length, 'current month tx:', currentMonthTx.length);
-        console.log('Returning insights object with keys:', Object.keys({
-          hiddenLeaks: leaksList,
-          leaksTotal,
-          monthlyTrendPercent,
-          categoryTrends,
-          lifestyleStatus,
-          budgetUsage,
-          overspendStatus,
-          busiestDay,
-          topMerchant,
-          savingsRate: savingsRate.toFixed(1),
-          streak,
-          dailyAverage: dailyAverage.toFixed(2),
-          runwayDays,
-          expenseRatio: expenseRatio.toFixed(1),
-          subscriptions,
-          emiStress: emiStress.toFixed(1),
-          emiStatus,
-          healthScore: Math.round(healthScore),
-          needsExpense,
-          totalSpent,
-          totalIncome,
-          totalBudget,
-          aiCoachScore,
-          // NEW CODE START - Return additional insights
-          opportunityCosts,
-          diminishingReturns,
-          incomeElasticity,
-          presentBiasScore: presentBiasScore.toFixed(1),
-          presentBiasCategory,
-          spendProbability: Math.round(spendProbability),
-          projectedCorpus,
-          allocationDeviation: Math.round(allocationDeviation * 10) / 10,
-          currentAllocation,
-          idealAllocation,
-          // new metrics for happiness/goals
-          avgHappinessScore: avgHappinessScore.toFixed(1),
-          wantsByHappiness,
-          goalsProgress: goalsProgress.toFixed(1),
-          happinessROI: happinessROI.slice(0, 5),
-          happinessSpendingCorrelation,
-          wantsTransactions: wantsTransactions.length
-          // NEW CODE END
-        }).length);
         
         return {
           hiddenLeaks: leaksList,
@@ -4685,11 +4692,15 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
       // NEW CODE START - Ensure insights container exists with null check
       const insightsContainer = typeof document !== 'undefined' ? document.getElementById("insights-section") : null;
       
-      let insights = calculateInsights(transactions, getCurrentBudgets(), customIncome, selectedMonth);
+      // Compute current budgets for the selected month
+      const getCurrentBudgetsForInsights = () => {
+        const monthKey = selectedMonth === "all" ? "default" : selectedMonth;
+        return budgets[monthKey] || {};
+      };
+      
+      let insights = calculateInsights(transactions, getCurrentBudgetsForInsights(), customIncome, selectedMonth);
       
       console.log('InsightsPanel received insights:', insights);
-      
-      // if insights is empty, bail out with an error message
       if (!insights || Object.keys(insights).length === 0) {
         console.error('Insights calculation returned empty object');
         return (
@@ -5662,10 +5673,16 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
 
     function AIFinancialCoach({ 
       transactions, budgets, customIncome, personSettlements, monthlyTrends, autoBudgetSuggestions,
-      aiCoachTarget, setAiCoachTarget, userAge, setUserAge, loanDetails, setLoanDetails, impulseThreshold
+      aiCoachTarget, setAiCoachTarget, userAge, setUserAge, loanDetails, setLoanDetails, impulseThreshold, selectedMonth
     }) {
       const [missedMonths, setMissedMonths] = useState(0);
       const [activeTab, setActiveTab] = useState('dashboard');
+      
+      // Compute current budgets for the selected month
+      const getCurrentBudgetsForCoach = () => {
+        const monthKey = selectedMonth === "all" ? "default" : selectedMonth;
+        return budgets[monthKey] || {};
+      };
       
       // normalize and filter transactions to avoid missing field issues
       const normTx = transactions.map(tx => ({
@@ -5684,7 +5701,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
       
       let insights;
       try {
-        insights = calculateInsights(transactions, getCurrentBudgets(), customIncome, selectedMonth);
+        insights = calculateInsights(transactions, getCurrentBudgetsForCoach(), customIncome, selectedMonth);
       } catch (err) {
         console.error('Insights calculation failed', err);
         insights = {};
@@ -6221,7 +6238,11 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
         setCurrentUser(null);
       };
 
-      return currentUser ? <App currentUser={currentUser} logoutUser={logoutUser} /> : <LoginForm onLogin={setCurrentUser} />;
+      return (
+        <ErrorBoundary>
+          {currentUser ? <App currentUser={currentUser} logoutUser={logoutUser} /> : <LoginForm onLogin={setCurrentUser} />}
+        </ErrorBoundary>
+      );
     }
 
     ReactDOM.render(<Root />, document.getElementById("root"));
