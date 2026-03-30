@@ -1894,6 +1894,12 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
               >
                 <i className="fas fa-calendar mr-2"></i>Financial Month
               </button>
+              <button 
+                className={activeTab === 'data' ? 'active' : ''} 
+                onClick={() => setActiveTab('data')}
+              >
+                <i className="fas fa-database mr-2"></i>Data
+              </button>
             </div>
 
             {/* Profile Settings */}
@@ -1979,6 +1985,64 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
                 <div className="settings-actions">
                   <button className="btn-secondary" onClick={onClose}>Cancel</button>
                   <button className="btn-primary" onClick={handleSaveSettings}>Save Changes</button>
+                </div>
+              </div>
+            )}
+
+            {/* Data Management Settings */}
+            {activeTab === 'data' && (
+              <div className="settings-section">
+                <h3>Data Management</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                  Export your data to backup or transfer to another device. Import to restore data from a backup file.
+                </p>
+                <div className="space-y-4">
+                  <div>
+                    <button className="btn-primary w-full" onClick={() => {
+                      const data = {};
+                      for (let i = 0; i < localStorage.length; i++) {
+                        const key = localStorage.key(i);
+                        data[key] = localStorage.getItem(key);
+                      }
+                      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                      const url = URL.createObjectURL(blob);
+                      const a = document.createElement('a');
+                      a.href = url;
+                      a.download = 'moneywise_backup.json';
+                      a.click();
+                      URL.revokeObjectURL(url);
+                    }}>
+                      <i className="fas fa-download mr-2"></i>Export Data
+                    </button>
+                    <p className="text-xs text-gray-500 mt-1">Download all your data as a JSON file</p>
+                  </div>
+                  <div className="settings-field">
+                    <label>Import Data</label>
+                    <input 
+                      type="file" 
+                      accept=".json" 
+                      onChange={(event) => {
+                        const file = event.target.files[0];
+                        if (!file) return;
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                          try {
+                            const data = JSON.parse(e.target.result);
+                            for (const key in data) {
+                              localStorage.setItem(key, data[key]);
+                            }
+                            alert('Data imported successfully! The page will reload.');
+                            window.location.reload();
+                          } catch (err) {
+                            alert('Invalid file format. Please select a valid backup file.');
+                          }
+                        };
+                        reader.readAsText(file);
+                      }}
+                      className="w-full"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">Upload a previously exported JSON file to restore your data</p>
+                  </div>
                 </div>
               </div>
             )}
@@ -4167,6 +4231,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
       }
       const totalGoalsTarget = savingsGoals.reduce((sum, goal) => sum + (parseFloat(goal.targetAmount) || 0), 0);
       const totalGoalsCurrent = savingsGoals.reduce((sum, goal) => sum + (parseFloat(goal.currentAmount) || 0), 0);
+      const goalsProgress = totalGoalsTarget > 0 ? (totalGoalsCurrent / totalGoalsTarget) * 100 : 0;
         
         // NEW: Happiness-ROI Analysis
         const happinessROI = wantsTransactions.map(tx => ({
