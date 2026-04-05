@@ -508,9 +508,161 @@ textarea {
       border-bottom: 1px solid #e5e7eb;
     }
 
-    .dark .settings-header {
-      border-bottom-color: #57534e;
-    }
+/* ── ASK ENGINE ─────────────────────────────────────────── */
+.ask-engine-fab {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(99,102,241,0.5);
+  z-index: 9990;
+  transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+.ask-engine-fab:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 30px rgba(99,102,241,0.6);
+}
+.ask-engine-panel {
+  position: fixed;
+  bottom: 92px;
+  right: 24px;
+  width: 360px;
+  max-height: 520px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  z-index: 9989;
+  overflow: hidden;
+  animation: slideUp 0.3s ease-out;
+}
+.dark .ask-engine-panel {
+  background: #1c1917;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+.ask-engine-header {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  padding: 14px 16px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.ask-engine-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  scroll-behavior: smooth;
+}
+.ask-msg-user {
+  align-self: flex-end;
+  background: linear-gradient(135deg,#6366f1,#8b5cf6);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 12px 12px 2px 12px;
+  max-width: 82%;
+  font-size: 0.85rem;
+}
+.ask-msg-ai {
+  align-self: flex-start;
+  background: #f3f4f6;
+  color: #111827;
+  padding: 8px 12px;
+  border-radius: 12px 12px 12px 2px;
+  max-width: 90%;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+.dark .ask-msg-ai {
+  background: #292524;
+  color: #e5e7eb;
+}
+.ask-msg-typing {
+  align-self: flex-start;
+  background: #f3f4f6;
+  padding: 8px 14px;
+  border-radius: 12px;
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+}
+.dark .ask-msg-typing { background: #292524; }
+.ask-engine-input-row {
+  padding: 10px 12px;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.dark .ask-engine-input-row { border-color: #44403c; }
+.ask-engine-input {
+  flex: 1;
+  padding: 8px 12px;
+  border-radius: 20px;
+  border: 1px solid #d1d5db;
+  font-size: 0.85rem;
+  outline: none;
+  background: #fafaf9 !important;
+}
+.dark .ask-engine-input {
+  background: #292524 !important;
+  border-color: #57534e;
+  color: #e5e7eb;
+}
+.ask-engine-send {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg,#6366f1,#8b5cf6);
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+.ask-engine-send:hover { transform: scale(1.08); }
+.ask-engine-send:disabled { opacity: 0.5; cursor: not-allowed; }
+.ask-chip {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: #ede9fe;
+  color: #6d28d9;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid #c4b5fd;
+  white-space: nowrap;
+}
+.dark .ask-chip {
+  background: #3b2d5e;
+  color: #c4b5fd;
+  border-color: #6d28d9;
+}
+.ask-chip:hover { background: #6366f1; color: white; border-color: #6366f1; }
+@media (max-width: 480px) {
+  .ask-engine-panel { width: calc(100vw - 32px); right: 16px; }
+}
+
 
     .settings-header h2 {
       margin: 0;
@@ -1613,7 +1765,7 @@ textarea {
                             </div>
                           </div>
                           <div className="quote-icon">💸</div>
-                            <div className="quote-icon"><i className="fas fa-coins text-gray-700 dark:text-gray-400"></i></div>
+                            <div className="quote-icon"><i className="fas fa-coins" style={{color:"black"}}></i></div>
                         </div>
                         
                         <div>
@@ -1762,6 +1914,13 @@ textarea {
           <main className="p-4">
             {renderActiveView()}
           </main>
+          {/* Ask Engine — floats globally over the whole app */}
+          <AskEngine
+            transactions={transactions}
+            budgets={budgets}
+            customIncome={customIncome}
+            selectedMonth={selectedMonth}
+          />
         </div>
       );
     }
@@ -1779,7 +1938,7 @@ textarea {
     <div className="flex justify-between items-center mb-4 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
       <div className="relative">
         <button className="p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition flex items-center justify-center w-10 h-10">
-          <i className="fas fa-calendar-alt"></i>
+          <i className="fas fa-calendar-alt" style={{color:"white"}}></i>
         </button>
         <input
           type="month"
@@ -1863,8 +2022,9 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
             <div className="flex gap-3 items-center relative">
               <button 
                 onClick={() => setActiveView("home")}
-                className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition text-sm"
+                className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition text-sm flex items-center gap-2"
               >
+                <i className="fas fa-home" style={{color:"black"}}></i>
                 Home
               </button>
               <button
@@ -1872,7 +2032,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
                 onClick={() => setShowShare(true)}
                 className="p-2 bg-green-500 text-white rounded-full hover:bg-green-600 transition text-sm"
               >
-                <i className="fas fa-share-alt"></i>
+                <i className="fas fa-share-alt" style={{color:"white"}}></i>
               </button>
               <span className="text-xs sm:text-sm px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">👤 {currentUser}</span>
               <div className="relative">
@@ -1880,59 +2040,59 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
                   onClick={() => setShowDropdown(!showDropdown)}
                   className="p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition"
                 >
-                  <i className="fas fa-bars"></i>
+                  <i className="fas fa-bars" style={{color:"white"}}></i>
                 </button>
                 <div className={`dropdown-menu ${showDropdown ? 'show' : ''}`}>
                   <button className="dropdown-item" onClick={() => { setActiveView("transactionLog"); setShowDropdown(false); }}>
-                    <i className="fas fa-receipt mr-2"></i> Transaction Log
+                    <i className="fas fa-receipt mr-2" style={{color:"black"}}></i> Transaction Log
                   </button>
                   <button className="dropdown-item" onClick={() => { setActiveView("timeSpentAnalysis"); setShowDropdown(false); }}>
-                    <i className="fas fa-clock mr-2"></i> Time Spent Analysis
+                    <i className="fas fa-clock mr-2" style={{color:"black"}}></i> Time Spent Analysis
                   </button>
                   <button className="dropdown-item" onClick={() => { setActiveView("personSettlements"); setShowDropdown(false); }}>
-                    <i className="fas fa-users mr-2"></i> Person-wise Settlements
+                    <i className="fas fa-users mr-2" style={{color:"black"}}></i> Person-wise Settlements
                   </button>
                   <button className="dropdown-item" onClick={() => { setActiveView("budgetPlanner"); setShowDropdown(false); }}>
-                    <i className="fas fa-chart-pie mr-2"></i> Budget Planner
+                    <i className="fas fa-chart-pie mr-2" style={{color:"black"}}></i> Budget Planner
                   </button>
                   <button className="dropdown-item" onClick={() => { setActiveView("monthlySuggestions"); setShowDropdown(false); }}>
-                    <i className="fas fa-lightbulb mr-2"></i> Monthly Budget Suggestions
+                    <i className="fas fa-lightbulb mr-2" style={{color:"black"}}></i> Monthly Budget Suggestions
                   </button>
                   <button className="dropdown-item" onClick={() => { setActiveView("expenseBreakdown"); setShowDropdown(false); }}>
-                    <i className="fas fa-chart-pie mr-2"></i> Expense Breakdown
+                    <i className="fas fa-chart-pie mr-2" style={{color:"black"}}></i> Expense Breakdown
                   </button>
                   <button className="dropdown-item" onClick={() => { setActiveView("budgetCompletion"); setShowDropdown(false); }}>
-                    <i className="fas fa-tasks mr-2"></i> Budget Completion
+                    <i className="fas fa-tasks mr-2" style={{color:"black"}}></i> Budget Completion
                   </button>
                   <button className="dropdown-item" onClick={() => { setActiveView("costDrivers"); setShowDropdown(false); }}>
-                    <i className="fas fa-chart-line mr-2"></i> Cost Drivers Analysis
+                    <i className="fas fa-chart-line mr-2" style={{color:"black"}}></i> Cost Drivers Analysis
                   </button>
                   <button className="dropdown-item" onClick={() => { setActiveView("insights"); setShowDropdown(false); }}>
-                    <i className="fas fa-lightbulb mr-2"></i> Insights 
+                    <i className="fas fa-lightbulb mr-2" style={{color:"black"}}></i> Insights 
                   </button>
                   <button className="dropdown-item" onClick={() => { setActiveView("goals"); setShowDropdown(false); }}>
-                    <i className="fas fa-bullseye mr-2"></i> Goals 
+                    <i className="fas fa-bullseye mr-2" style={{color:"black"}}></i> Goals 
                   </button>
                   <button className="dropdown-item" onClick={() => { setActiveView("aiCoach"); setShowDropdown(false); }}>
-                    <i className="fas fa-robot mr-2"></i> AI Financial Coach
+                    <i className="fas fa-robot mr-2" style={{color:"black"}}></i> AI Financial Coach
                   </button>
                   <button className="dropdown-item" onClick={() => { setShowSettings(true); setShowDropdown(false); }}>
-                    <i className="fas fa-cog mr-2"></i> Settings
+                    <i className="fas fa-cog mr-2" style={{color:"black"}}></i> Settings
                   </button>
                   <button className="dropdown-item" onClick={exportToCSV}>
-                    <i className="fas fa-file-export mr-2"></i> Export CSV
+                    <i className="fas fa-file-export mr-2" style={{color:"black"}}></i> Export CSV
                   </button>
                   <button className="dropdown-item" onClick={() => { setShowShare(true); setShowDropdown(false); }}>
-                    <i className="fas fa-share-alt mr-2"></i> Share App
+                    <i className="fas fa-share-alt mr-2" style={{color:"black"}}></i> Share App
                   </button>
                   <button className="dropdown-item" onClick={() => { 
                     window.open('https://www.linkedin.com/in/subhra-prasad-chakraborty-3b91aa285?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app', '_blank');
                     setShowDropdown(false);
                   }}>
-                    <i className="fas fa-envelope mr-2"></i> Contact Us
+                    <i className="fas fa-envelope mr-2" style={{color:"black"}}></i> Contact Us
                   </button>
                   <button className="dropdown-item" onClick={() => { logoutUser(); setShowDropdown(false); }}>
-                    <i className="fas fa-sign-out-alt mr-2"></i> Logout
+                    <i className="fas fa-sign-out-alt mr-2" style={{color:"black"}}></i> Logout
                   </button>
                 </div>
               </div>
@@ -1989,7 +2149,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
             <div className="settings-header">
               <h2 className="text-xl font-semibold">Settings</h2>
               <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
-                <i className="fas fa-times"></i>
+                <i className="fas fa-times" style={{color:"black"}}></i>
               </button>
             </div>
 
@@ -1999,25 +2159,25 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
                 className={activeTab === 'profile' ? 'active' : ''} 
                 onClick={() => setActiveTab('profile')}
               >
-                <i className="fas fa-user mr-2"></i>Profile
+                <i className="fas fa-user mr-2" style={{color:"black"}}></i>Profile
               </button>
               <button 
                 className={activeTab === 'currency' ? 'active' : ''} 
                 onClick={() => setActiveTab('currency')}
               >
-                <i className="fas fa-money-bill mr-2"></i>Currency
+                <i className="fas fa-money-bill mr-2" style={{color:"black"}}></i>Currency
               </button>
               <button 
                 className={activeTab === 'financial' ? 'active' : ''} 
                 onClick={() => setActiveTab('financial')}
               >
-                <i className="fas fa-calendar mr-2"></i>Financial Month
+                <i className="fas fa-calendar mr-2" style={{color:"black"}}></i>Financial Month
               </button>
               <button 
                 className={activeTab === 'data' ? 'active' : ''} 
                 onClick={() => setActiveTab('data')}
               >
-                <i className="fas fa-database mr-2"></i>Data
+                <i className="fas fa-database mr-2" style={{color:"black"}}></i>Data
               </button>
             </div>
 
@@ -2045,7 +2205,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
                     className="w-full px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
                     onClick={() => { logoutUser(); onClose(); }}
                   >
-                    <i className="fas fa-sign-out-alt mr-2"></i> Logout
+                    <i className="fas fa-sign-out-alt mr-2" style={{color:"black"}}></i> Logout
                   </button>
                 </div>
               </div>
@@ -2131,7 +2291,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
                       a.click();
                       URL.revokeObjectURL(url);
                     }}>
-                      <i className="fas fa-download mr-2"></i>Export Data
+                      <i className="fas fa-download mr-2" style={{color:"black"}}></i>Export Data
                     </button>
                     <p className="text-xs text-gray-500 mt-1">Download all your data as a JSON file</p>
                   </div>
@@ -2181,7 +2341,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
                         alert('Failed to recover data from backup. Please try importing a backup file manually.');
                       }
                     }}>
-                      <i className="fas fa-undo mr-2"></i>Recover from Auto-Backup
+                      <i className="fas fa-undo mr-2" style={{color:"black"}}></i>Recover from Auto-Backup
                     </button>
                     <p className="text-xs text-gray-500 mt-1">Restore data from the last automatic backup</p>
                   </div>
@@ -2246,29 +2406,30 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
       const chartRef = React.useRef(null);
       const chartInstance = React.useRef(null);
       
-      const calculateTimeSpent = () => {
+      // Build money-spent data keyed by period
+      const calculateMoneySpent = () => {
         const data = { daily: {}, weekly: {}, monthly: {} };
-        const categoryTime = {};
+        const categoryMoney = {};
         
-        transactions.forEach(tx => {
+        const expTx = transactions.filter(tx => tx.category && tx.category.toLowerCase() !== 'income');
+        expTx.forEach(tx => {
           const date = new Date(tx.date);
+          if (isNaN(date.getTime())) return;
           const dayKey = date.toISOString().split('T')[0];
-          const dayName = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][date.getDay()];
           const weekNum = Math.ceil((date.getDate() + new Date(date.getFullYear(), date.getMonth(), 1).getDay()) / 7);
-          const weekKey = `W${weekNum}`;
+          const weekKey = `W${weekNum} (${date.toLocaleDateString('en-US', { month: 'short' })})`;
           const monthKey = date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
           
-          data.daily[dayKey] = (data.daily[dayKey] || 0) + 1;
-          data.weekly[weekKey] = (data.weekly[weekKey] || 0) + 1;
-          data.monthly[monthKey] = (data.monthly[monthKey] || 0) + 1;
-          
-          categoryTime[tx.category] = (categoryTime[tx.category] || 0) + 1;
+          data.daily[dayKey] = (data.daily[dayKey] || 0) + (tx.amount || 0);
+          data.weekly[weekKey] = (data.weekly[weekKey] || 0) + (tx.amount || 0);
+          data.monthly[monthKey] = (data.monthly[monthKey] || 0) + (tx.amount || 0);
+          categoryMoney[tx.category] = (categoryMoney[tx.category] || 0) + (tx.amount || 0);
         });
         
-        return { periodData: data, categoryData: categoryTime };
+        return { periodData: data, categoryData: categoryMoney };
       };
       
-      const { periodData, categoryData } = calculateTimeSpent();
+      const { periodData, categoryData } = calculateMoneySpent();
       
       useEffect(() => {
         if (chartRef.current && Object.keys(periodData[analysisType]).length > 0) {
@@ -2281,14 +2442,28 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
           const dataValues = sortedKeys.map(k => selectedData[k]);
           
           let labels = sortedKeys;
-          let title = `${analysisType.charAt(0).toUpperCase() + analysisType.slice(1)} Transaction Frequency`;
+          const titleMap = { daily: 'Daily Money Spent', weekly: 'Weekly Money Spent', monthly: 'Monthly Money Spent' };
           
           if (analysisType === "daily") {
-            labels = sortedKeys.map(date => {
-              const d = new Date(date);
+            labels = sortedKeys.map(dateStr => {
+              const d = new Date(dateStr);
               return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
             });
           }
+          
+          const maxVal = Math.max(...dataValues);
+          const barColors = dataValues.map(v => {
+            const ratio = maxVal > 0 ? v / maxVal : 0;
+            if (ratio > 0.75) return 'rgba(239,68,68,0.82)';
+            if (ratio > 0.45) return 'rgba(245,158,11,0.82)';
+            return 'rgba(99,102,241,0.82)';
+          });
+          const borderColors = dataValues.map(v => {
+            const ratio = maxVal > 0 ? v / maxVal : 0;
+            if (ratio > 0.75) return '#dc2626';
+            if (ratio > 0.45) return '#d97706';
+            return '#4f46e5';
+          });
           
           const ctx = chartRef.current.getContext('2d');
           chartInstance.current = new Chart(ctx, {
@@ -2296,59 +2471,49 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
             data: {
               labels: labels,
               datasets: [{
-                label: 'Transaction Count',
+                label: 'Amount Spent (₹)',
                 data: dataValues,
-                backgroundColor: dataValues.map((_, idx) => {
-                  const colors = ['#3b82f6', '#06b6d4', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'];
-                  return colors[idx % colors.length];
-                }),
-                borderColor: dataValues.map((_, idx) => {
-                  const colors = ['#1e40af', '#0369a1', '#047857', '#d97706', '#b91c1c', '#6d28d9', '#be185d'];
-                  return colors[idx % colors.length];
-                }),
+                backgroundColor: barColors,
+                borderColor: borderColors,
                 borderWidth: 2,
                 borderRadius: 8,
                 borderSkipped: false,
-                hoverBackgroundColor: '#6366f1',
-                hoverBorderColor: '#4f46e5',
-                hoverBorderWidth: 3,
-                tension: 0.4
+                hoverBackgroundColor: 'rgba(99,102,241,0.95)',
+                hoverBorderColor: '#3730a3',
+                hoverBorderWidth: 3
               }]
             },
             options: {
               responsive: true,
               maintainAspectRatio: true,
-              indexAxis: 'x',
               plugins: {
-                legend: { 
+                legend: {
                   display: true,
-                  labels: {
-                    font: { size: 12, weight: 'bold' },
-                    color: '#666',
-                    padding: 15
-                  }
+                  labels: { font: { size: 12, weight: 'bold' }, color: '#6b7280', padding: 15 }
                 },
                 title: {
                   display: true,
-                  text: title,
+                  text: titleMap[analysisType],
                   font: { size: 14, weight: 'bold' },
-                  padding: 20
+                  padding: 20,
+                  color: '#374151'
                 },
                 tooltip: {
-                  backgroundColor: 'rgba(0,0,0,0.8)',
-                  padding: 12,
+                  backgroundColor: 'rgba(17,24,39,0.93)',
+                  padding: 14,
                   titleFont: { size: 13, weight: 'bold' },
                   bodyFont: { size: 12 },
-                  cornerRadius: 8,
+                  cornerRadius: 10,
                   displayColors: true,
                   callbacks: {
+                    title: function(items) { return items[0].label; },
                     label: function(context) {
-                      return `Transactions: ${context.raw}`;
+                      return `  Spent: ₹${context.raw.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
                     },
                     afterLabel: function(context) {
                       const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                      const percent = ((context.raw / total) * 100).toFixed(1);
-                      return `(${percent}% of total)`;
+                      const pct = total > 0 ? ((context.raw / total) * 100).toFixed(1) : '0.0';
+                      return `  Share: ${pct}% of period total`;
                     }
                   }
                 }
@@ -2357,26 +2522,15 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
                 y: {
                   beginAtZero: true,
                   ticks: {
-                    stepSize: 1,
-                    font: { size: 11 }
+                    font: { size: 11 },
+                    callback: v => '₹' + Number(v).toLocaleString('en-IN')
                   },
-                  grid: {
-                    color: 'rgba(0,0,0,0.05)',
-                    drawBorder: true
-                  },
-                  title: {
-                    display: true,
-                    text: 'Transaction Count',
-                    font: { weight: 'bold' }
-                  }
+                  grid: { color: 'rgba(0,0,0,0.04)' },
+                  title: { display: true, text: 'Amount Spent (₹)', font: { weight: 'bold' }, color: '#6b7280' }
                 },
                 x: {
-                  ticks: {
-                    font: { size: 11 }
-                  },
-                  grid: {
-                    display: false
-                  }
+                  ticks: { font: { size: 11 }, maxRotation: 45 },
+                  grid: { display: false }
                 }
               }
             }
@@ -2390,35 +2544,69 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
         };
       }, [analysisType, transactions, selectedMonth]);
       
+      // Stats summary
+      const expTx = transactions.filter(tx => tx.category && tx.category.toLowerCase() !== 'income');
+      const totalSpent = expTx.reduce((s, tx) => s + (tx.amount || 0), 0);
       const selectedData = periodData[analysisType];
       const sortedPeriods = Object.keys(selectedData).sort();
-      
+      const periodValues = sortedPeriods.map(k => selectedData[k]);
+      const maxPeriod = periodValues.length ? Math.max(...periodValues) : 0;
+      const maxPeriodKey = sortedPeriods[periodValues.indexOf(maxPeriod)] || '—';
+      const avgPeriod = periodValues.length ? (periodValues.reduce((a,b)=>a+b,0)/periodValues.length) : 0;
+
+      // Top spend categories
+      const sortedCategories = Object.entries(categoryData).sort((a,b)=>b[1]-a[1]).slice(0,3);
+
       return (
-        <div className="bg-white dark:bg-gray-800 p-4 rounded shadow space-y-4">
-          <div className="flex justify-between items-center">
-            <h2 className="font-semibold text-lg">⏱️ Time Spent Analysis</h2>
-            <div className="text-sm text-gray-600 dark:text-gray-400">
-              {selectedMonth === "all" ? "All Time" : `Month: ${selectedMonth}`}
+        <div className="space-y-5">
+          {/* Header card */}
+          <div style={{ background: 'linear-gradient(135deg,#6366f1 0%,#8b5cf6 60%,#a78bfa 100%)', borderRadius: 18, padding: '22px 28px', color: 'white', boxShadow: '0 8px 32px rgba(99,102,241,0.22)' }}>
+            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:12 }}>
+              <div>
+                <div style={{ fontSize: '0.78rem', letterSpacing: '0.12em', textTransform:'uppercase', opacity:0.8, marginBottom:4 }}>Time Spent Analysis</div>
+                <div style={{ fontSize: '2.1rem', fontWeight: 800 }}>₹{totalSpent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</div>
+                <div style={{ fontSize: '0.85rem', opacity: 0.85 }}>Total money spent • {selectedMonth === "all" ? "All time" : selectedMonth}</div>
+              </div>
+              <div style={{ display:'flex', gap:18 }}>
+                <div style={{ textAlign:'center' }}>
+                  <div style={{ fontSize:'0.7rem', opacity:0.75, textTransform:'uppercase' }}>Avg / Period</div>
+                  <div style={{ fontWeight:700, fontSize:'1.1rem' }}>₹{Math.round(avgPeriod).toLocaleString('en-IN')}</div>
+                </div>
+                <div style={{ textAlign:'center' }}>
+                  <div style={{ fontSize:'0.7rem', opacity:0.75, textTransform:'uppercase' }}>Peak</div>
+                  <div style={{ fontWeight:700, fontSize:'1.1rem' }}>₹{Math.round(maxPeriod).toLocaleString('en-IN')}</div>
+                </div>
+              </div>
             </div>
           </div>
-          
-          <div className="flex gap-2 flex-wrap">
+
+          {/* Filter pills */}
+          <div style={{ display:'flex', gap:10, flexWrap:'wrap' }}>
             {['daily', 'weekly', 'monthly'].map(type => (
               <button
                 key={type}
                 onClick={() => setAnalysisType(type)}
-                className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 transform hover:scale-105 ${
-                  analysisType === type
-                    ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg'
-                    : 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600'
-                }`}
+                style={{
+                  padding: '8px 22px',
+                  borderRadius: 30,
+                  fontWeight: 600,
+                  fontSize: '0.88rem',
+                  border: '2px solid',
+                  borderColor: analysisType === type ? '#6366f1' : '#e5e7eb',
+                  background: analysisType === type ? 'linear-gradient(135deg,#6366f1,#8b5cf6)' : 'white',
+                  color: analysisType === type ? 'white' : '#6b7280',
+                  cursor: 'pointer',
+                  boxShadow: analysisType === type ? '0 4px 14px rgba(99,102,241,0.28)' : 'none',
+                  transition: 'all 0.2s'
+                }}
               >
                 {type.charAt(0).toUpperCase() + type.slice(1)}
               </button>
             ))}
           </div>
-          
-          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 p-4 rounded-lg">
+
+          {/* Chart */}
+          <div style={{ background:'white', borderRadius:16, padding:'20px', boxShadow:'0 2px 16px rgba(0,0,0,0.07)', border:'1px solid #f0f0f0' }} className="dark:bg-gray-800 dark:border-gray-700">
             {sortedPeriods.length > 0 ? (
               <canvas ref={chartRef} style={{ maxHeight: '350px' }}></canvas>
             ) : (
@@ -2426,47 +2614,40 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
             )}
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg border-l-4 border-purple-500">
-              <h3 className="font-semibold mb-3 text-purple-900 dark:text-purple-200">Top Categories</h3>
-              <div className="space-y-2">
-                {Object.entries(categoryData)
-                  .sort((a, b) => b[1] - a[1])
-                  .slice(0, 5)
-                  .map(([category, count]) => (
-                    <div key={category} className="flex justify-between items-center p-2 bg-white dark:bg-gray-800 rounded hover:bg-purple-100 dark:hover:bg-purple-900/40 transition-colors duration-200">
-                      <span className="text-sm font-medium truncate">{category}</span>
-                      <span className="text-sm font-bold text-purple-600 dark:text-purple-400 ml-2">{count}</span>
-                    </div>
-                  ))}
-              </div>
+          {/* Summary stats row */}
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(180px,1fr))', gap:14 }}>
+            <div style={{ background:'linear-gradient(135deg,#fef3c7,#fde68a)', borderRadius:14, padding:'16px 18px', borderLeft:'4px solid #f59e0b' }}>
+              <div style={{ fontSize:'0.72rem', textTransform:'uppercase', letterSpacing:'0.1em', color:'#92400e', marginBottom:4 }}>Peak Spend Period</div>
+              <div style={{ fontWeight:800, fontSize:'1.1rem', color:'#78350f' }}>₹{Math.round(maxPeriod).toLocaleString('en-IN')}</div>
+              <div style={{ fontSize:'0.75rem', color:'#b45309', marginTop:2, whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>{analysisType === 'daily' ? new Date(maxPeriodKey).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : maxPeriodKey}</div>
             </div>
-            
-            <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border-l-4 border-blue-500">
-              <h3 className="font-semibold mb-3 text-blue-900 dark:text-blue-200">Summary</h3>
-              <div className="space-y-3">
-                <div className="flex justify-between p-2 bg-white dark:bg-gray-800 rounded hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-colors duration-200">
-                  <span className="text-sm">Total Transactions</span>
-                  <span className="font-bold text-blue-600 dark:text-blue-400">{transactions.length}</span>
-                </div>
-                <div className="flex justify-between p-2 bg-white dark:bg-gray-800 rounded hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-colors duration-200">
-                  <span className="text-sm">Periods with Data</span>
-                  <span className="font-bold text-blue-600 dark:text-blue-400">{sortedPeriods.length}</span>
-                </div>
-                <div className="flex justify-between p-2 bg-white dark:bg-gray-800 rounded hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-colors duration-200">
-                  <span className="text-sm">Avg per Period</span>
-                  <span className="font-bold text-blue-600 dark:text-blue-400">
-                    {sortedPeriods.length > 0 ? (transactions.length / sortedPeriods.length).toFixed(1) : 0}
-                  </span>
-                </div>
-                <div className="flex justify-between p-2 bg-white dark:bg-gray-800 rounded hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-colors duration-200">
-                  <span className="text-sm">Busiest Period</span>
-                  <span className="font-bold text-blue-600 dark:text-blue-400">
-                    {sortedPeriods.length > 0 ? Math.max(...sortedPeriods.map(p => selectedData[p])) : 0}
-                  </span>
-                </div>
-              </div>
+            <div style={{ background:'linear-gradient(135deg,#d1fae5,#a7f3d0)', borderRadius:14, padding:'16px 18px', borderLeft:'4px solid #10b981' }}>
+              <div style={{ fontSize:'0.72rem', textTransform:'uppercase', letterSpacing:'0.1em', color:'#065f46', marginBottom:4 }}>Average / {analysisType.charAt(0).toUpperCase()+analysisType.slice(1,-2)}</div>
+              <div style={{ fontWeight:800, fontSize:'1.1rem', color:'#065f46' }}>₹{Math.round(avgPeriod).toLocaleString('en-IN')}</div>
+              <div style={{ fontSize:'0.75rem', color:'#047857', marginTop:2 }}>over {sortedPeriods.length} periods</div>
             </div>
+            <div style={{ background:'linear-gradient(135deg,#ede9fe,#ddd6fe)', borderRadius:14, padding:'16px 18px', borderLeft:'4px solid #8b5cf6' }}>
+              <div style={{ fontSize:'0.72rem', textTransform:'uppercase', letterSpacing:'0.1em', color:'#4c1d95', marginBottom:4 }}>Top Category</div>
+              <div style={{ fontWeight:800, fontSize:'1rem', color:'#4c1d95', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>{sortedCategories[0] ? sortedCategories[0][0] : '—'}</div>
+              <div style={{ fontSize:'0.75rem', color:'#6d28d9', marginTop:2 }}>{sortedCategories[0] ? `₹${Math.round(sortedCategories[0][1]).toLocaleString('en-IN')} spent` : 'No data'}</div>
+            </div>
+          </div>
+
+          {/* Category breakdown */}
+          <div style={{ background:'white', borderRadius:16, padding:'18px 20px', boxShadow:'0 2px 12px rgba(0,0,0,0.06)', border:'1px solid #f0f0f0' }} className="dark:bg-gray-800 dark:border-gray-700">
+            <div style={{ fontWeight:700, marginBottom:14, color:'#374151', fontSize:'0.95rem' }}>💸 Spending by Category</div>
+            {sortedCategories.length > 0 ? sortedCategories.map(([cat, amt], i) => (
+              <div key={cat} style={{ marginBottom:10 }}>
+                <div style={{ display:'flex', justifyContent:'space-between', marginBottom:4 }}>
+                  <span style={{ fontSize:'0.85rem', fontWeight:600, color:'#4b5563' }}>{cat}</span>
+                  <span style={{ fontSize:'0.85rem', fontWeight:700, color:'#6366f1' }}>₹{Math.round(amt).toLocaleString('en-IN')}</span>
+                </div>
+                <div style={{ background:'#f3f4f6', borderRadius:8, height:8, overflow:'hidden' }}>
+                  <div style={{ height:'100%', borderRadius:8, width:`${totalSpent>0?Math.round((amt/totalSpent)*100):0}%`, background: i===0?'#ef4444':i===1?'#f59e0b':'#8b5cf6', transition:'width 0.6s ease' }}></div>
+                </div>
+                <div style={{ fontSize:'0.7rem', color:'#9ca3af', marginTop:2 }}>{totalSpent>0?Math.round((amt/totalSpent)*100):0}% of total spend</div>
+              </div>
+            )) : <p style={{ color:'#9ca3af', textAlign:'center', padding:'12px 0' }}>No category data available</p>}
           </div>
         </div>
       );
@@ -3423,7 +3604,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
                   onClick={() => shareViaEmail(person)}
                   className="w-full p-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 flex items-center justify-center gap-2"
                 >
-                  <i className="fas fa-envelope text-xl"></i>
+                  <i className="fas fa-envelope text-xl" style={{color:"black"}}></i>
                   Share via Email
                 </button>
                 
@@ -3431,7 +3612,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
                   onClick={() => shareViaSMS(person)}
                   className="w-full p-3 bg-purple-500 text-white rounded-lg hover:bg-purple-600 flex items-center justify-center gap-2"
                 >
-                  <i className="fas fa-comment text-xl"></i>
+                  <i className="fas fa-comment text-xl" style={{color:"black"}}></i>
                   Share via SMS
                 </button>
                 
@@ -3439,7 +3620,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
                   onClick={() => copyToClipboard(person)}
                   className="w-full p-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 flex items-center justify-center gap-2"
                 >
-                  <i className="fas fa-copy text-xl"></i>
+                  <i className="fas fa-copy text-xl" style={{color:"black"}}></i>
                   Copy to Clipboard
                 </button>
                 
@@ -3559,7 +3740,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
                     className="px-2 py-1 bg-blue-500 text-white rounded text-sm hover:bg-blue-600 flex items-center gap-1"
                     title={`Share ${person}'s settlement history`}
                   >
-                    <i className="fas fa-share-alt"></i>
+                    <i className="fas fa-share-alt" style={{color:"black"}}></i>
                     <span className="hidden sm:inline">Share</span>
                   </button>
                 </div>
@@ -3879,275 +4060,234 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
         setEditForm({});
       };
       
-      return (
-        <div className="bg-white dark:bg-gray-800 p-4 rounded shadow overflow-auto">
-          <div className="flex justify-between items-center mb-3">
-            <h2 className="font-semibold text-lg">Transaction Log</h2>
-            <select 
-              value={monthFilter} 
-              onChange={(e) => setMonthFilter(e.target.value)}
-              className="p-2 rounded bg-gray-100 dark:bg-gray-700 text-sm"
-            >
-              <option value="all">All Months</option>
-              {availableMonths.map(month => (
-                <option key={month} value={month}>
-                  {new Date(month + '-01').toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
-                </option>
-              ))}
-            </select>
-          </div>
-          
-          {transactions.length === 0 ? (
-            <p className="text-gray-500 dark:text-gray-400 p-2">No transactions for selected month</p>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="table-auto w-full text-left">
-                <thead>
-                  <tr className="border-b dark:border-gray-700">
-                    <th className="p-2">Date</th>
-                    <th className="p-2">Description</th>
-                    <th className="p-2">Category</th>
-                    <th className="p-2">Amount</th>
-                    <th className="p-2">Necessity</th>
-                    <th className="p-2">Details</th>
-                    <th className="p-2">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {transactions.map((tx, idx) => (
-                    <tr key={tx.id || idx} className="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
-                      {editingRow === idx ? (
-                        <>
-                          <td className="p-2">
-                            <input
-                              type="date"
-                              value={editForm.date}
-                              onChange={(e) => handleEditChange('date', e.target.value)}
-                              className="w-full p-1 border rounded"
-                            />
-                          </td>
-                          <td className="p-2">
-                            <input
-                              type="text"
-                              value={editForm.description}
-                              onChange={(e) => handleEditChange('description', e.target.value)}
-                              className="w-full p-1 border rounded"
-                            />
-                          </td>
-                          <td className="p-2">
-                            <select
-                              value={editForm.category}
-                              onChange={(e) => handleEditChange('category', e.target.value)}
-                              className="w-full p-1 border rounded"
-                            >
-                              {["Rent & Utilities","Foods & cravings","Daily Living","Travel & Transport","Fitness & Health","Family Support","Entertainment & Subscriptions","Personal Care & Shopping","Investments","Personal EMIs","Emergency Funds","Savings & Goals"].map(cat => (
-                                <option key={cat} value={cat}>{cat}</option>
-                              ))}
-                            </select>
-                          </td>
-                          <td className="p-2">
-                            <input
-                              type="number"
-                              step="0.01"
-                              value={editForm.amount}
-                              onChange={(e) => handleEditChange('amount', parseFloat(e.target.value))}
-                              className="w-full p-1 border rounded"
-                            />
-                          </td>
-                          <td className="p-2">
-                            <select
-                              value={editForm.necessity}
-                              onChange={(e) => handleEditChange('necessity', e.target.value)}
-                              className="w-full p-1 border rounded"
-                            >
-                              <option value="Needs">Needs</option>
-                              <option value="Wants">Wants</option>
-                              <option value="Investment">Investment</option>
-                            </select>
-                          </td>
-                          <td className="p-2">
-                            <div>
-                              <label className="block text-xs mb-1">Group Payment</label>
-                              <select
-                                value={editForm.groupPay || "No"}
-                                onChange={(e) => {
-                                  const val = e.target.value;
-                                  handleEditChange('groupPay', val);
-                                  if (val === 'Yes' && !editForm.groupDetails) {
-                                    setEditForm({
-                                      ...editForm,
-                                      groupDetails: {
-                                        splitType: 'equal',
-                                        includeMe: true,
-                                        people: [
-                                          { id: Date.now() + 1, name: currentUser || 'You', amount: 0, includeMe: true, isCustomName: false }
-                                        ]
-                                      }
-                                    });
-                                  }
-                                }}
-                                className="w-full p-1 border rounded"
-                              >
-                                <option value="No">No - Personal</option>
-                                <option value="Yes">Yes - Shared</option>
-                              </select>
+      // Category colour map for pill badges
+      const catColor = {
+        'Rent & Utilities': '#3b82f6',
+        'Foods & cravings': '#f59e0b',
+        'Daily Living': '#10b981',
+        'Travel & Transport': '#6366f1',
+        'Fitness & Health': '#ec4899',
+        'Family Support': '#8b5cf6',
+        'Entertainment & Subscriptions': '#ef4444',
+        'Personal Care & Shopping': '#f97316',
+        'Investments': '#14b8a6',
+        'Personal EMIs': '#dc2626',
+        'Emergency Funds': '#64748b',
+        'Savings & Goals': '#22c55e',
+        'Income': '#059669'
+      };
+      const getCatColor = (cat) => catColor[cat] || '#6b7280';
 
-                              {editForm.groupPay === "Yes" && editForm.groupDetails && (
-                                <div className="mt-2 space-y-2 p-2 bg-gray-50 dark:bg-gray-700 rounded">
-                                  {(editForm.groupDetails.people || []).map((person, pIdx) => (
-                                    <div key={person.id} className="flex gap-2 items-center">
-                                      <input type="text" value={person.name} onChange={(e) => handleEditPersonChange(pIdx, 'name', e.target.value)} className="flex-1 p-1 border rounded" />
-                                      <input type="number" step="0.01" value={person.amount} onChange={(e) => handleEditPersonChange(pIdx, 'amount', e.target.value)} className="w-24 p-1 border rounded" />
-                                    </div>
-                                  ))}
-                                  <div className="flex gap-2">
-                                    <button type="button" onClick={handleAddEditPerson} className="px-2 py-1 bg-green-500 text-white rounded">Add Person</button>
-                                  </div>
+      const totalAmt = transactions.reduce((s, tx) => s + (tx.amount || 0), 0);
+      const needsAmt = transactions.filter(tx => tx.necessity === 'Needs').reduce((s, tx) => s + (tx.amount || 0), 0);
+      const wantsAmt = transactions.filter(tx => tx.necessity === 'Wants').reduce((s, tx) => s + (tx.amount || 0), 0);
+      const investAmt = transactions.filter(tx => tx.necessity === 'Investment').reduce((s, tx) => s + (tx.amount || 0), 0);
+
+      return (
+        <div style={{ background:'white', borderRadius:18, overflow:'hidden', boxShadow:'0 4px 24px rgba(0,0,0,0.08)' }} className="dark:bg-gray-800">
+          {/* Header */}
+          <div style={{ background:'linear-gradient(135deg,#1e1b4b 0%,#312e81 50%,#4c1d95 100%)', padding:'24px 28px 20px 28px' }}>
+            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', flexWrap:'wrap', gap:12 }}>
+              <div>
+                <div style={{ color:'rgba(255,255,255,0.65)', fontSize:'0.72rem', textTransform:'uppercase', letterSpacing:'0.14em', marginBottom:4 }}>Transaction Log</div>
+                <div style={{ color:'white', fontSize:'1.8rem', fontWeight:800 }}>₹{totalAmt.toLocaleString('en-IN',{minimumFractionDigits:0})}</div>
+                <div style={{ color:'rgba(255,255,255,0.65)', fontSize:'0.8rem', marginTop:2 }}>{transactions.length} transactions</div>
+              </div>
+              <div style={{ display:'flex', gap:12, flexWrap:'wrap' }}>
+                <div style={{ background:'rgba(255,255,255,0.1)', borderRadius:10, padding:'8px 14px', textAlign:'center' }}>
+                  <div style={{ color:'rgba(255,255,255,0.6)', fontSize:'0.65rem', textTransform:'uppercase' }}>Needs</div>
+                  <div style={{ color:'#86efac', fontWeight:700 }}>₹{needsAmt.toLocaleString('en-IN',{minimumFractionDigits:0})}</div>
+                </div>
+                <div style={{ background:'rgba(255,255,255,0.1)', borderRadius:10, padding:'8px 14px', textAlign:'center' }}>
+                  <div style={{ color:'rgba(255,255,255,0.6)', fontSize:'0.65rem', textTransform:'uppercase' }}>Wants</div>
+                  <div style={{ color:'#fca5a5', fontWeight:700 }}>₹{wantsAmt.toLocaleString('en-IN',{minimumFractionDigits:0})}</div>
+                </div>
+                <div style={{ background:'rgba(255,255,255,0.1)', borderRadius:10, padding:'8px 14px', textAlign:'center' }}>
+                  <div style={{ color:'rgba(255,255,255,0.6)', fontSize:'0.65rem', textTransform:'uppercase' }}>Invest</div>
+                  <div style={{ color:'#93c5fd', fontWeight:700 }}>₹{investAmt.toLocaleString('en-IN',{minimumFractionDigits:0})}</div>
+                </div>
+              </div>
+            </div>
+            {/* Month filter */}
+            <div style={{ marginTop:16 }}>
+              <select
+                value={monthFilter}
+                onChange={(e) => setMonthFilter(e.target.value)}
+                style={{ background:'rgba(255,255,255,0.15)', border:'1px solid rgba(255,255,255,0.25)', borderRadius:8, color:'white', padding:'7px 14px', fontSize:'0.85rem', cursor:'pointer' }}
+              >
+                <option value="all" style={{ color:'#1e1b4b', background:'white' }}>All Months</option>
+                {availableMonths.map(month => (
+                  <option key={month} value={month} style={{ color:'#1e1b4b', background:'white' }}>
+                    {new Date(month + '-01').toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* Body */}
+          <div style={{ padding:'18px 20px' }}>
+          {transactions.length === 0 ? (
+            <div style={{ textAlign:'center', padding:'48px 24px', color:'#9ca3af' }}>
+              <div style={{ fontSize:'2.5rem', marginBottom:12 }}>📭</div>
+              <div style={{ fontWeight:600, fontSize:'1rem', marginBottom:6 }}>No transactions</div>
+              <div style={{ fontSize:'0.85rem' }}>No transactions found for the selected period</div>
+            </div>
+          ) : (
+            <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
+              {transactions.map((tx, idx) => (
+                <div key={tx.id || idx}
+                  style={{ border: editingRow === idx ? '2px solid #6366f1' : '1px solid #f3f4f6', borderRadius:14, overflow:'hidden', transition:'all 0.2s', background: editingRow === idx ? '#faf5ff' : 'white' }}
+                  className="dark:bg-gray-700 dark:border-gray-600 hover:shadow-md"
+                >
+                  {editingRow === idx ? (
+                    /* ---- EDIT MODE ---- */
+                    <div style={{ padding:'16px 18px' }}>
+                      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:12, marginBottom:12 }}>
+                        <div>
+                          <label style={{ fontSize:'0.72rem', fontWeight:700, color:'#6b7280', textTransform:'uppercase', letterSpacing:'0.08em', display:'block', marginBottom:4 }}>Date</label>
+                          <input type="date" value={editForm.date} onChange={(e) => handleEditChange('date', e.target.value)} className="w-full p-2 border rounded text-sm" style={{ borderRadius:8 }} />
+                        </div>
+                        <div>
+                          <label style={{ fontSize:'0.72rem', fontWeight:700, color:'#6b7280', textTransform:'uppercase', letterSpacing:'0.08em', display:'block', marginBottom:4 }}>Amount (₹)</label>
+                          <input type="number" step="0.01" value={editForm.amount} onChange={(e) => handleEditChange('amount', parseFloat(e.target.value))} className="w-full p-2 border rounded text-sm" style={{ borderRadius:8 }} />
+                        </div>
+                        <div style={{ gridColumn:'1 / -1' }}>
+                          <label style={{ fontSize:'0.72rem', fontWeight:700, color:'#6b7280', textTransform:'uppercase', letterSpacing:'0.08em', display:'block', marginBottom:4 }}>Description</label>
+                          <input type="text" value={editForm.description} onChange={(e) => handleEditChange('description', e.target.value)} className="w-full p-2 border rounded text-sm" style={{ borderRadius:8 }} />
+                        </div>
+                        <div>
+                          <label style={{ fontSize:'0.72rem', fontWeight:700, color:'#6b7280', textTransform:'uppercase', letterSpacing:'0.08em', display:'block', marginBottom:4 }}>Category</label>
+                          <select value={editForm.category} onChange={(e) => handleEditChange('category', e.target.value)} className="w-full p-2 border rounded text-sm" style={{ borderRadius:8 }}>
+                            {["Rent & Utilities","Foods & cravings","Daily Living","Travel & Transport","Fitness & Health","Family Support","Entertainment & Subscriptions","Personal Care & Shopping","Investments","Personal EMIs","Emergency Funds","Savings & Goals"].map(cat => (
+                              <option key={cat} value={cat}>{cat}</option>
+                            ))}
+                          </select>
+                        </div>
+                        <div>
+                          <label style={{ fontSize:'0.72rem', fontWeight:700, color:'#6b7280', textTransform:'uppercase', letterSpacing:'0.08em', display:'block', marginBottom:4 }}>Necessity</label>
+                          <select value={editForm.necessity} onChange={(e) => handleEditChange('necessity', e.target.value)} className="w-full p-2 border rounded text-sm" style={{ borderRadius:8 }}>
+                            <option value="Needs">Needs</option>
+                            <option value="Wants">Wants</option>
+                            <option value="Investment">Investment</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label style={{ fontSize:'0.72rem', fontWeight:700, color:'#6b7280', textTransform:'uppercase', letterSpacing:'0.08em', display:'block', marginBottom:4 }}>Group Payment</label>
+                          <select value={editForm.groupPay || "No"} onChange={(e) => { const val = e.target.value; handleEditChange('groupPay', val); if (val === 'Yes' && !editForm.groupDetails) { setEditForm({ ...editForm, groupPay: val, groupDetails: { splitType:'equal', includeMe:true, people:[{ id:Date.now()+1, name:currentUser||'You', amount:0, includeMe:true, isCustomName:false }] }}); } }} className="w-full p-2 border rounded text-sm" style={{ borderRadius:8 }}>
+                            <option value="No">No - Personal</option>
+                            <option value="Yes">Yes - Shared</option>
+                          </select>
+                          {editForm.groupPay === "Yes" && editForm.groupDetails && (
+                            <div style={{ marginTop:8, padding:10, background:'#f9fafb', borderRadius:8 }}>
+                              {(editForm.groupDetails.people || []).map((person, pIdx) => (
+                                <div key={person.id} style={{ display:'flex', gap:8, marginBottom:6 }}>
+                                  <input type="text" value={person.name} onChange={(e) => handleEditPersonChange(pIdx,'name',e.target.value)} className="flex-1 p-1 border rounded text-sm" />
+                                  <input type="number" step="0.01" value={person.amount} onChange={(e) => handleEditPersonChange(pIdx,'amount',e.target.value)} className="w-24 p-1 border rounded text-sm" />
                                 </div>
-                              )}
+                              ))}
+                              <button type="button" onClick={handleAddEditPerson} style={{ fontSize:'0.75rem', padding:'4px 10px', background:'#10b981', color:'white', border:'none', borderRadius:6, cursor:'pointer' }}>+ Add Person</button>
                             </div>
-                          </td>
-                          <td className="p-2">
-                            <div className="flex gap-1">
-                              <button 
-                                onClick={handleSaveEdit}
-                                className="px-2 py-1 bg-green-500 text-white rounded text-sm hover:bg-green-600"
-                              >
-                                Save
-                              </button>
-                              <button 
-                                onClick={handleCancelEdit}
-                                className="px-2 py-1 bg-gray-500 text-white rounded text-sm hover:bg-gray-600"
-                              >
-                                Cancel
-                              </button>
-                            </div>
-                          </td>
-                        </>
-                      ) : (
-                        <>
-                          <td className="p-2">{tx.date}</td>
-                          <td className="p-2">
-                            <div className="font-medium">{tx.description}</div>
-                            {tx.groupPay === "Yes" && tx.groupDetails && (
-                              <div className="text-xs text-blue-600 dark:text-blue-400 mt-1">
-                                <div>{tx.groupDetails.people.length} people</div>
-                                {tx.groupDetails.splitType === 'equal' ? (
-                                  <div>Equal split: ₹{(tx.amount / tx.groupDetails.people.length).toFixed(2)} each</div>
-                                ) : (
-                                  <div>Custom split</div>
-                                )}
-                              </div>
-                            )}
-                          </td>
-                          <td className="p-2">
-                            <div>
-                              {tx.category}{tx.category === "Savings & Goals" && tx.goalName ? ` (${tx.goalName})` : ''}
-                              {tx.category === "Savings & Goals" && tx.goalAmountAdded > 0 && (
-                                <div className="text-xs text-green-600">Allocated ₹{tx.goalAmountAdded.toFixed(2)}</div>
-                              )}
-                            </div>
-                            <div className={`text-xs px-1 rounded ${tx.necessity === 'Needs' ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-300' : tx.necessity === 'Wants' ? 'bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-300' : 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-300'}`}>
-                              {tx.necessity}
-                            </div>
-                            {tx.category === "Savings & Goals" && (
-                              <button
-                                onClick={() => {
-                                  const goalAmount = prompt("Enter amount to add to goals:", tx.amount);
-                                  if (goalAmount && !isNaN(goalAmount) && parseFloat(goalAmount) > 0) {
-                                    const goals = JSON.parse(localStorage.getItem("moneywise_goals") || "[]");
-                                    if (goals.length > 0) {
-                                      // build list of names separately so we can map over an array
-                                      const goalNames = goals.map(g => g.name);
-                                      const selectedGoal = prompt(
-                                        `Select goal number to add to:\n${goalNames
-                                          .map((name, i) => `${i+1}. ${name}`)
-                                          .join("\n")}`,
-                                        "1"
-                                      );
-                                      if (selectedGoal) {
-                                        const goalIndex = parseInt(selectedGoal) - 1;
-                                        if (goals[goalIndex]) {
-                                          goals[goalIndex].currentAmount += parseFloat(goalAmount);
-                                          localStorage.setItem("moneywise_goals", JSON.stringify(goals));
-                                          alert(`Added ₹${goalAmount} to goal: ${goals[goalIndex].name}`);
-                                          window.dispatchEvent(new Event("goalsUpdated"));
-                                          // update transaction record
-                                          const updated = { ...tx, goalAmountAdded: (tx.goalAmountAdded || 0) + parseFloat(goalAmount) };
-                                          onEdit(updated);
-                                        }
-                                      }
-                                    } else {
-                                      alert("No goals found. Create a goal first in the Goals section.");
+                          )}
+                        </div>
+                      </div>
+                      <div style={{ display:'flex', gap:8 }}>
+                        <button onClick={handleSaveEdit} style={{ flex:1, padding:'9px 0', background:'linear-gradient(135deg,#10b981,#059669)', color:'white', border:'none', borderRadius:9, fontWeight:600, cursor:'pointer', fontSize:'0.88rem' }}>✓ Save</button>
+                        <button onClick={handleCancelEdit} style={{ flex:1, padding:'9px 0', background:'#f3f4f6', color:'#6b7280', border:'none', borderRadius:9, fontWeight:600, cursor:'pointer', fontSize:'0.88rem' }}>✕ Cancel</button>
+                      </div>
+                    </div>
+                  ) : (
+                    /* ---- VIEW ROW END ---- */
+                    <div style={{ padding:'14px 18px', display:'flex', alignItems:'center', gap:14, flexWrap:'wrap' }}>
+                      {/* Date bubble */}
+                      <div style={{ background:'#f3f4f6', borderRadius:10, padding:'8px 12px', textAlign:'center', minWidth:54, flexShrink:0 }} className="dark:bg-gray-600">
+                        <div style={{ fontSize:'0.65rem', color:'#9ca3af', fontWeight:700, textTransform:'uppercase' }}>{new Date(tx.date).toLocaleDateString('en-US',{month:'short'})}</div>
+                        <div style={{ fontWeight:800, fontSize:'1.05rem', color:'#1f2937', lineHeight:1 }} className="dark:text-gray-100">{new Date(tx.date).getDate()}</div>
+                      </div>
+
+                      {/* Main info */}
+                      <div style={{ flex:1, minWidth:120 }}>
+                        <div style={{ fontWeight:700, fontSize:'0.92rem', color:'#1f2937', marginBottom:4 }} className="dark:text-gray-100">{tx.description}</div>
+                        <div style={{ display:'flex', gap:6, flexWrap:'wrap', alignItems:'center' }}>
+                          <span style={{ fontSize:'0.7rem', fontWeight:700, padding:'2px 8px', borderRadius:20, color:'white', background:getCatColor(tx.category) }}>{tx.category}</span>
+                          <span style={{ fontSize:'0.7rem', fontWeight:600, padding:'2px 8px', borderRadius:20, background: tx.necessity==='Needs'?'#d1fae5':tx.necessity==='Wants'?'#fef3c7':'#dbeafe', color: tx.necessity==='Needs'?'#065f46':tx.necessity==='Wants'?'#92400e':'#1e40af' }}>{tx.necessity}</span>
+                          {tx.groupPay === 'Yes' && <span style={{ fontSize:'0.7rem', padding:'2px 8px', borderRadius:20, background:'#ede9fe', color:'#5b21b6', fontWeight:600 }}>👥 Group</span>}
+                          {tx.goalName && <span style={{ fontSize:'0.7rem', padding:'2px 8px', borderRadius:20, background:'#ecfdf5', color:'#065f46', fontWeight:600 }}>🎯 {tx.goalName}</span>}
+                        </div>
+                        {tx.groupPay === 'Yes' && tx.groupDetails && (
+                          <div style={{ fontSize:'0.72rem', color:'#8b5cf6', marginTop:4 }}>
+                            {tx.groupDetails.people.length} people · {tx.groupDetails.splitType === 'equal' ? `₹${(tx.amount/tx.groupDetails.people.length).toFixed(0)} each` : 'Custom split'}
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Amount */}
+                      <div style={{ textAlign:'right', flexShrink:0 }}>
+                        <div style={{ fontWeight:800, fontSize:'1.05rem', color: tx.category.toLowerCase()==='income'?'#059669':'#dc2626' }}>
+                          {tx.category.toLowerCase()==='income'?'+':'-'}₹{(tx.amount||0).toLocaleString('en-IN',{minimumFractionDigits:0})}
+                        </div>
+                        <div style={{ fontSize:'0.7rem', color:'#9ca3af' }}><CurrencyAmount amount={tx.amount} /></div>
+                      </div>
+
+                      {/* Actions */}
+                      <div style={{ display:'flex', gap:6, flexShrink:0 }}>
+                        {tx.category === 'Savings & Goals' && (
+                          <button
+                            onClick={() => {
+                              const goalAmount = prompt("Enter amount to add to goals:", tx.amount);
+                              if (goalAmount && !isNaN(goalAmount) && parseFloat(goalAmount) > 0) {
+                                const goals = JSON.parse(localStorage.getItem("moneywise_goals") || "[]");
+                                if (goals.length > 0) {
+                                  const goalNames = goals.map(g => g.name);
+                                  const selectedGoal = prompt(`Select goal number:\n${goalNames.map((name, i) => `${i+1}. ${name}`).join("\n")}`, "1");
+                                  if (selectedGoal) {
+                                    const goalIndex = parseInt(selectedGoal) - 1;
+                                    if (goals[goalIndex]) {
+                                      goals[goalIndex].currentAmount += parseFloat(goalAmount);
+                                      localStorage.setItem("moneywise_goals", JSON.stringify(goals));
+                                      alert(`Added ₹${goalAmount} to goal: ${goals[goalIndex].name}`);
+                                      window.dispatchEvent(new Event("goalsUpdated"));
+                                      const updated = { ...tx, goalAmountAdded: (tx.goalAmountAdded || 0) + parseFloat(goalAmount) };
+                                      onEdit(updated);
                                     }
                                   }
-                                }}
-                                className="ml-2 px-2 py-1 bg-green-500 text-white rounded text-xs hover:bg-green-600"
-                                title="Add to Goal"
-                                disabled={tx.goalAmountAdded >= tx.amount}
-                              >
-                                <i className="fas fa-bullseye mr-1"></i>
-                                {tx.goalAmountAdded >= tx.amount ? 'Added' : 'Add to Goal'}
-                              </button>
-                            )}
-                          </td>
-                          <td className="p-2 font-medium text-green-600 dark:text-green-400">
-                            <CurrencyAmount amount={tx.amount} />
-                          </td>
-                          <td className="p-2">
-                            <span className={`text-xs px-2 py-1 rounded ${tx.necessity === 'Needs' ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-300' : tx.necessity === 'Wants' ? 'bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-300' : 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-300'}`}>
-                              {tx.necessity}
-                            </span>
-                          </td>
-                          <td className="p-2">
-                            {tx.groupPay === "Yes" && tx.groupDetails ? (
-                              <div className="text-xs">
-                                <div className={`px-2 py-1 rounded mb-1 ${tx.groupPay === 'Yes' ? 'bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-300' : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300'}`}>
-                                  Group: {tx.groupDetails.splitType}
-                                </div>
-                                <div className="text-gray-600 dark:text-gray-400">
-                                  Includes you: {tx.groupDetails.includeMe ? 'Yes' : 'No'}
-                                </div>
-                              </div>
-                            ) : (
-                              <span className={`text-xs px-2 py-1 rounded ${tx.groupPay === 'Yes' ? 'bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-300' : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300'}`}>
-                                Personal
-                              </span>
-                            )}
-                          </td>
-                          <td className="p-2">
-                            <div className="flex gap-1">
-                              <button 
-                                onClick={() => handleEditClick(tx, idx)}
-                                className="px-2 py-1 bg-blue-500 text-white rounded text-sm hover:bg-blue-600"
-                              >
-                                Edit
-                              </button>
-                              <button 
-                                onClick={() => onDelete(idx)} 
-                                className="px-2 py-1 bg-red-500 text-white rounded text-sm hover:bg-red-600"
-                              >
-                                Delete
-                              </button>
-                            </div>
-                          </td>
-                        </>
-                      )}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                                } else {
+                                  alert("No goals found. Create a goal first.");
+                                }
+                              }
+                            }}
+                            style={{ padding:'6px 10px', background:'#ecfdf5', color:'#059669', border:'1px solid #a7f3d0', borderRadius:8, fontSize:'0.72rem', fontWeight:700, cursor:'pointer' }}
+                            disabled={tx.goalAmountAdded >= tx.amount}
+                            title="Add to Goal"
+                          >🎯 {tx.goalAmountAdded >= tx.amount ? 'Done' : 'Goal'}</button>
+                        )}
+                        <button onClick={() => handleEditClick(tx, idx)} style={{ padding:'6px 12px', background:'#eff6ff', color:'#3b82f6', border:'1px solid #bfdbfe', borderRadius:8, fontSize:'0.72rem', fontWeight:700, cursor:'pointer' }}>✏️ Edit</button>
+                        <button onClick={() => onDelete(idx)} style={{ padding:'6px 12px', background:'#fff1f2', color:'#ef4444', border:'1px solid #fecaca', borderRadius:8, fontSize:'0.72rem', fontWeight:700, cursor:'pointer' }}>🗑️</button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
             </div>
           )}
-          
+
+          {/* Footer summary */}
           {transactions.length > 0 && (
-            <div className="mt-3 p-3 bg-gray-50 dark:bg-gray-700 rounded text-sm">
-              <div className="font-medium">Month Summary:</div>
-              <div>Total Transactions: {transactions.length}</div>
-              <div>Total Amount: <CurrencyAmount amount={transactions.reduce((sum, tx) => sum + (tx.amount || 0), 0)} /></div>
-              <div>Group Payments: {transactions.filter(tx => tx.groupPay === "Yes").length}</div>
+            <div style={{ marginTop:16, display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(140px,1fr))', gap:10 }}>
+              {[
+                { label:'Total Transactions', value:transactions.length, color:'#6366f1', icon:'🔢' },
+                { label:'Total Amount', value:'₹'+totalAmt.toLocaleString('en-IN',{minimumFractionDigits:0}), color:'#dc2626', icon:'💸' },
+                { label:'Group Payments', value:transactions.filter(tx => tx.groupPay==="Yes").length, color:'#8b5cf6', icon:'👥' },
+                { label:'Investments', value:'₹'+investAmt.toLocaleString('en-IN',{minimumFractionDigits:0}), color:'#14b8a6', icon:'📈' }
+              ].map(item => (
+                <div key={item.label} style={{ background:'#f9fafb', borderRadius:12, padding:'12px 14px', borderLeft:`3px solid ${item.color}` }} className="dark:bg-gray-700">
+                  <div style={{ fontSize:'0.65rem', color:'#9ca3af', textTransform:'uppercase', letterSpacing:'0.08em', marginBottom:2 }}>{item.icon} {item.label}</div>
+                  <div style={{ fontWeight:800, fontSize:'1rem', color:item.color }}>{item.value}</div>
+                </div>
+              ))}
             </div>
           )}
+          </div>
         </div>
       );
     }
@@ -4584,6 +4724,64 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
         );
         
         // NEW CODE END
+
+        // ── PAYDAY ECHO EFFECT ──────────────────────────────────────────────
+        // Compare spending in the 5 days after salary-date vs rest of month
+        const salaryDayNum = (() => {
+          try {
+            const stored = localStorage.getItem("moneywise_salaryDate");
+            return stored ? parseInt(stored) : 1;
+          } catch(e) { return 1; }
+        })();
+        const postPaydayTx = currentMonthTx.filter(tx => {
+          const d = new Date(tx.date);
+          const dayNum = d.getDate();
+          return dayNum >= salaryDayNum && dayNum <= salaryDayNum + 4;
+        });
+        const nonPaydayTx = currentMonthTx.filter(tx => {
+          const d = new Date(tx.date);
+          const dayNum = d.getDate();
+          return dayNum < salaryDayNum || dayNum > salaryDayNum + 4;
+        });
+        const postPaydaySpend = postPaydayTx.reduce((s, tx) => s + tx.amount, 0);
+        const nonPaydaySpend = nonPaydayTx.reduce((s, tx) => s + tx.amount, 0);
+        const postPaydayDailyAvg = postPaydayTx.length > 0 ? postPaydaySpend / 5 : 0;
+        const nonPaydayDailyAvg = nonPaydayTx.length > 0 ? nonPaydaySpend / Math.max(1, Object.keys(recentDays).length - 5) : 0;
+        const paydayEchoMultiplier = nonPaydayDailyAvg > 0 ? postPaydayDailyAvg / nonPaydayDailyAvg : 1;
+        const paydayEchoStatus = paydayEchoMultiplier > 2 ? 'HIGH' : paydayEchoMultiplier > 1.3 ? 'MODERATE' : 'LOW';
+        // Top categories in payday window
+        const paydayCategoryBreakdown = {};
+        postPaydayTx.forEach(tx => {
+          paydayCategoryBreakdown[tx.category] = (paydayCategoryBreakdown[tx.category] || 0) + tx.amount;
+        });
+        const paydayTopCategories = Object.entries(paydayCategoryBreakdown)
+          .sort((a, b) => b[1] - a[1]).slice(0, 3);
+
+        // ── WEEKEND VS WEEKDAY SPEND RATIO ─────────────────────────────────
+        const weekendSpendTx = currentMonthTx.filter(tx => {
+          const d = new Date(tx.date);
+          return d.getDay() === 0 || d.getDay() === 6;
+        });
+        const weekdaySpendTx = currentMonthTx.filter(tx => {
+          const d = new Date(tx.date);
+          return d.getDay() >= 1 && d.getDay() <= 5;
+        });
+        const weekendTotal = weekendSpendTx.reduce((s, tx) => s + tx.amount, 0);
+        const weekdayTotal = weekdaySpendTx.reduce((s, tx) => s + tx.amount, 0);
+        // Normalise to daily averages (2 weekend days vs 5 weekday days per week)
+        const weekendDailyAvg = weekendTotal / Math.max(1, weekendSpendTx.length);
+        const weekdayDailyAvg = weekdayTotal / Math.max(1, weekdaySpendTx.length);
+        const weekendWeekdayRatio = weekdayDailyAvg > 0 ? weekendDailyAvg / weekdayDailyAvg : 1;
+        // Day-by-day breakdown
+        const spendByDay = { Sun: 0, Mon: 0, Tue: 0, Wed: 0, Thu: 0, Fri: 0, Sat: 0 };
+        const countByDay = { Sun: 0, Mon: 0, Tue: 0, Wed: 0, Thu: 0, Fri: 0, Sat: 0 };
+        const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+        currentMonthTx.forEach(tx => {
+          const d = new Date(tx.date);
+          const name = dayNames[d.getDay()];
+          spendByDay[name] += tx.amount;
+          countByDay[name]++;
+        });
         
         console.log('Calculated insights for month:', selectedMonth, 'total transactions:', filteredTx.length, 'current month tx:', currentMonthTx.length);
         
@@ -4628,8 +4826,24 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
           goalsProgress: goalsProgress.toFixed(1),
           happinessROI: happinessROI.slice(0, 5),
           happinessSpendingCorrelation,
-          wantsTransactions: wantsTransactions.length
+          wantsTransactions: wantsTransactions.length,
           // NEW CODE END
+          // Payday Echo
+          paydayEchoMultiplier: Math.round(paydayEchoMultiplier * 100) / 100,
+          paydayEchoStatus,
+          postPaydaySpend,
+          nonPaydaySpend,
+          postPaydayDailyAvg,
+          nonPaydayDailyAvg,
+          paydayTopCategories,
+          // Weekend vs Weekday
+          weekendTotal,
+          weekdayTotal,
+          weekendDailyAvg,
+          weekdayDailyAvg,
+          weekendWeekdayRatio: Math.round(weekendWeekdayRatio * 100) / 100,
+          spendByDay,
+          countByDay
         };
       } catch (error) {
         console.error('Error in calculateInsights:', error);
@@ -4673,7 +4887,21 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
           goalsProgress: '0.0',
           happinessROI: [],
           happinessSpendingCorrelation: 0,
-          wantsTransactions: 0
+          wantsTransactions: 0,
+          paydayEchoMultiplier: 1,
+          paydayEchoStatus: 'LOW',
+          postPaydaySpend: 0,
+          nonPaydaySpend: 0,
+          postPaydayDailyAvg: 0,
+          nonPaydayDailyAvg: 0,
+          paydayTopCategories: [],
+          weekendTotal: 0,
+          weekdayTotal: 0,
+          weekendDailyAvg: 0,
+          weekdayDailyAvg: 0,
+          weekendWeekdayRatio: 1,
+          spendByDay: { Sun:0, Mon:0, Tue:0, Wed:0, Thu:0, Fri:0, Sat:0 },
+          countByDay: { Sun:0, Mon:0, Tue:0, Wed:0, Thu:0, Fri:0, Sat:0 }
         };
       }
     }
@@ -4754,56 +4982,112 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
       };
       
       
-      const InsightCard = ({ title, icon, children, id }) => (
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg border-l-4 border-blue-500 overflow-hidden hover:shadow-xl transition-all duration-300 hover:border-blue-600 transform hover:scale-100 group insight-card">
-          <button
-            onClick={(e) => { e.preventDefault(); setExpandedCard(expandedCard === id ? null : id); }}
-            className="w-full p-4 flex items-center justify-between hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 dark:hover:from-blue-900/20 dark:hover:to-indigo-900/20 transition-all duration-300"
-          >
-            <div className="flex items-center gap-3">
-              <span className="text-2xl group-hover:scale-110 transition-transform duration-300">{icon}</span>
-              <h3 className="font-semibold text-lg group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">{title}</h3>
-            </div>
-            <span className="text-gray-400 group-hover:text-blue-500 transition-all duration-300 transform group-hover:scale-125">{expandedCard === id ? '▼' : '▶'}</span>
-          </button>
-          
-          {expandedCard === id && (
-            <div className="p-4 border-t dark:border-gray-700 bg-gradient-to-b from-gray-50 to-white dark:from-gray-700/50 dark:to-gray-800 animate-in fade-in slide-in-from-top-2 duration-300">
-              {children}
-            </div>
-          )}
-        </div>
-      );
+      const insightRationale = {
+        'leaks': 'Small, frequent expenses (&lt;₹500) rarely appear large individually, but compound into significant monthly drains. By surfacing them, you can identify habitual micro-spending that erodes your savings without delivering proportionate value.',
+        'trend': 'Month-over-month expense change reveals spending momentum. Rising trends signal lifestyle inflation risk; declining trends confirm discipline. Use this to spot early whether you are drifting from your financial plan.',
+        'health': 'A composite score synthesising savings rate, budget adherence, EMI burden, goal progress, and spending habits. Scores above 70 indicate strong financial hygiene; below 40 warrants immediate attention.',
+        'opportunity': 'Every ₹10,000+ spent today forgoes compound growth. At 12% annual returns, ₹10,000 becomes ~₹31,000 in 10 years. Seeing future value makes the true cost of large discretionary purchases visible.',
+        'diminishing': 'Marginal utility theory: each additional unit of spending in a category yields less satisfaction than the previous one. When category spend keeps rising but happiness scores plateau, you have crossed the optimum.',
+        'elasticity': 'If your expenses grow faster than income (elasticity &gt;1), lifestyle inflation is outpacing earnings growth. An elasticity near 0 means your lifestyle costs are stable regardless of income changes — the hallmark of high savers.',
+        'presentbias': 'Present bias measures your tendency to over-weight immediate gratification versus future gains. A high score indicates frequent impulse spending (&gt;₹2,000 on wants), which undermines long-term wealth accumulation.',
+        'probability': 'Behavioural finance shows spending probability spikes on weekends (+25%), post-payday (+30%), and after recent impulse purchases (+15%). This predictive score helps you enter high-risk moments with heightened awareness.',
+        'happiness-roi': 'Not all spending brings equal joy. ROI here is happiness-per-₹1000: a ₹500 purchase scoring 5/5 beats a ₹5,000 purchase scoring 2/5. High ROI wants are worth keeping; low ROI ones are prime cut candidates.',
+        'goals-progress': 'Goals anchor your savings to tangible outcomes. Research shows people save 42% more when targets are concrete and tracked. This card shows aggregate progress and flags goals at risk of missing deadlines.',
+        'wealth': 'Using your current monthly savings rate, this projects your corpus at a conservative 10% compounding over 30 years. Even small increases in the savings rate have an outsized effect on the final corpus due to compounding.',
+        'allocation': 'Ideal asset allocation follows the 100-minus-age rule for equity, with the remainder in debt and cash. Deviation from ideal allocation increases either risk (too much equity) or inflation drag (too much cash).',
+        'leaks-card': 'Recurring small charges often go unnoticed. Tracking them exposes hidden financial drains.',
+        'trend-card': 'Expense trajectory gives early warning of overspending before it becomes a crisis.',
+        'cattrends': 'Category-level trends reveal which areas of your life are getting more expensive, enabling targeted budget corrections before they snowball.',
+        'lifestyle': 'Spending 15%+ above your monthly average signals lifestyle creep — often triggered by raises, bonuses, or social pressure. Catching it early prevents permanent cost-base elevation.',
+        'budget': 'Budget tracking converts abstract goals into real-time feedback. Seeing exactly how much headroom you have per category prevents overshoot and builds spending discipline.',
+        'overspend': 'Aggregate overspend status gives you a single-glance budget health signal. Yellow means you have spent 90%+ of budget; Red means you have already exceeded it.',
+        'patterns': 'Spending patterns reveal unconscious habits. Knowing your highest-spend day and most-visited merchant helps you set targeted friction (e.g., uninstalling apps before that day) to reduce impulsive spending.',
+        'savings': 'The 50/30/20 rule recommends 20% savings rate as a minimum. Your rate relative to this benchmark tells you where you stand on the path to financial independence.',
+        'streak': 'Consistent tracking builds the habit loop that drives financial awareness. Each logged day reduces average spending by forcing conscious awareness of money flows.',
+        'daily': 'Daily average spend and runway days together answer the fundamental question: "How long can I sustain this lifestyle on my current income?" A runway below 30 days is a financial red flag.',
+        'ratio': 'Fixed costs (needs) as a percentage of income measure financial flexibility. Below 50% is healthy; above 70% leaves little room to save, invest, or absorb shocks.',
+        'subs': 'Subscription creep is one of the most common hidden budget killers. Each service seems small monthly, but combined annual costs often exceed ₹15,000–₹30,000 per year.',
+        'emi': 'The RBI recommends keeping EMI obligations below 30% of take-home income. Beyond this threshold, repayment stress increases default risk and limits financial agility.',
+        'payday-echo': 'Post-payday spending spikes are a documented behavioural pattern. The brain perceives fresh salary as a windfall, triggering higher-than-usual discretionary spending in the days immediately following income receipt.',
+        'weekend': 'Weekend spending typically runs 40-60% higher per day than weekday spending due to leisure, dining, and shopping patterns. Tracking this ratio helps you budget weekends as a distinct financial period.'
+      };
+
+      const InsightCard = ({ title, icon, children, id, rationale }) => {
+        const cardRationale = rationale || insightRationale[id] || '';
+        return (
+          <div style={{ background:'white', borderRadius:16, overflow:'hidden', boxShadow:'0 2px 14px rgba(0,0,0,0.07)', border:'1px solid #f3f4f6', transition:'all 0.25s', marginBottom:0 }}
+            className="dark:bg-gray-800 dark:border-gray-700 insight-card hover:shadow-xl">
+            <button
+              onClick={(e) => { e.preventDefault(); setExpandedCard(expandedCard === id ? null : id); }}
+              style={{ width:'100%', padding:'16px 20px', display:'flex', alignItems:'center', justifyContent:'space-between', background:'none', border:'none', cursor:'pointer', textAlign:'left' }}
+              className="hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 dark:hover:from-indigo-900/20 dark:hover:to-purple-900/20 transition-all duration-200"
+            >
+              <div style={{ display:'flex', alignItems:'center', gap:12 }}>
+                <span style={{ fontSize:'1.1rem', width:28, display:'flex', alignItems:'center', justifyContent:'center', color:'#374151', filter:'grayscale(1)' }}>{icon}</span>
+                <div>
+                  <div style={{ fontWeight:700, fontSize:'0.97rem', color:'#1f2937' }} className="dark:text-gray-100">{title}</div>
+                  {cardRationale && expandedCard !== id && (
+                    <div style={{ fontSize:'0.72rem', color:'#9ca3af', marginTop:1, maxWidth:280, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>
+                      {cardRationale.replace(/<[^>]+>/g,'').substring(0,60)}…
+                    </div>
+                  )}
+                </div>
+              </div>
+              <span style={{ fontSize:'0.75rem', color:'#9ca3af', marginLeft:8, flexShrink:0 }}>{expandedCard === id ? '▲' : '▼'}</span>
+            </button>
+            
+            {expandedCard === id && (
+              <div style={{ padding:'0 20px 20px 20px', borderTop:'1px solid #f3f4f6' }} className="dark:border-gray-700">
+                {cardRationale && (
+                  <div style={{ background:'linear-gradient(135deg,#f0f9ff,#e0f2fe)', borderRadius:10, padding:'10px 14px', margin:'14px 0 16px 0', borderLeft:'3px solid #0ea5e9' }}>
+                    <div style={{ fontSize:'0.7rem', fontWeight:700, color:'#0369a1', textTransform:'uppercase', letterSpacing:'0.08em', marginBottom:4 }}>💡 Why this matters</div>
+                    <p style={{ fontSize:'0.8rem', color:'#0c4a6e', lineHeight:1.55, margin:0 }} dangerouslySetInnerHTML={{ __html: cardRationale }}></p>
+                  </div>
+                )}
+                <div style={{ marginTop: cardRationale ? 0 : 14 }}>
+                  {children}
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      };
       
       return (
         <div className="space-y-3" id="insights-section">
-          {/* Original insight cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-            <div className="hover-lift bg-gradient-to-br from-red-50 to-pink-50 dark:from-red-900/20 dark:to-pink-900/20 p-4 rounded-lg border-2 border-transparent hover:border-red-300 dark:hover:border-red-600 transition-all duration-300 cursor-pointer">
-                <div className="text-sm font-medium text-gray-600 dark:text-gray-400"><i className="fas fa-droplet text-gray-700 dark:text-gray-500 mr-2"></i>Hidden Leaks</div>
-              <div className="text-3xl font-bold text-red-600 dark:text-red-400 mt-2">₹{insights.leaksTotal.toFixed(2)}</div>
-              <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">{insights.hiddenLeaks.length} recurring expenses</div>
+          {/* Hero summary cards */}
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(200px,1fr))', gap:16, marginBottom:8 }}>
+            <div style={{ background:'linear-gradient(135deg,#fee2e2,#fecaca)', borderRadius:16, padding:'18px 20px', borderLeft:'5px solid #ef4444', position:'relative', overflow:'hidden' }}>
+              
+              <div style={{ fontSize:'0.72rem', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.1em', color:'#991b1b', marginBottom:4 }}>Hidden Leaks</div>
+              <div style={{ fontSize:'1.9rem', fontWeight:800, color:'#dc2626' }}>₹{insights.leaksTotal.toFixed(0)}</div>
+              <div style={{ fontSize:'0.75rem', color:'#b91c1c', marginTop:2 }}>{insights.hiddenLeaks.length} micro-recurring charges</div>
+              <div style={{ fontSize:'0.7rem', color:'#991b1b', marginTop:6, opacity:0.8 }}>Small spends, big cumulative impact</div>
             </div>
-            
-            <div className="hover-lift bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 p-4 rounded-lg border-2 border-transparent hover:border-blue-300 dark:hover:border-blue-600 transition-all duration-300 cursor-pointer">
-                <div className="text-sm font-medium text-gray-600 dark:text-gray-400"><i className="fas fa-chart-bar text-gray-700 dark:text-gray-500 mr-2"></i>Monthly Trend</div>
-              <div className="text-3xl font-bold mt-2">
-                <span className={insights.monthlyTrendPercent >= 0 ? 'text-red-600 dark:text-red-400' : 'text-green-600 dark:text-green-400'}>
-                  {insights.monthlyTrendPercent >= 0 ? '↑' : '↓'} {Math.abs(insights.monthlyTrendPercent).toFixed(1)}%
-                </span>
+
+            <div style={{ background: insights.monthlyTrendPercent >= 0 ? 'linear-gradient(135deg,#fef3c7,#fde68a)' : 'linear-gradient(135deg,#d1fae5,#a7f3d0)', borderRadius:16, padding:'18px 20px', borderLeft:`5px solid ${insights.monthlyTrendPercent >= 0 ? '#f59e0b' : '#10b981'}`, position:'relative', overflow:'hidden' }}>
+              
+              <div style={{ fontSize:'0.72rem', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.1em', color: insights.monthlyTrendPercent >= 0 ? '#92400e' : '#065f46', marginBottom:4 }}>Monthly Trend</div>
+              <div style={{ fontSize:'1.9rem', fontWeight:800, color: insights.monthlyTrendPercent >= 0 ? '#d97706' : '#059669' }}>
+                {insights.monthlyTrendPercent >= 0 ? '↑' : '↓'} {Math.abs(insights.monthlyTrendPercent).toFixed(1)}%
               </div>
-              <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">vs previous month</div>
+              <div style={{ fontSize:'0.75rem', color: insights.monthlyTrendPercent >= 0 ? '#b45309' : '#047857', marginTop:2 }}>vs previous month</div>
+              <div style={{ fontSize:'0.7rem', marginTop:6, opacity:0.8, color: insights.monthlyTrendPercent >= 0 ? '#92400e' : '#065f46' }}>{insights.monthlyTrendPercent >= 0 ? 'Spending momentum is rising' : 'Great — costs are trending down'}</div>
             </div>
-            
-            <div className="hover-lift bg-gradient-to-br from-purple-50 to-violet-50 dark:from-purple-900/20 dark:to-violet-900/20 p-4 rounded-lg border-2 border-transparent hover:border-purple-300 dark:hover:border-purple-600 transition-all duration-300 cursor-pointer">
-                <div className="text-sm font-medium text-gray-600 dark:text-gray-400"><i className="fas fa-star text-gray-700 dark:text-gray-500 mr-2"></i>Financial Health</div>
-              <div className="text-3xl font-bold text-purple-600 dark:text-purple-400 mt-2">{insights.healthScore}<span className="text-lg">/100</span></div>
-              <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">Overall score</div>
+
+            <div style={{ background:'linear-gradient(135deg,#ede9fe,#ddd6fe)', borderRadius:16, padding:'18px 20px', borderLeft:'5px solid #8b5cf6', position:'relative', overflow:'hidden' }}>
+              
+              <div style={{ fontSize:'0.72rem', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.1em', color:'#4c1d95', marginBottom:4 }}>Financial Health</div>
+              <div style={{ fontSize:'1.9rem', fontWeight:800, color:'#7c3aed' }}>{insights.healthScore}<span style={{ fontSize:'1rem', fontWeight:500 }}>/100</span></div>
+              <div style={{ width:'100%', background:'#c4b5fd', borderRadius:8, height:6, marginTop:8, overflow:'hidden' }}>
+                <div style={{ height:'100%', borderRadius:8, width:`${insights.healthScore}%`, background: insights.healthScore>70?'#7c3aed':insights.healthScore>40?'#a78bfa':'#c084fc' }}></div>
+              </div>
+              <div style={{ fontSize:'0.7rem', color:'#6d28d9', marginTop:4 }}>{insights.healthScore>70?'Strong financial position':insights.healthScore>40?'Room for improvement':'Needs immediate attention'}</div>
             </div>
           </div>
           
           {/* NEW CODE START - "Can I Afford This?" Simulator */}
-          <InsightCard title="Can I Afford This? Simulator" icon="💰" id="afford">
+          <InsightCard title="Can I Afford This? Simulator" icon={<i className="fas fa-calculator" style={{color:"black"}}></i>} id="afford">
             <div className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
@@ -4865,7 +5149,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
           
           {/* Opportunity Cost Analyzer */}
           {insights.opportunityCosts && insights.opportunityCosts.length > 0 && (
-            <InsightCard title="Opportunity Cost Alert" icon="⏰" id="opportunity">
+            <InsightCard title="Opportunity Cost Alert" icon={<i className="fas fa-hourglass-half" style={{color:"black"}}></i>} id="opportunity">
               <div className="space-y-3">
                 <p className="text-sm text-red-500">Large purchases detected (&gt;₹10,000)</p>
                 {insights.opportunityCosts.slice(0, 3).map((item, idx) => (
@@ -4891,7 +5175,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
           
           {/* Diminishing Returns Detector */}
           {Object.keys(insights.diminishingReturns || {}).length > 0 && (
-            <InsightCard title="Diminishing Returns Detector" icon="📉" id="diminishing">
+            <InsightCard title="Diminishing Returns Detector" icon={<i className="fas fa-arrow-trend-down" style={{color:"black"}}></i>} id="diminishing">
               <div className="space-y-2">
                 <p className="text-sm">Spending beyond optimal utility zone in:</p>
                 {Object.keys(insights.diminishingReturns).map((cat, idx) => (
@@ -4904,7 +5188,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
           )}
           
           {/* Income Elasticity of Lifestyle */}
-          <InsightCard title="Lifestyle Elasticity" icon="📈" id="elasticity">
+          <InsightCard title="Lifestyle Elasticity" icon={<i className="fas fa-arrow-trend-up" style={{color:"black"}}></i>} id="elasticity">
             <div className="text-center">
               <div className="text-3xl font-bold my-4">
                 {insights.incomeElasticity ? insights.incomeElasticity.toFixed(2) : 'N/A'}
@@ -4920,7 +5204,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
           </InsightCard>
           
           {/* Present Bias Score */}
-          <InsightCard title="Present Bias Score" icon="⏳" id="presentbias">
+          <InsightCard title="Present Bias Score" icon={<i className="fas fa-clock" style={{color:"black"}}></i>} id="presentbias">
             <div className="text-center">
               <div className="text-3xl font-bold my-4">
                 {insights.presentBiasScore}%
@@ -4938,7 +5222,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
           </InsightCard>
           
           {/* Spending Probability Prediction */}
-          <InsightCard title="Spending Probability" icon="🎲" id="probability">
+          <InsightCard title="Spending Probability" icon={<i className="fas fa-percent" style={{color:"black"}}></i>} id="probability">
             <div className="text-center">
               <div className="text-3xl font-bold my-4">
                 {insights.spendProbability}%
@@ -4960,7 +5244,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
           
           
           {/* Happiness ROI Card */}
-          <InsightCard title="Happiness ROI" icon="😊" id="happiness-roi">
+          <InsightCard title="Happiness ROI" icon={<i className="fas fa-heart" style={{color:"black"}}></i>} id="happiness-roi">
             <div className="space-y-3">
               <p className="text-sm text-gray-600 dark:text-gray-400">
                 Happiness per ₹1000 spent on wants
@@ -4998,7 +5282,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
                   
                   {insights.happinessSpendingCorrelation < 0.3 && (
                     <div className="mt-2 p-2 bg-yellow-100 dark:bg-yellow-900/20 rounded text-sm">
-                      <i className="fas fa-lightbulb mr-2"></i>
+                      <i className="fas fa-lightbulb mr-2" style={{color:"black"}}></i>
                       Low correlation between spending and happiness. Consider focusing on high-ROI purchases.
                     </div>
                   )}
@@ -5010,7 +5294,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
           </InsightCard>
 
           {/* Goals Progress Card */}
-          <InsightCard title="Goals Progress" icon="🎯" id="goals-progress">
+          <InsightCard title="Goals Progress" icon={<i className="fas fa-bullseye" style={{color:"black"}}></i>} id="goals-progress">
             <div className="space-y-3">
               <div className="text-center">
                 <div className="text-4xl font-bold text-green-600 mb-2">{insights.goalsProgress}%</div>
@@ -5052,7 +5336,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
           </InsightCard>
 
           {/* Long-Term Wealth Probability */}
-          <InsightCard title="30-Year Wealth Projection" icon="🚀" id="wealth">
+          <InsightCard title="30-Year Wealth Projection" icon={<i className="fas fa-chart-line" style={{color:"black"}}></i>} id="wealth">
             <div className="text-center">
               <div className="text-2xl font-bold my-2">
                 ₹{(insights.projectedCorpus / 10000000).toFixed(2)} Cr
@@ -5073,7 +5357,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
           </InsightCard>
           
           {/* Asset Allocation Analyzer */}
-          <InsightCard title="Asset Allocation Score" icon="📊" id="allocation">
+          <InsightCard title="Asset Allocation Score" icon={<i className="fas fa-chart-pie" style={{color:"black"}}></i>} id="allocation">
             <div className="space-y-3">
               <div className="flex justify-between">
                 <span>Your vs Ideal</span>
@@ -5100,7 +5384,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
           </InsightCard>
           
           {/* Original insight cards continue... */}
-          <InsightCard title="Hidden Leaks" icon={<i className="fas fa-magnifying-glass text-gray-700 dark:text-gray-400"></i>} id="leaks">
+          <InsightCard title="Hidden Leaks" icon={<i className="fas fa-magnifying-glass" style={{color:"black"}}></i>} id="leaks">
             <div className="space-y-2">
               {insights.hiddenLeaks.length > 0 ? (
                 insights.hiddenLeaks.map(([desc, amount], idx) => (
@@ -5113,12 +5397,12 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
                 <p className="text-gray-500">No small recurring expenses detected</p>
               )}
               <div className="mt-3 p-2 bg-yellow-50 dark:bg-yellow-900/20 rounded text-sm">
-                 <i className="fas fa-lightbulb text-gray-700 dark:text-gray-400 mr-2"></i>Tip: These small expenses add up! Consider reducing or eliminating some.
+                 <i className="fas fa-lightbulb text-gray-700 dark:text-gray-400 mr-2" style={{color:"black"}}></i>Tip: These small expenses add up! Consider reducing or eliminating some.
               </div>
             </div>
           </InsightCard>
           
-          <InsightCard title="Monthly Trend" icon={<i className="fas fa-chart-bar text-gray-700 dark:text-gray-400"></i>} id="trend">
+          <InsightCard title="Monthly Trend" icon={<i className="fas fa-chart-bar" style={{color:"black"}}></i>} id="trend">
             <div className="text-center">
               <div className="text-3xl font-bold my-4">
                 <span className={insights.monthlyTrendPercent >= 0 ? 'text-red-600' : 'text-green-600'}>
@@ -5131,7 +5415,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
             </div>
           </InsightCard>
           
-          <InsightCard title="Category Trends" icon={<i className="fas fa-chart-line text-gray-700 dark:text-gray-400"></i>} id="cattrends">
+          <InsightCard title="Category Trends" icon={<i className="fas fa-chart-line" style={{color:"black"}}></i>} id="cattrends">
             <div className="space-y-2">
               {insights.categoryTrends.length > 0 ? (
                 insights.categoryTrends.map((trend, idx) => (
@@ -5151,7 +5435,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
             </div>
           </InsightCard>
           
-          <InsightCard title="Lifestyle Inflation" icon={insights.lifestyleStatus === 'OK' ? <i className="fas fa-check text-gray-700 dark:text-gray-400"></i> : <i className="fas fa-exclamation-triangle text-gray-700 dark:text-gray-400"></i>} id="lifestyle">
+          <InsightCard title="Lifestyle Inflation" icon={insights.lifestyleStatus === 'OK' ? <i className="fas fa-check" style={{color:"black"}}></i> : <i className="fas fa-exclamation-triangle" style={{color:"black"}}></i>} id="lifestyle">
             <div className="text-center">
               <div className={`text-3xl font-bold my-4 ${insights.lifestyleStatus === 'OK' ? 'text-green-600' : 'text-red-600'}`}>
                 {insights.lifestyleStatus}
@@ -5164,7 +5448,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
             </div>
           </InsightCard>
           
-          <InsightCard title="Budget Usage" icon={<i className="fas fa-bullseye text-gray-700 dark:text-gray-400"></i>} id="budget">
+          <InsightCard title="Budget Usage" icon={<i className="fas fa-bullseye" style={{color:"black"}}></i>} id="budget">
             <div className="space-y-3">
               {insights.budgetUsage.length > 0 ? (
                 insights.budgetUsage.map((item, idx) => (
@@ -5190,7 +5474,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
             </div>
           </InsightCard>
           
-          <InsightCard title="Overspend Prediction" icon={insights.overspendStatus === 'RED' ? <i className="fas fa-circle text-gray-700 dark:text-gray-400"></i> : insights.overspendStatus === 'YELLOW' ? <i className="fas fa-circle text-gray-700 dark:text-gray-400"></i> : <i className="fas fa-circle text-gray-700 dark:text-gray-400"></i>} id="overspend">
+          <InsightCard title="Overspend Prediction" icon={insights.overspendStatus === 'RED' ? <i className="fas fa-circle" style={{color:"black"}}></i> : insights.overspendStatus === 'YELLOW' ? <i className="fas fa-circle" style={{color:"black"}}></i> : <i className="fas fa-circle" style={{color:"black"}}></i>} id="overspend">
             <div className="text-center">
               <div className="text-3xl font-bold my-4">{insights.overspendStatus}</div>
               <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -5199,7 +5483,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
             </div>
           </InsightCard>
           
-          <InsightCard title="Pattern Detection" icon={<i className="fas fa-arrows-rotate text-gray-700 dark:text-gray-400"></i>} id="patterns">
+          <InsightCard title="Pattern Detection" icon={<i className="fas fa-arrows-rotate" style={{color:"black"}}></i>} id="patterns">
             <div className="space-y-2">
               <div className="p-2 bg-white dark:bg-gray-800 rounded">
                 <div className="text-sm text-gray-600">Busiest Day</div>
@@ -5212,7 +5496,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
             </div>
           </InsightCard>
           
-          <InsightCard title="Savings Rate" icon={<i className="fas fa-wallet text-gray-700 dark:text-gray-400"></i>} id="savings">
+          <InsightCard title="Savings Rate" icon={<i className="fas fa-wallet" style={{color:"black"}}></i>} id="savings">
             <div className="text-center">
               <div className="text-3xl font-bold my-4 text-green-600">{insights.savingsRate}%</div>
               <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -5221,14 +5505,14 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
             </div>
           </InsightCard>
           
-          <InsightCard title="Savings Streak" icon={<i className="fas fa-fire text-gray-700 dark:text-gray-400"></i>} id="streak">
+          <InsightCard title="Savings Streak" icon={<i className="fas fa-fire" style={{color:"black"}}></i>} id="streak">
             <div className="text-center">
               <div className="text-4xl font-bold my-4">{insights.streak}</div>
               <p className="text-sm text-gray-600 dark:text-gray-400">days of tracked spending</p>
             </div>
           </InsightCard>
           
-          <InsightCard title="Daily Average" icon={<i className="fas fa-calendar text-gray-700 dark:text-gray-400"></i>} id="daily">
+          <InsightCard title="Daily Average" icon={<i className="fas fa-calendar" style={{color:"black"}}></i>} id="daily">
             <div className="text-center">
               <div className="text-3xl font-bold my-4">₹{insights.dailyAverage}</div>
               <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -5240,7 +5524,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
             </div>
           </InsightCard>
           
-          <InsightCard title="Expense Ratio" icon={<i className="fas fa-chart-pie text-gray-700 dark:text-gray-400"></i>} id="ratio">
+          <InsightCard title="Expense Ratio" icon={<i className="fas fa-chart-pie" style={{color:"black"}}></i>} id="ratio">
             <div className="text-center">
               <div className="text-3xl font-bold my-4">{insights.expenseRatio}%</div>
               <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -5249,7 +5533,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
             </div>
           </InsightCard>
           
-          <InsightCard title="Subscriptions" icon={<i className="fas fa-gift text-gray-700 dark:text-gray-400"></i>} id="subs">
+          <InsightCard title="Subscriptions" icon={<i className="fas fa-gift" style={{color:"black"}}></i>} id="subs">
             <div className="space-y-2">
               {insights.subscriptions.length > 0 ? (
                 insights.subscriptions.map((sub, idx) => (
@@ -5264,7 +5548,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
             </div>
           </InsightCard>
           
-          <InsightCard title="EMI Stress" icon={insights.emiStatus === 'SAFE' ? <i className="fas fa-check text-gray-700 dark:text-gray-400"></i> : insights.emiStatus === 'MODERATE' ? <i className="fas fa-exclamation-triangle text-gray-700 dark:text-gray-400"></i> : <i className="fas fa-circle text-gray-700 dark:text-gray-400"></i>} id="emi">
+          <InsightCard title="EMI Stress" icon={insights.emiStatus === 'SAFE' ? <i className="fas fa-check" style={{color:"black"}}></i> : insights.emiStatus === 'MODERATE' ? <i className="fas fa-exclamation-triangle" style={{color:"black"}}></i> : <i className="fas fa-circle" style={{color:"black"}}></i>} id="emi">
             <div className="text-center">
               <div className={`text-3xl font-bold my-4 ${insights.emiStatus === 'SAFE' ? 'text-green-600' : insights.emiStatus === 'MODERATE' ? 'text-yellow-600' : 'text-red-600'}`}>
                 {insights.emiStatus}
@@ -5272,6 +5556,161 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
               <p className="text-sm text-gray-600 dark:text-gray-400">
                 {insights.emiStress}% of income goes to EMIs
               </p>
+            </div>
+          </InsightCard>
+
+          {/* ── PAYDAY ECHO EFFECT ── */}
+          <InsightCard title="Payday Echo Effect" icon={<i className="fas fa-money-bill-wave" style={{color:"black"}}></i>} id="payday-echo">
+            <div className="space-y-4">
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                How much more do you spend in the 5 days after payday vs the rest of the month?
+              </p>
+              <div className="grid grid-cols-3 gap-3">
+                <div className="p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg text-center">
+                  <div className="text-xs text-gray-500 mb-1">Post-Payday Daily Avg</div>
+                  <div className="text-xl font-bold text-amber-600">₹{insights.postPaydayDailyAvg.toFixed(0)}</div>
+                </div>
+                <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded-lg text-center">
+                  <div className="text-xs text-gray-500 mb-1">Rest of Month Daily Avg</div>
+                  <div className="text-xl font-bold text-green-600">₹{insights.nonPaydayDailyAvg.toFixed(0)}</div>
+                </div>
+                <div className={`p-3 rounded-lg text-center ${
+                  insights.paydayEchoStatus === 'HIGH' ? 'bg-red-50 dark:bg-red-900/20' :
+                  insights.paydayEchoStatus === 'MODERATE' ? 'bg-orange-50 dark:bg-orange-900/20' :
+                  'bg-blue-50 dark:bg-blue-900/20'
+                }`}>
+                  <div className="text-xs text-gray-500 mb-1">Echo Multiplier</div>
+                  <div className={`text-xl font-bold ${
+                    insights.paydayEchoStatus === 'HIGH' ? 'text-red-600' :
+                    insights.paydayEchoStatus === 'MODERATE' ? 'text-orange-600' : 'text-blue-600'
+                  }`}>{insights.paydayEchoMultiplier}×</div>
+                </div>
+              </div>
+              {/* Echo status badge */}
+              <div className={`flex items-center gap-3 p-3 rounded-lg ${
+                insights.paydayEchoStatus === 'HIGH' ? 'bg-red-100 dark:bg-red-900/30' :
+                insights.paydayEchoStatus === 'MODERATE' ? 'bg-orange-100 dark:bg-orange-900/30' :
+                'bg-green-100 dark:bg-green-900/30'
+              }`}>
+                <span className="text-2xl">
+                  {insights.paydayEchoStatus === 'HIGH' ? '🚨' : insights.paydayEchoStatus === 'MODERATE' ? '⚠️' : '✅'}
+                </span>
+                <div>
+                  <div className={`font-semibold ${
+                    insights.paydayEchoStatus === 'HIGH' ? 'text-red-700' :
+                    insights.paydayEchoStatus === 'MODERATE' ? 'text-orange-700' : 'text-green-700'
+                  }`}>
+                    {insights.paydayEchoStatus === 'HIGH' ? 'Strong Payday Echo — Splurge Alert!' :
+                     insights.paydayEchoStatus === 'MODERATE' ? 'Moderate Echo — Watch your urges' :
+                     'Echo is low — Great discipline!'}
+                  </div>
+                  <div className="text-xs text-gray-500 mt-0.5">
+                    {insights.paydayEchoStatus === 'HIGH'
+                      ? `You spend ${insights.paydayEchoMultiplier}× more per day right after payday. Consider setting a post-payday budget cap.`
+                      : insights.paydayEchoStatus === 'MODERATE'
+                      ? `You spend ${insights.paydayEchoMultiplier}× more per day after payday — slightly elevated but manageable.`
+                      : 'Your spending is consistent throughout the month. Keep it up!'}
+                  </div>
+                </div>
+              </div>
+              {/* Payday window spend bar */}
+              {insights.postPaydaySpend + insights.nonPaydaySpend > 0 && (
+                <div>
+                  <div className="flex justify-between text-xs text-gray-500 mb-1">
+                    <span>Payday window (₹{insights.postPaydaySpend.toFixed(0)})</span>
+                    <span>Rest of month (₹{insights.nonPaydaySpend.toFixed(0)})</span>
+                  </div>
+                  <div className="w-full h-4 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-700 flex">
+                    <div
+                      className="h-4 bg-amber-500 transition-all duration-500"
+                      style={{ width: `${Math.min(100, (insights.postPaydaySpend / (insights.postPaydaySpend + insights.nonPaydaySpend)) * 100)}%` }}
+                    ></div>
+                    <div className="h-4 bg-green-400 flex-1"></div>
+                  </div>
+                </div>
+              )}
+              {/* Top categories during payday window */}
+              {insights.paydayTopCategories.length > 0 && (
+                <div>
+                  <div className="text-xs font-semibold text-gray-500 mb-2">Top spends during payday window</div>
+                  <div className="space-y-1">
+                    {insights.paydayTopCategories.map(([cat, amt], i) => (
+                      <div key={i} className="flex justify-between text-sm p-2 bg-white dark:bg-gray-800 rounded">
+                        <span>{cat}</span>
+                        <span className="font-semibold text-amber-600">₹{amt.toFixed(0)}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </InsightCard>
+
+          {/* ── WEEKEND VS WEEKDAY SPEND RATIO ── */}
+          <InsightCard title="Weekend vs Weekday Spend" icon={<i className="fas fa-calendar-week" style={{color:"black"}}></i>} id="weekend-weekday">
+            <div className="space-y-4">
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Comparing your average per-transaction spend on weekends vs weekdays this month
+              </p>
+              {/* Summary cards */}
+              <div className="grid grid-cols-2 gap-3">
+                <div className="p-3 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg text-center">
+                  <div className="text-xs text-gray-500 mb-1">Weekend Total</div>
+                  <div className="text-xl font-bold text-indigo-600">₹{insights.weekendTotal.toFixed(0)}</div>
+                  <div className="text-xs text-gray-400 mt-1">Avg/txn ₹{insights.weekendDailyAvg.toFixed(0)}</div>
+                </div>
+                <div className="p-3 bg-sky-50 dark:bg-sky-900/20 rounded-lg text-center">
+                  <div className="text-xs text-gray-500 mb-1">Weekday Total</div>
+                  <div className="text-xl font-bold text-sky-600">₹{insights.weekdayTotal.toFixed(0)}</div>
+                  <div className="text-xs text-gray-400 mt-1">Avg/txn ₹{insights.weekdayDailyAvg.toFixed(0)}</div>
+                </div>
+              </div>
+              {/* Ratio badge */}
+              <div className={`flex items-center gap-3 p-3 rounded-lg ${
+                insights.weekendWeekdayRatio > 1.5 ? 'bg-red-50 dark:bg-red-900/20' :
+                insights.weekendWeekdayRatio > 1.1 ? 'bg-yellow-50 dark:bg-yellow-900/20' :
+                'bg-green-50 dark:bg-green-900/20'
+              }`}>
+                <span className="text-3xl font-bold" style={{ color: insights.weekendWeekdayRatio > 1.5 ? '#dc2626' : insights.weekendWeekdayRatio > 1.1 ? '#d97706' : '#16a34a' }}>
+                  {insights.weekendWeekdayRatio}×
+                </span>
+                <div>
+                  <div className="font-semibold text-sm">
+                    {insights.weekendWeekdayRatio > 1.5 ? '🚨 Weekend splurge pattern detected!' :
+                     insights.weekendWeekdayRatio > 1.1 ? '⚠️ Slightly higher weekend spending' :
+                     insights.weekendWeekdayRatio < 0.9 ? '✅ You actually spend less on weekends' :
+                     '✅ Balanced spending across the week'}
+                  </div>
+                  <div className="text-xs text-gray-500 mt-0.5">
+                    {insights.weekendWeekdayRatio > 1.1
+                      ? `Each weekend transaction is ${insights.weekendWeekdayRatio}× larger than a weekday one. Plan weekend activities with a cap.`
+                      : 'Your spend distribution is healthy — no strong weekend bias.'}
+                  </div>
+                </div>
+              </div>
+              {/* Day-by-day mini bar chart */}
+              <div>
+                <div className="text-xs font-semibold text-gray-500 mb-2">Avg spend per transaction by day</div>
+                <div className="space-y-1">
+                  {['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(day => {
+                    const avg = insights.countByDay[day] > 0 ? insights.spendByDay[day] / insights.countByDay[day] : 0;
+                    const maxDay = Math.max(...Object.keys(insights.spendByDay).map(d => insights.countByDay[d] > 0 ? insights.spendByDay[d] / insights.countByDay[d] : 0), 1);
+                    const isWeekend = day === 'Sat' || day === 'Sun';
+                    return (
+                      <div key={day} className="flex items-center gap-2">
+                        <span className={`text-xs w-8 font-medium ${isWeekend ? 'text-indigo-600' : 'text-gray-600'}`}>{day}</span>
+                        <div className="flex-1 bg-gray-200 dark:bg-gray-700 rounded h-3">
+                          <div
+                            className={`h-3 rounded transition-all duration-500 ${isWeekend ? 'bg-indigo-500' : 'bg-sky-400'}`}
+                            style={{ width: `${(avg / maxDay) * 100}%` }}
+                          ></div>
+                        </div>
+                        <span className="text-xs text-gray-500 w-14 text-right">₹{avg.toFixed(0)}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
           </InsightCard>
           {/* NEW CODE END */}
@@ -5371,14 +5810,14 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
       };
       
       const typeEmoji = {
-          savings: <i className="fas fa-piggy-bank text-gray-700 dark:text-gray-400"></i>,
-          debt: <i className="fas fa-credit-card text-gray-700 dark:text-gray-400"></i>
+          savings: <i className="fas fa-piggy-bank" style={{color:"black"}}></i>,
+          debt: <i className="fas fa-credit-card" style={{color:"black"}}></i>
       };
       
       return (
         <div className="bg-white dark:bg-gray-800 p-4 rounded shadow">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="font-semibold text-lg"><i className="fas fa-bullseye text-gray-700 dark:text-gray-400 mr-2"></i>Goals System</h2>
+            <h2 className="font-semibold text-lg"><i className="fas fa-bullseye text-gray-700 dark:text-gray-400 mr-2" style={{color:"black"}}></i>Goals System</h2>
             <button
               onClick={() => setShowForm(!showForm)}
               className="px-3 py-1 bg-blue-500 text-white rounded text-sm hover:bg-blue-600"
@@ -5753,7 +6192,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
       
       return (
         <div className="bg-white dark:bg-gray-800 p-4 rounded shadow">
-          <h2 className="font-semibold text-lg mb-4"><i className="fas fa-robot text-gray-700 dark:text-gray-400 mr-2"></i>AI Financial Coach</h2>
+          <h2 className="font-semibold text-lg mb-4"><i className="fas fa-robot text-gray-700 dark:text-gray-400 mr-2" style={{color:"black"}}></i>AI Financial Coach</h2>
           
           <div className="flex gap-2 mb-4 flex-wrap">
             <button
@@ -5914,7 +6353,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
 
               {/* Top 3 Financial Leaks */}
               <div className="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg">
-                <h3 className="font-semibold mb-2 flex items-center"><i className="fas fa-exclamation-triangle text-red-500 mr-2"></i> Top 3 Financial Leaks</h3>
+                <h3 className="font-semibold mb-2 flex items-center"><i className="fas fa-exclamation-triangle text-red-500 mr-2" style={{color:"black"}}></i> Top 3 Financial Leaks</h3>
                 <div className="space-y-2">
                   {insights.hiddenLeaks.slice(0, 3).map(([desc, amount], idx) => (
                     <div key={idx} className="flex justify-between items-center p-2 bg-white dark:bg-gray-800 rounded">
@@ -6242,6 +6681,193 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
         <ErrorBoundary>
           {currentUser ? <App currentUser={currentUser} logoutUser={logoutUser} /> : <LoginForm onLogin={setCurrentUser} />}
         </ErrorBoundary>
+      );
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // ASK ENGINE — AI-powered Q&A over user's financial data
+    // ═══════════════════════════════════════════════════════════════
+    function AskEngine({ transactions, budgets, customIncome, selectedMonth }) {
+      const [open, setOpen] = React.useState(false);
+      const [messages, setMessages] = React.useState([
+        { role: 'ai', text: "Hi! I'm your MoneyWise Ask Engine 🤖\nAsk me anything about your spending, savings, patterns, or get personalised tips!" }
+      ]);
+      const [input, setInput] = React.useState('');
+      const [loading, setLoading] = React.useState(false);
+      const msgsRef = React.useRef(null);
+
+      React.useEffect(() => {
+        if (msgsRef.current) msgsRef.current.scrollTop = msgsRef.current.scrollHeight;
+      }, [messages, open]);
+
+      const buildContext = () => {
+        // Build a compact financial summary to include as context
+        const expTx = transactions.filter(tx => tx.category && tx.category.toLowerCase() !== 'income');
+        const incTx = transactions.filter(tx => tx.category && tx.category.toLowerCase() === 'income');
+        const totalIncome = incTx.reduce((s, tx) => s + (tx.amount || 0), 0) + (customIncome || 0);
+        const totalSpent = expTx.reduce((s, tx) => s + (tx.amount || 0), 0);
+        const savings = totalIncome - totalSpent;
+        const savingsRate = totalIncome > 0 ? ((savings / totalIncome) * 100).toFixed(1) : '0';
+
+        const catTotals = {};
+        expTx.forEach(tx => { catTotals[tx.category] = (catTotals[tx.category] || 0) + tx.amount; });
+        const catSummary = Object.entries(catTotals).sort((a,b)=>b[1]-a[1]).slice(0,8)
+          .map(([c,v])=>`${c}: ₹${v.toFixed(0)}`).join(', ');
+
+        const weekendTx = expTx.filter(tx => { const d = new Date(tx.date); return d.getDay()===0||d.getDay()===6; });
+        const weekdayTx = expTx.filter(tx => { const d = new Date(tx.date); return d.getDay()>=1&&d.getDay()<=5; });
+        const wkendAvg = weekendTx.length ? (weekendTx.reduce((s,t)=>s+t.amount,0)/weekendTx.length).toFixed(0) : 0;
+        const wkdayAvg = weekdayTx.length ? (weekdayTx.reduce((s,t)=>s+t.amount,0)/weekdayTx.length).toFixed(0) : 0;
+
+        let goals = [];
+        try { goals = JSON.parse(localStorage.getItem('moneywise_goals')||'[]'); } catch(e){}
+
+        const recentTx = [...expTx].sort((a,b)=>new Date(b.date)-new Date(a.date)).slice(0,10)
+          .map(tx=>`${tx.date} ₹${tx.amount} on ${tx.category} (${tx.necessity}): ${tx.description}`).join('\n');
+
+        return `You are a helpful, concise financial advisor embedded in the MoneyWise app.
+The user is asking questions about their own financial data. Always answer based on the data below.
+Be specific, actionable, and use ₹ for Indian Rupees. Keep answers under 200 words unless asked for more detail.
+
+== USER FINANCIAL SUMMARY (${selectedMonth === 'all' ? 'All time' : selectedMonth}) ==
+Total Income: ₹${totalIncome.toFixed(0)} | Total Spent: ₹${totalSpent.toFixed(0)} | Savings: ₹${savings.toFixed(0)} (${savingsRate}%)
+Selected Month: ${selectedMonth}
+Category Breakdown: ${catSummary || 'No data'}
+Weekend avg/txn: ₹${wkendAvg} | Weekday avg/txn: ₹${wkdayAvg}
+Goals: ${goals.length > 0 ? goals.map(g=>`${g.name}: ₹${g.currentAmount||0}/₹${g.targetAmount}`).join(', ') : 'None set'}
+
+== RECENT TRANSACTIONS ==
+${recentTx || 'No transactions'}
+
+Respond helpfully. If data is insufficient, say so and suggest what to add.`;
+      };
+
+      const [apiKey, setApiKey] = React.useState(() => localStorage.getItem('moneywise_apikey') || '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');
+
+      // Auto-save the API key
+      React.useEffect(() => {
+        if (apiKey && apiKey !== localStorage.getItem('moneywise_apikey')) {
+          localStorage.setItem('moneywise_apikey', apiKey);
+        }
+      }, [apiKey]);
+
+      const sendMessage = async (text) => {
+        const q = (text || input).trim();
+        if (!q || loading) return;
+
+        const key = apiKey || localStorage.getItem('moneywise_apikey') || '';
+        if (!key) {
+          setShowKeyInput(true);
+          return;
+        }
+
+        setInput('');
+        setMessages(prev => [...prev, { role: 'user', text: q }]);
+        setLoading(true);
+
+        try {
+          const res = await fetch('https://api.anthropic.com/v1/messages', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'x-api-key': key,
+              'anthropic-version': '2023-06-01',
+              'anthropic-dangerous-direct-browser-access': 'true'
+            },
+            body: JSON.stringify({
+              model: 'claude-sonnet-4-20250514',
+              max_tokens: 400,
+              system: buildContext(),
+              messages: [{ role: 'user', content: q }]
+            })
+          });
+          if (!res.ok) {
+            const errData = await res.json().catch(() => ({}));
+            const errMsg = (errData.error && errData.error.message) || `HTTP ${res.status}`;
+            if (res.status === 401) {
+              setMessages(prev => [...prev, { role: 'ai', text: '🔑 Invalid API key. Tap the key icon to update it.' }]);
+            } else {
+              setMessages(prev => [...prev, { role: 'ai', text: `⚠️ ${errMsg}` }]);
+            }
+            setLoading(false);
+            return;
+          }
+          const data = await res.json();
+          const reply = (data.content || []).map(b => b.text || '').join('');
+          setMessages(prev => [...prev, { role: 'ai', text: reply || 'Sorry, I could not get a response.' }]);
+        } catch (e) {
+          setMessages(prev => [...prev, { role: 'ai', text: '⚠️ Unable to reach the AI. Check your connection and try again.' }]);
+        }
+        setLoading(false);
+      };
+
+      const chips = [
+        'Where am I overspending?',
+        'How can I save more?',
+        'What are my top 3 expense categories?',
+        'Am I on track with my goals?',
+        'Tips to cut weekend spending',
+        'What is my savings rate?'
+      ];
+
+      return (
+        <>
+          {/* Floating action button */}
+          <button className="ask-engine-fab" onClick={() => setOpen(o => !o)} title="Ask MoneyWise AI">
+            {open ? <i className="fas fa-times" style={{color:"white"}}></i> : <i className="fas fa-comments" style={{color:"white"}}></i>}
+          </button>
+
+          {open && (
+            <div className="ask-engine-panel">
+              <div className="ask-engine-header">
+                <div className="flex items-center gap-2">
+                  <span style={{ fontSize:'1.2rem' }}>🤖</span>
+                  <div>
+                    <div className="font-semibold text-sm">MoneyWise Ask Engine</div>
+                    <div style={{ fontSize:'0.7rem', opacity:0.85 }}>Powered by Claude AI</div>
+                  </div>
+                </div>
+                <div style={{ display:'flex', gap:6, alignItems:'center' }}>
+                  <button onClick={() => setMessages([{ role:'ai', text:"Hi! Ask me anything about your finances!" }])}
+                    style={{ background:'none', border:'none', color:'rgba(255,255,255,0.8)', cursor:'pointer', fontSize:'0.75rem' }}>
+                    Clear
+                  </button>
+                </div>
+              </div>
+
+              {/* API key setup panel - REMOVED */}
+              {/* No key — prompt to add - REMOVED */}
+
+              <div className="ask-engine-messages" ref={msgsRef}>
+                {messages.map((m, i) => (
+                  <div key={i} className={m.role === 'user' ? 'ask-msg-user' : 'ask-msg-ai'}>{m.text}</div>
+                ))}
+                {loading && <div className="ask-msg-typing">•••</div>}
+                {!loading && messages[messages.length-1]?.role === 'ai' && messages.length <= 3 && (
+                  <div style={{ display:'flex', flexWrap:'wrap', gap:'6px', marginTop:'4px' }}>
+                    {chips.map((c,i) => (
+                      <span key={i} className="ask-chip" onClick={() => sendMessage(c)}>{c}</span>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div className="ask-engine-input-row">
+                <input
+                  className="ask-engine-input"
+                  placeholder="Ask anything about your finances…"
+                  value={input}
+                  onChange={e => setInput(e.target.value)}
+                  onKeyDown={e => e.key === 'Enter' && !e.shiftKey && sendMessage()}
+                  disabled={loading}
+                />
+                <button className="ask-engine-send" onClick={() => sendMessage()} disabled={loading || !input.trim()}>
+                  <i className="fas fa-paper-plane" style={{color:"white"}}></i>
+                </button>
+              </div>
+            </div>
+          )}
+        </>
       );
     }
 
