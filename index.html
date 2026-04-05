@@ -2403,6 +2403,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
 
     function TimeSpentAnalysis({ transactions, selectedMonth }) {
       const [analysisType, setAnalysisType] = useState("daily");
+      const [timeSpentMonth, setTimeSpentMonth] = useState(selectedMonth || "all");
       const chartRef = React.useRef(null);
       const chartInstance = React.useRef(null);
       
@@ -2411,7 +2412,17 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
         const data = { daily: {}, weekly: {}, monthly: {} };
         const categoryMoney = {};
         
-        const expTx = transactions.filter(tx => tx.category && tx.category.toLowerCase() !== 'income');
+        const expTx = transactions.filter(tx => {
+          if (!tx.category || tx.category.toLowerCase() === 'income') return false;
+          if (timeSpentMonth === "all") return true;
+          
+          const txDate = new Date(tx.date);
+          if (isNaN(txDate.getTime())) return false;
+          
+          const txMonth = txDate.toISOString().slice(0, 7); // YYYY-MM format
+          return txMonth === timeSpentMonth;
+        });
+        
         expTx.forEach(tx => {
           const date = new Date(tx.date);
           if (isNaN(date.getTime())) return;
@@ -2542,7 +2553,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
             chartInstance.current.destroy();
           }
         };
-      }, [analysisType, transactions, selectedMonth]);
+      }, [analysisType, transactions, timeSpentMonth]);
       
       // Stats summary
       const expTx = transactions.filter(tx => tx.category && tx.category.toLowerCase() !== 'income');
@@ -2565,7 +2576,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
               <div>
                 <div style={{ fontSize: '0.78rem', letterSpacing: '0.12em', textTransform:'uppercase', opacity:0.8, marginBottom:4 }}>Time Spent Analysis</div>
                 <div style={{ fontSize: '2.1rem', fontWeight: 800 }}>₹{totalSpent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</div>
-                <div style={{ fontSize: '0.85rem', opacity: 0.85 }}>Total money spent • {selectedMonth === "all" ? "All time" : selectedMonth}</div>
+                <div style={{ fontSize: '0.85rem', opacity: 0.85 }}>Total money spent • {timeSpentMonth === "all" ? "All time" : timeSpentMonth}</div>
               </div>
               <div style={{ display:'flex', gap:18 }}>
                 <div style={{ textAlign:'center' }}>
@@ -2576,6 +2587,33 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
                   <div style={{ fontSize:'0.7rem', opacity:0.75, textTransform:'uppercase' }}>Peak</div>
                   <div style={{ fontWeight:700, fontSize:'1.1rem' }}>₹{Math.round(maxPeriod).toLocaleString('en-IN')}</div>
                 </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Month Filter */}
+          <div className="flex justify-between items-center mb-4 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+            <div className="relative">
+              <button className="p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition flex items-center justify-center w-10 h-10">
+                <i className="fas fa-calendar-alt" style={{color:"white"}}></i>
+              </button>
+              <input
+                type="month"
+                value={timeSpentMonth === "all" ? "" : timeSpentMonth}
+                onChange={(e) => setTimeSpentMonth(e.target.value || "all")}
+                className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer z-10"
+                title="Select month (leave empty for all time)"
+              />
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setTimeSpentMonth("all")}
+                className={`px-3 py-1 rounded text-sm ${timeSpentMonth === "all" ? 'bg-blue-500 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'}`}
+              >
+                All Time
+              </button>
+              <div className="text-sm text-gray-600 dark:text-gray-400">
+                {timeSpentMonth === "all" ? "Showing all transactions" : `Showing ${new Date(timeSpentMonth + '-01').toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}`}
               </div>
             </div>
           </div>
