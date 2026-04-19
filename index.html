@@ -12,8 +12,38 @@
 
 
   <style>
+    /* ═══════════════════════════════════════════
+       MONEYWISE — PREMIUM FINANCE THEME
+       Palette: Deep Teal · Warm Sand · Muted Gold
+    ═══════════════════════════════════════════ */
+    :root {
+      --mw-teal:       #1a6b72;
+      --mw-teal-light: #e6f3f4;
+      --mw-teal-mid:   #2e8b92;
+      --mw-teal-dark:  #124d52;
+      --mw-gold:       #b8863a;
+      --mw-gold-light: #fdf4e7;
+      --mw-gold-mid:   #d4a057;
+      --mw-sand:       #f7f1e8;
+      --mw-sand-dark:  #ede5d6;
+      --mw-ivory:      #fdfaf5;
+      --mw-text:       #2c3e35;
+      --mw-text-muted: #6e7d73;
+      --mw-border:     #dde8e6;
+      --mw-success:    #2e7d57;
+      --mw-danger:     #b94040;
+      --mw-warn:       #c0832a;
+    }
+
     body { 
-      font-family: 'Inter', sans-serif; 
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(145deg, #f0f7f7 0%, #f7f1e8 100%) !important;
+      color: var(--mw-text);
+    }
+    
+    .dark body {
+      background: linear-gradient(145deg, #0e3035 0%, #1a2820 100%) !important;
+      color: #e8f0ed;
     }
   
     .dropdown-item {
@@ -21,104 +51,136 @@
       font-weight: 500;
     }
 
-body {
-  background: linear-gradient(135deg, #fafaf9 0%, #f5f5f4 100%) !important;
-}
+    /* ── Navigation ── */
+    nav.bg-white {
+      background: linear-gradient(135deg, #ffffff 0%, #f7fbfb 100%) !important;
+      border-bottom: 2px solid var(--mw-teal-light) !important;
+      box-shadow: 0 2px 16px rgba(26,107,114,0.08) !important;
+    }
+    .dark nav.dark\:bg-gray-800 {
+      background: linear-gradient(135deg, #0a2428 0%, #0e3035 100%) !important;
+      border-bottom: 2px solid #1a4a50 !important;
+    }
 
-.dark body {
-  background: linear-gradient(135deg, #292524 0%, #44403c 100%) !important;
-}
+    /* ── Cards / Panels ── */
+    .bg-white {
+      background: #ffffff !important;
+    }
+    .dark .bg-gray-800 {
+      background: #102a2e !important;
+    }
+    .bg-gray-50 {
+      background: var(--mw-sand) !important;
+    }
+    .dark .bg-gray-50 {
+      background: #0d2226 !important;
+    }
 
-.quote-container {
-  background: linear-gradient(135deg, #fefaf6 0%, #f9f6f2 100%);
-  border-left: 6px solid #a78b71;
-}
-.dark .quote-container {
-  background: linear-gradient(135deg, #3a3630 0%, #2d2a26 100%);
-  border-left: 6px solid #b49b83;
-}
+    /* ── Quote container ── */
+    .quote-container {
+      background: linear-gradient(135deg, #fef9f0 0%, #f0f9fa 100%);
+      border-left: 5px solid var(--mw-gold-mid);
+    }
+    .dark .quote-container {
+      background: linear-gradient(135deg, #0e2a2e 0%, #162010 100%);
+      border-left: 5px solid var(--mw-gold);
+    }
 
-.hover-lift:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 20px 40px -10px rgba(120, 113, 108, 0.15);
-}
+    /* ── Hover lift ── */
+    .hover-lift:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px -10px rgba(26,107,114,0.15);
+    }
 
-nav.bg-white {
-  background: linear-gradient(135deg, #ffffff 0%, #fafaf9 100%) !important;
-}
-.dark nav.dark\:bg-gray-800 {
-  background: linear-gradient(135deg, #292524 0%, #1c1917 100%) !important;
-}
+    /* ── gradient overrides → teal/sand ── */
+    .bg-gradient-to-r.from-blue-50.to-indigo-50,
+    .bg-gradient-to-r.from-blue-50.to-purple-50,
+    .bg-gradient-to-br.from-blue-50.to-cyan-50 {
+      background: linear-gradient(135deg, var(--mw-teal-light) 0%, #f0fbfc 100%) !important;
+    }
+    .dark .bg-gradient-to-r.from-blue-50.to-indigo-50,
+    .dark .bg-gradient-to-r.from-blue-50.to-purple-50,
+    .dark .bg-gradient-to-br.from-blue-50.to-cyan-50 {
+      background: linear-gradient(135deg, #0e2f35 0%, #0a2428 100%) !important;
+    }
+    .bg-gradient-to-r.from-green-50.to-emerald-50,
+    .bg-gradient-to-r.from-emerald-50.to-teal-50 {
+      background: linear-gradient(135deg, #e8f5ef 0%, var(--mw-teal-light) 100%) !important;
+    }
+    .dark .bg-gradient-to-r.from-green-50.to-emerald-50,
+    .dark .bg-gradient-to-r.from-emerald-50.to-teal-50 {
+      background: linear-gradient(135deg, #102a1e 0%, #0e2f35 100%) !important;
+    }
+    .bg-gradient-to-r.from-red-50.to-pink-50,
+    .bg-gradient-to-br.from-red-50.to-pink-50 {
+      background: linear-gradient(135deg, #fdf0f0 0%, #fdf5f0 100%) !important;
+    }
+    .dark .bg-gradient-to-r.from-red-50.to-pink-50,
+    .dark .bg-gradient-to-br.from-red-50.to-pink-50 {
+      background: linear-gradient(135deg, #2a1010 0%, #2a1a10 100%) !important;
+    }
+    .bg-gradient-to-r.from-purple-50.to-violet-50,
+    .bg-gradient-to-br.from-purple-50.to-violet-50 {
+      background: linear-gradient(135deg, var(--mw-gold-light) 0%, #fdf7ee 100%) !important;
+    }
+    .dark .bg-gradient-to-r.from-purple-50.to-violet-50,
+    .dark .bg-gradient-to-br.from-purple-50.to-violet-50 {
+      background: linear-gradient(135deg, #2a2010 0%, #2a1a0a 100%) !important;
+    }
 
-.bg-gradient-to-r.from-blue-50.to-indigo-50 {
-  background: linear-gradient(135deg, #f7f7f5 0%, #f0f0ed 100%);
-}
-.dark .bg-gradient-to-r.from-blue-50.to-indigo-50 {
-  background: linear-gradient(135deg, #3a3630 0%, #2d2a26 100%);
-}
+    /* ── Inputs ── */
+    .income-input, input, select, textarea {
+      background-color: var(--mw-ivory) !important;
+      border-color: var(--mw-border) !important;
+    }
+    .dark .income-input, .dark input, .dark select, .dark textarea {
+      background-color: #0e2a2e !important;
+      border-color: #1e4a50 !important;
+      color: #d8eeec !important;
+    }
+    .income-input:focus, input:focus, select:focus, textarea:focus {
+      box-shadow: 0 0 0 3px rgba(26,107,114,0.18) !important;
+      border-color: var(--mw-teal) !important;
+      outline: none !important;
+    }
 
-.bg-gradient-to-r.from-green-50.to-emerald-50 {
-  background: linear-gradient(135deg, #f0f2eb 0%, #e8ebe5 100%);
-}
-.dark .bg-gradient-to-r.from-green-50.to-emerald-50 {
-  background: linear-gradient(135deg, #6f706f 0%, #9f9f9f 100%);
-}
+    /* ── Primary action buttons ── */
+    .bg-blue-500 { background-color: var(--mw-teal) !important; }
+    .bg-blue-500:hover { background-color: var(--mw-teal-dark) !important; }
+    .bg-green-500 { background-color: var(--mw-success) !important; }
+    .bg-green-500:hover { background-color: #236145 !important; }
+    .bg-purple-500 { background-color: var(--mw-gold) !important; }
+    .bg-purple-500:hover { background-color: #9a6e2a !important; }
 
-.bg-gradient-to-r.from-red-50.to-pink-50 {
-  background: linear-gradient(135deg, #f8f0ef 0%, #f2e8e7 100%);
-}
-.dark .bg-gradient-to-r.from-red-50.to-pink-50 {
-  background: linear-gradient(135deg, #3a2d2d 0%, #322626 100%);
-}
+    /* ── Status colors ── */
+    .bg-green-100 { background-color: #e8f5ef !important; }
+    .bg-yellow-100 { background-color: #fdf4e7 !important; }
+    .bg-red-100 { background-color: #fdf0f0 !important; }
+    .text-green-600 { color: var(--mw-success) !important; }
+    .text-red-600 { color: var(--mw-danger) !important; }
+    .text-blue-600 { color: var(--mw-teal) !important; }
+    .text-purple-600 { color: var(--mw-gold) !important; }
 
-.bg-gradient-to-r.from-purple-50.to-violet-50 {
-  background: linear-gradient(135deg, #f5f2f0 0%, #f0edea 100%);
-}
-.dark .bg-gradient-to-r.from-purple-50.to-violet-50 {
-  background: linear-gradient(135deg, #3a3030 0%, #322d2d 100%);
-}
+/* ── Dropdown ── */
+    .dropdown-menu {
+      border: 1px solid var(--mw-border);
+      background: #ffffff;
+      box-shadow: 0 12px 40px rgba(26,107,114,0.15);
+    }
+    .dark .dropdown-menu {
+      background: #0e2a2e;
+      border-color: #1e4a50;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+    }
+    .dropdown-item:hover {
+      background-color: var(--mw-teal-light) !important;
+      color: var(--mw-teal-dark);
+    }
+    .dark .dropdown-item:hover {
+      background-color: #1a3d42 !important;
+    }
 
-.bg-gradient-to-r.from-emerald-50.to-teal-50 {
-  background: linear-gradient(135deg, #f0f2eb 0%, #e8ebe8 100%);
-}
-.dark .bg-gradient-to-r.from-emerald-50.to-teal-50 {
-  background: linear-gradient(135deg, #2d3a2a 0%, #2d3232 100%);
-}
-
-.bg-gray-50 {
-  background: linear-gradient(135deg, #fafaf9 0%, #f5f5f4 100%) !important;
-}
-.dark .bg-gray-50 {
-  background: linear-gradient(135deg, #3a3630 0%, #2d2a26 100%) !important;
-}
-.bg-gradient-to-r.from-blue-50.to-purple-50 {
-  background: linear-gradient(135deg, #f7f7f5 0%, #f5f2f0 100%);
-}
-.dark .bg-gradient-to-r.from-blue-50.to-purple-50 {
-  background: linear-gradient(135deg, #3a3630 0%, #3a3030 100%);
-}
-.bg-gradient-to-br.from-blue-50.to-cyan-50 {
-  background: linear-gradient(135deg, #f7f7f5 0%, #f5f7f7 100%);
-}
-.dark .bg-gradient-to-br.from-blue-50.to-cyan-50 {
-  background: linear-gradient(135deg, #3a3630 0%, #303a3a 100%);
-}
-
-.bg-gradient-to-br.from-red-50.to-pink-50 {
-  background: linear-gradient(135deg, #f8f0ef 0%, #f8f2f0 100%);
-}
-.dark .bg-gradient-to-br.from-red-50.to-pink-50 {
-  background: linear-gradient(135deg, #3a2d2d 0%, #3a3030 100%);
-}
-
-.bg-gradient-to-br.from-purple-50.to-violet-50 {
-  background: linear-gradient(135deg, #f5f2f0 0%, #f5f0f2 100%);
-}
-.dark .bg-gradient-to-br.from-purple-50.to-violet-50 {
-  background: linear-gradient(135deg, #3a3030 0%, #3a2d3a 100%);
-}
-
-/* Share Modal Styles */
+    /* ── Share Modal Styles ── */
 .fab {
   font-family: "Font Awesome 6 Brands";
 }
@@ -134,18 +196,19 @@ nav.bg-white {
 }
 
 .share-modal-content {
-  background: white;
-  border-radius: 12px;
+  background: var(--mw-ivory);
+  border-radius: 16px;
   padding: 24px;
   max-width: 400px;
   width: 90%;
   max-height: 80vh;
   overflow-y: auto;
+  border: 1px solid var(--mw-border);
 }
 
 .dark .share-modal-content {
-  background: #1f2937;
-  color: #e5e7eb;
+  background: #0e2a2e;
+  color: #d8eeec;
 }
 
 .share-button {
@@ -252,50 +315,61 @@ textarea {
       right: 16px;
       top: 70px;
       background: white;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-      border-radius: 12px;
+      box-shadow: 0 12px 40px rgba(26,107,114,0.18);
+      border-radius: 14px;
       z-index: 9999;
-      min-width: 220px;
+      min-width: 240px;
       overflow: hidden;
+      border: 1px solid var(--mw-border);
     }
     
     .dark .dropdown-menu {
-      background: #1f2937;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+      background: #0d2226;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+      border-color: #1e4a50;
     }
     
     .dropdown-menu.show {
       display: block;
+      animation: slideInFromTop 0.2s ease-out;
     }
     
     .dropdown-item {
       display: flex;
       align-items: center;
-      padding: 0.875rem 1rem;
+      padding: 0.8rem 1.1rem;
       width: 100%;
       text-align: left;
-      border-bottom: 1px solid #e5e7eb;
-      font-size: 0.9375rem;
-      transition: all 0.2s ease;
+      border-bottom: 1px solid var(--mw-teal-light);
+      font-size: 0.875rem;
+      transition: all 0.18s ease;
+      color: var(--mw-text);
     }
     
     .dark .dropdown-item {
-      border-color: #4b5563;
+      border-color: #1a3d42;
+      color: #c8e8ec;
     }
     
     .dropdown-item:hover {
-      background-color: #f3f4f6;
-      transform: translateX(2px);
+      background: linear-gradient(90deg, var(--mw-teal-light), transparent) !important;
+      color: var(--mw-teal-dark);
+      padding-left: 1.4rem;
     }
     
     .dark .dropdown-item:hover {
-      background-color: #374151;
+      background: linear-gradient(90deg, #1a3d42, transparent) !important;
+      color: #7dd8dc;
     }
     
     .dropdown-item i {
       width: 20px;
       margin-right: 10px;
       text-align: center;
+      color: var(--mw-teal);
+    }
+    .dark .dropdown-item i {
+      color: #5dcbcc;
     }
     
     .quote-text {
@@ -303,40 +377,46 @@ textarea {
       font-style: italic;
       font-size: 1.25rem;
       line-height: 1.6;
+      color: var(--mw-teal-dark);
     }
+    .dark .quote-text { color: #88c9d0; }
     .quote-author {
       font-family: 'Playfair Display', serif;
       font-weight: 600;
       letter-spacing: 0.5px;
+      color: var(--mw-gold);
     }
     .quote-container {
-      background: linear-gradient(135deg, #f5f3ff 0%, #e6c4c4 100%);
-      border-left: 6px solid #2f130d;
+      background: linear-gradient(135deg, #f0f9fa 0%, var(--mw-gold-light) 100%);
+      border-left: 5px solid var(--mw-gold-mid);
       position: relative;
       overflow: hidden;
+      border-radius: 12px;
     }
     .dark .quote-container {
-      background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
-      border-left: 6px solid #ce947b;
+      background: linear-gradient(135deg, #0d2226 0%, #1a1408 100%);
+      border-left: 5px solid var(--mw-gold);
     }
     .quote-icon {
       position: absolute;
-      opacity: 0.1;
+      opacity: 0.06;
       font-size: 8rem;
       right: 20px;
       top: 20px;
       transform: rotate(15deg);
+      color: var(--mw-teal);
     }
+    .dark .quote-icon { color: var(--mw-gold); }
     .quote-indicator {
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background-color: #c4b5fd;
+      background-color: var(--mw-border);
       transition: all 0.3s ease;
     }
     .quote-indicator.active {
-      background-color: #8b5cf6;
-      transform: scale(1.2);
+      background-color: var(--mw-teal);
+      transform: scale(1.25);
     }
     .fade-in {
       animation: fadeIn 1s ease-in-out;
@@ -411,7 +491,7 @@ textarea {
       width: 100%;
       height: 100%;
       border-radius: 50%;
-      background: conic-gradient(from 0deg, #22c55e 0deg, #eab308 calc(var(--score)*3.6deg), #e5e7eb calc(var(--score)*3.6deg) 360deg);
+      background: conic-gradient(from 0deg, var(--mw-teal) 0deg, var(--mw-gold-mid) calc(var(--score)*3.6deg), #e5e7eb calc(var(--score)*3.6deg) 360deg);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -426,9 +506,11 @@ textarea {
       justify-content: center;
       font-size: 2rem;
       font-weight: bold;
+      color: var(--mw-teal-dark);
     }
     .dark .score-gauge-inner {
-      background: #2d2a26;
+      background: #0d2226;
+      color: #5dcbcc;
     }
     .insight-card {
       transition: all 0.3s ease;
@@ -455,20 +537,20 @@ textarea {
       background: #4b5563;
     }
     .progress-step.completed {
-      background: #10b981;
+      background: var(--mw-success);
       color: white;
     }
     .progress-step.current {
-      background: #3b82f6;
+      background: var(--mw-teal);
       color: white;
     }
     .progress-step.pending {
-      background: #e5e7eb;
-      color: #6b7280;
+      background: var(--mw-border);
+      color: var(--mw-text-muted);
     }
     .dark .progress-step.pending {
-      background: #4b5563;
-      color: #9ca3af;
+      background: #1e4a50;
+      color: #80a8a0;
     }
     /* NEW CODE END */
 
@@ -480,16 +562,18 @@ textarea {
       left: 0;
       right: 0;
       bottom: 0;
-      background-color: rgba(0, 0, 0, 0.5);
+      background-color: rgba(10, 30, 32, 0.55);
+      backdrop-filter: blur(4px);
       justify-content: center;
       align-items: center;
       z-index: 10000;
     }
 
     .settings-content {
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      background: var(--mw-ivory);
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(26,107,114,0.2);
+      border: 1px solid var(--mw-border);
       max-width: 500px;
       width: 90%;
       max-height: 90vh;
@@ -497,7 +581,8 @@ textarea {
     }
 
     .dark .settings-content {
-      background: #2d2a26;
+      background: #0d2226;
+      border-color: #1e4a50;
     }
 
     .settings-header {
@@ -505,7 +590,8 @@ textarea {
       justify-content: space-between;
       align-items: center;
       padding: 1.5rem;
-      border-bottom: 1px solid #e5e7eb;
+      border-bottom: 1px solid var(--mw-border);
+      background: linear-gradient(90deg, var(--mw-teal-light), transparent);
     }
 
 /* ── ASK ENGINE ─────────────────────────────────────────── */
@@ -513,10 +599,10 @@ textarea {
   position: fixed;
   bottom: 24px;
   right: 24px;
-  width: 56px;
-  height: 56px;
+  width: 58px;
+  height: 58px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  background: linear-gradient(135deg, var(--mw-teal) 0%, var(--mw-teal-mid) 100%);
   color: white;
   border: none;
   cursor: pointer;
@@ -524,36 +610,38 @@ textarea {
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 20px rgba(99,102,241,0.5);
+  box-shadow: 0 4px 20px rgba(26,107,114,0.4);
   z-index: 9990;
   transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
 }
 .ask-engine-fab:hover {
   transform: scale(1.1);
-  box-shadow: 0 8px 30px rgba(99,102,241,0.6);
+  box-shadow: 0 8px 30px rgba(26,107,114,0.55);
 }
 .ask-engine-panel {
   position: fixed;
-  bottom: 92px;
+  bottom: 96px;
   right: 24px;
-  width: 360px;
-  max-height: 520px;
-  background: white;
-  border-radius: 16px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+  width: 370px;
+  max-height: 540px;
+  background: var(--mw-ivory);
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(26,107,114,0.18);
   display: flex;
   flex-direction: column;
   z-index: 9989;
   overflow: hidden;
   animation: slideUp 0.3s ease-out;
+  border: 1px solid var(--mw-border);
 }
 .dark .ask-engine-panel {
-  background: #1c1917;
+  background: #0d2226;
   box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  border-color: #1e4a50;
 }
 .ask-engine-header {
-  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-  padding: 14px 16px;
+  background: linear-gradient(135deg, var(--mw-teal-dark) 0%, var(--mw-teal-mid) 100%);
+  padding: 14px 18px;
   color: white;
   display: flex;
   align-items: center;
@@ -563,72 +651,81 @@ textarea {
 .ask-engine-messages {
   flex: 1;
   overflow-y: auto;
-  padding: 12px 14px;
+  padding: 14px 16px;
   display: flex;
   flex-direction: column;
   gap: 10px;
   scroll-behavior: smooth;
+  background: var(--mw-ivory);
+}
+.dark .ask-engine-messages {
+  background: #0d2226;
 }
 .ask-msg-user {
   align-self: flex-end;
-  background: linear-gradient(135deg,#6366f1,#8b5cf6);
+  background: linear-gradient(135deg, var(--mw-teal), var(--mw-teal-mid));
   color: white;
-  padding: 8px 12px;
-  border-radius: 12px 12px 2px 12px;
+  padding: 9px 14px;
+  border-radius: 16px 16px 3px 16px;
   max-width: 82%;
   font-size: 0.85rem;
+  line-height: 1.5;
 }
 .ask-msg-ai {
   align-self: flex-start;
-  background: #f3f4f6;
-  color: #111827;
-  padding: 8px 12px;
-  border-radius: 12px 12px 12px 2px;
+  background: #edf6f7;
+  color: var(--mw-text);
+  padding: 9px 14px;
+  border-radius: 16px 16px 16px 3px;
   max-width: 90%;
   font-size: 0.85rem;
-  line-height: 1.5;
+  line-height: 1.55;
   white-space: pre-wrap;
+  border: 1px solid var(--mw-teal-light);
 }
 .dark .ask-msg-ai {
-  background: #292524;
-  color: #e5e7eb;
+  background: #102a2e;
+  color: #d0e8ec;
+  border-color: #1e4a50;
 }
 .ask-msg-typing {
   align-self: flex-start;
-  background: #f3f4f6;
+  background: #edf6f7;
   padding: 8px 14px;
   border-radius: 12px;
   font-size: 1.2rem;
   letter-spacing: 2px;
+  border: 1px solid var(--mw-teal-light);
 }
-.dark .ask-msg-typing { background: #292524; }
+.dark .ask-msg-typing { background: #102a2e; }
 .ask-engine-input-row {
-  padding: 10px 12px;
-  border-top: 1px solid #e5e7eb;
+  padding: 10px 14px;
+  border-top: 1px solid var(--mw-border);
   display: flex;
   gap: 8px;
   flex-shrink: 0;
+  background: var(--mw-sand);
 }
-.dark .ask-engine-input-row { border-color: #44403c; }
+.dark .ask-engine-input-row { border-color: #1e4a50; background: #0a1e22; }
 .ask-engine-input {
   flex: 1;
-  padding: 8px 12px;
+  padding: 9px 14px;
   border-radius: 20px;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--mw-border) !important;
   font-size: 0.85rem;
   outline: none;
-  background: #fafaf9 !important;
+  background: #ffffff !important;
 }
 .dark .ask-engine-input {
-  background: #292524 !important;
-  border-color: #57534e;
-  color: #e5e7eb;
+  background: #0e2a2e !important;
+  border-color: #1e4a50 !important;
+  color: #d8eeec !important;
 }
 .ask-engine-send {
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
-  background: linear-gradient(135deg,#6366f1,#8b5cf6);
+  background: linear-gradient(135deg, var(--mw-teal), var(--mw-teal-mid));
   color: white;
   border: none;
   cursor: pointer;
@@ -640,25 +737,37 @@ textarea {
   transition: all 0.2s;
 }
 .ask-engine-send:hover { transform: scale(1.08); }
-.ask-engine-send:disabled { opacity: 0.5; cursor: not-allowed; }
+.ask-engine-send:disabled { opacity: 0.45; cursor: not-allowed; }
 .ask-chip {
   display: inline-block;
-  padding: 4px 10px;
+  padding: 5px 12px;
   border-radius: 20px;
-  background: #ede9fe;
-  color: #6d28d9;
+  background: var(--mw-teal-light);
+  color: var(--mw-teal-dark);
   font-size: 0.75rem;
   cursor: pointer;
   transition: all 0.2s;
-  border: 1px solid #c4b5fd;
+  border: 1px solid rgba(26,107,114,0.2);
   white-space: nowrap;
 }
 .dark .ask-chip {
-  background: #3b2d5e;
-  color: #c4b5fd;
-  border-color: #6d28d9;
+  background: #102a2e;
+  color: #88c9d0;
+  border-color: #1e4a50;
 }
-.ask-chip:hover { background: #6366f1; color: white; border-color: #6366f1; }
+.ask-chip:hover { background: var(--mw-teal); color: white; border-color: var(--mw-teal); }
+/* API key input inside chat */
+.ask-key-input-wrap {
+  padding: 10px 14px;
+  background: var(--mw-gold-light);
+  border-top: 1px solid #e0c08a;
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+.dark .ask-key-input-wrap {
+  background: #1e1a08;
+  border-color: #3a2e10;
+}
 @media (max-width: 480px) {
   .ask-engine-panel { width: calc(100vw - 32px); right: 16px; }
 }
@@ -678,13 +787,13 @@ textarea {
 
     .settings-tab {
       display: flex;
-      border-bottom: 1px solid #e5e7eb;
-      background-color: #f9f7f4;
+      border-bottom: 1px solid var(--mw-border);
+      background-color: var(--mw-sand);
     }
 
     .dark .settings-tab {
-      background-color: #3a3630;
-      border-bottom-color: #57534e;
+      background-color: #0a1e22;
+      border-bottom-color: #1e4a50;
     }
 
     .settings-tab button {
@@ -694,23 +803,23 @@ textarea {
       background: none;
       cursor: pointer;
       font-size: 0.9rem;
-      color: #6b7280;
+      color: var(--mw-text-muted);
       border-bottom: 3px solid transparent;
       transition: all 0.2s ease;
     }
 
     .dark .settings-tab button {
-      color: #a4a4a4;
+      color: #80a8a0;
     }
 
     .settings-tab button.active {
-      color: #2563eb;
-      border-bottom-color: #2563eb;
+      color: var(--mw-teal);
+      border-bottom-color: var(--mw-teal);
     }
 
     .dark .settings-tab button.active {
-      color: #60a5fa;
-      border-bottom-color: #60a5fa;
+      color: #5dcbcc;
+      border-bottom-color: #5dcbcc;
     }
 
     .settings-section {
@@ -786,30 +895,32 @@ textarea {
     }
 
     .btn-primary {
-      background-color: #2563eb;
+      background: linear-gradient(135deg, var(--mw-teal), var(--mw-teal-mid));
       color: white;
+      border-radius: 8px;
     }
 
     .btn-primary:hover {
-      background-color: #1d4ed8;
+      background: linear-gradient(135deg, var(--mw-teal-dark), var(--mw-teal));
     }
 
     .btn-secondary {
-      background-color: #e5e7eb;
-      color: #374151;
+      background-color: var(--mw-sand-dark);
+      color: var(--mw-text);
+      border-radius: 8px;
     }
 
     .dark .btn-secondary {
-      background-color: #57534e;
-      color: #f5f5f4;
+      background-color: #1e3a40;
+      color: #c0dde0;
     }
 
     .btn-secondary:hover {
-      background-color: #d1d5db;
+      background-color: var(--mw-border);
     }
 
     .dark .btn-secondary:hover {
-      background-color: #6f6b63;
+      background-color: #274a50;
     }
   </style>
 </head>
@@ -2015,84 +2126,103 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
       
       return (
         <>
-          <nav className="sticky top-0 z-50 bg-white dark:bg-gray-800 p-4 shadow-md flex justify-between items-center">
-            <div className="flex items-center gap-4">
-              <div className="font-bold text-lg">MoneyWise</div>
+          <nav className="sticky top-0 z-50 bg-white dark:bg-gray-800 p-3 shadow-md flex justify-between items-center" style={{borderBottom:'2px solid var(--mw-teal-light)'}}>
+            <div className="flex items-center gap-3">
+              <div style={{background:'linear-gradient(135deg,var(--mw-teal-dark),var(--mw-teal-mid))', borderRadius:10, width:36, height:36, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0}}>
+                <i className="fas fa-coins" style={{color:'var(--mw-gold-mid)', fontSize:'1rem'}}></i>
+              </div>
+              <div>
+                <div style={{fontWeight:800, fontSize:'1.1rem', color:'var(--mw-teal-dark)', letterSpacing:'-0.3px', fontFamily:"'Playfair Display', serif"}}>MoneyWise</div>
+                <div style={{fontSize:'0.62rem', color:'var(--mw-gold)', fontWeight:600, letterSpacing:'1px', textTransform:'uppercase'}}>Finance Manager</div>
+              </div>
             </div>
-            <div className="flex gap-3 items-center relative">
+            <div className="flex gap-2 items-center relative">
               <button 
                 onClick={() => setActiveView("home")}
-                className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition text-sm flex items-center gap-2"
+                className="px-3 py-1 text-white rounded-lg transition text-sm flex items-center gap-2"
+                style={{background:'linear-gradient(135deg,var(--mw-teal),var(--mw-teal-mid))', fontWeight:600}}
               >
-                <i className="fas fa-home" style={{color:"black"}}></i>
-                Home
+                <i className="fas fa-home" style={{color:"white"}}></i>
+                <span className="hidden sm:inline">Home</span>
               </button>
               <button
                 title="Share"
                 onClick={() => setShowShare(true)}
-                className="p-2 bg-green-500 text-white rounded-full hover:bg-green-600 transition text-sm"
+                className="p-2 text-white rounded-full transition text-sm"
+                style={{background:'var(--mw-success)'}}
               >
                 <i className="fas fa-share-alt" style={{color:"white"}}></i>
               </button>
-              <span className="text-xs sm:text-sm px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">👤 {currentUser}</span>
+              <span className="text-xs sm:text-sm px-2 py-1 rounded" style={{background:'var(--mw-teal-light)', color:'var(--mw-teal-dark)', fontWeight:600}}>💼 {currentUser}</span>
               <div className="relative">
                 <button 
                   onClick={() => setShowDropdown(!showDropdown)}
-                  className="p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition"
+                  className="p-2 text-white rounded-full transition"
+                  style={{background:'var(--mw-teal)'}}
+                  title="Menu"
                 >
-                  <i className="fas fa-bars" style={{color:"white"}}></i>
+                  <i className="fas fa-ellipsis-v" style={{color:"white"}}></i>
                 </button>
                 <div className={`dropdown-menu ${showDropdown ? 'show' : ''}`}>
+                  {/* ─ Transactions ─ */}
+                  <div style={{padding:'6px 14px 4px', fontSize:'0.68rem', fontWeight:700, color:'var(--mw-gold)', textTransform:'uppercase', letterSpacing:'0.8px', background:'var(--mw-sand)'}}>Transactions</div>
                   <button className="dropdown-item" onClick={() => { setActiveView("transactionLog"); setShowDropdown(false); }}>
-                    <i className="fas fa-receipt mr-2" style={{color:"black"}}></i> Transaction Log
+                    <i className="fas fa-receipt"></i> Transaction Log
                   </button>
                   <button className="dropdown-item" onClick={() => { setActiveView("timeSpentAnalysis"); setShowDropdown(false); }}>
-                    <i className="fas fa-clock mr-2" style={{color:"black"}}></i> Time Spent Analysis
+                    <i className="fas fa-clock"></i> Time Spent Analysis
                   </button>
                   <button className="dropdown-item" onClick={() => { setActiveView("personSettlements"); setShowDropdown(false); }}>
-                    <i className="fas fa-users mr-2" style={{color:"black"}}></i> Person-wise Settlements
+                    <i className="fas fa-users"></i> Person-wise Settlements
                   </button>
+                  {/* ─ Planning ─ */}
+                  <div style={{padding:'6px 14px 4px', fontSize:'0.68rem', fontWeight:700, color:'var(--mw-gold)', textTransform:'uppercase', letterSpacing:'0.8px', background:'var(--mw-sand)', borderTop:'1px solid var(--mw-border)'}}>Planning</div>
                   <button className="dropdown-item" onClick={() => { setActiveView("budgetPlanner"); setShowDropdown(false); }}>
-                    <i className="fas fa-chart-pie mr-2" style={{color:"black"}}></i> Budget Planner
+                    <i className="fas fa-chart-pie"></i> Budget Planner
                   </button>
                   <button className="dropdown-item" onClick={() => { setActiveView("monthlySuggestions"); setShowDropdown(false); }}>
-                    <i className="fas fa-lightbulb mr-2" style={{color:"black"}}></i> Monthly Budget Suggestions
-                  </button>
-                  <button className="dropdown-item" onClick={() => { setActiveView("expenseBreakdown"); setShowDropdown(false); }}>
-                    <i className="fas fa-chart-pie mr-2" style={{color:"black"}}></i> Expense Breakdown
-                  </button>
-                  <button className="dropdown-item" onClick={() => { setActiveView("budgetCompletion"); setShowDropdown(false); }}>
-                    <i className="fas fa-tasks mr-2" style={{color:"black"}}></i> Budget Completion
-                  </button>
-                  <button className="dropdown-item" onClick={() => { setActiveView("costDrivers"); setShowDropdown(false); }}>
-                    <i className="fas fa-chart-line mr-2" style={{color:"black"}}></i> Cost Drivers Analysis
-                  </button>
-                  <button className="dropdown-item" onClick={() => { setActiveView("insights"); setShowDropdown(false); }}>
-                    <i className="fas fa-lightbulb mr-2" style={{color:"black"}}></i> Insights 
+                    <i className="fas fa-lightbulb"></i> Monthly Suggestions
                   </button>
                   <button className="dropdown-item" onClick={() => { setActiveView("goals"); setShowDropdown(false); }}>
-                    <i className="fas fa-bullseye mr-2" style={{color:"black"}}></i> Goals 
+                    <i className="fas fa-bullseye"></i> Goals
+                  </button>
+                  {/* ─ Analysis ─ */}
+                  <div style={{padding:'6px 14px 4px', fontSize:'0.68rem', fontWeight:700, color:'var(--mw-gold)', textTransform:'uppercase', letterSpacing:'0.8px', background:'var(--mw-sand)', borderTop:'1px solid var(--mw-border)'}}>Analysis</div>
+                  <button className="dropdown-item" onClick={() => { setActiveView("expenseBreakdown"); setShowDropdown(false); }}>
+                    <i className="fas fa-chart-pie"></i> Expense Breakdown
+                  </button>
+                  <button className="dropdown-item" onClick={() => { setActiveView("budgetCompletion"); setShowDropdown(false); }}>
+                    <i className="fas fa-tasks"></i> Budget Completion
+                  </button>
+                  <button className="dropdown-item" onClick={() => { setActiveView("costDrivers"); setShowDropdown(false); }}>
+                    <i className="fas fa-chart-line"></i> Cost Drivers
+                  </button>
+                  <button className="dropdown-item" onClick={() => { setActiveView("insights"); setShowDropdown(false); }}>
+                    <i className="fas fa-brain"></i> Insights
                   </button>
                   <button className="dropdown-item" onClick={() => { setActiveView("aiCoach"); setShowDropdown(false); }}>
-                    <i className="fas fa-robot mr-2" style={{color:"black"}}></i> AI Financial Coach
+                    <i className="fas fa-robot"></i> AI Financial Coach
                   </button>
+                  {/* ─ Misc ─ */}
+                  <div style={{padding:'6px 14px 4px', fontSize:'0.68rem', fontWeight:700, color:'var(--mw-gold)', textTransform:'uppercase', letterSpacing:'0.8px', background:'var(--mw-sand)', borderTop:'1px solid var(--mw-border)'}}>App</div>
                   <button className="dropdown-item" onClick={() => { setShowSettings(true); setShowDropdown(false); }}>
-                    <i className="fas fa-cog mr-2" style={{color:"black"}}></i> Settings
+                    <i className="fas fa-cog"></i> Settings
                   </button>
                   <button className="dropdown-item" onClick={exportToCSV}>
-                    <i className="fas fa-file-export mr-2" style={{color:"black"}}></i> Export CSV
+                    <i className="fas fa-file-export"></i> Export CSV
                   </button>
                   <button className="dropdown-item" onClick={() => { setShowShare(true); setShowDropdown(false); }}>
-                    <i className="fas fa-share-alt mr-2" style={{color:"black"}}></i> Share App
+                    <i className="fas fa-share-alt"></i> Share App
                   </button>
                   <button className="dropdown-item" onClick={() => { 
                     window.open('https://www.linkedin.com/in/subhra-prasad-chakraborty-3b91aa285?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app', '_blank');
                     setShowDropdown(false);
                   }}>
-                    <i className="fas fa-envelope mr-2" style={{color:"black"}}></i> Contact Us
+                    <i className="fas fa-envelope"></i> Contact Us
                   </button>
-                  <button className="dropdown-item" onClick={() => { logoutUser(); setShowDropdown(false); }}>
-                    <i className="fas fa-sign-out-alt mr-2" style={{color:"black"}}></i> Logout
+                  <button className="dropdown-item" onClick={() => { logoutUser(); setShowDropdown(false); }}
+                    style={{color:'var(--mw-danger)'}}>
+                    <i className="fas fa-sign-out-alt" style={{color:'var(--mw-danger)'}}></i> Logout
                   </button>
                 </div>
               </div>
@@ -3516,17 +3646,60 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
 
     function PersonSettlements({ settlements, onMarkAsPaid, onDelete }) {
       const [filterPerson, setFilterPerson] = useState("all");
+      const [filterMonth, setFilterMonth] = useState("all");
+      const [showPrevPending, setShowPrevPending] = useState(true);
       const [showShareModal, setShowShareModal] = useState(false);
       const [selectedPersonForShare, setSelectedPersonForShare] = useState(null);
       
-      const personNames = [...new Set(settlements.map(s => s.personName))];
+      const personNames = [...new Set(settlements.map(s => s.personName))].filter(Boolean);
       
-      const filteredSettlements = filterPerson === "all" 
-        ? settlements 
-        : settlements.filter(s => s.personName === filterPerson);
+      // Get all unique months from settlements
+      const settlementMonths = [...new Set(
+        settlements
+          .filter(s => s.date)
+          .map(s => {
+            const d = new Date(s.date);
+            return `${d.getFullYear()}-${(d.getMonth()+1).toString().padStart(2,'0')}`;
+          })
+      )].sort().reverse();
+
+      // Current month (YYYY-MM)
+      const currentYM = (() => {
+        const n = new Date();
+        return `${n.getFullYear()}-${(n.getMonth()+1).toString().padStart(2,'0')}`;
+      })();
+
+      // Previous month
+      const prevYM = (() => {
+        const n = new Date();
+        n.setMonth(n.getMonth() - 1);
+        return `${n.getFullYear()}-${(n.getMonth()+1).toString().padStart(2,'0')}`;
+      })();
+
+      // Helper: get month string from settlement date
+      const getSettlementMonth = (s) => {
+        if (!s.date) return '';
+        const d = new Date(s.date);
+        return `${d.getFullYear()}-${(d.getMonth()+1).toString().padStart(2,'0')}`;
+      };
+
+      // Pending from previous month (to carry forward)
+      const prevMonthPending = settlements.filter(s => !s.paid && getSettlementMonth(s) === prevYM);
+
+      // Main filter: person + month
+      const filteredSettlements = settlements.filter(s => {
+        const personOk = filterPerson === "all" || s.personName === filterPerson;
+        const monthOk = filterMonth === "all" || getSettlementMonth(s) === filterMonth;
+        return personOk && monthOk;
+      });
       
       const pendingSettlements = filteredSettlements.filter(s => !s.paid);
       const completedSettlements = filteredSettlements.filter(s => s.paid);
+
+      // Carried-forward pending from prev month (when viewing current month)
+      const carriedForward = (filterMonth === currentYM || filterMonth === "all") && showPrevPending
+        ? prevMonthPending.filter(s => filterPerson === "all" || s.personName === filterPerson)
+        : [];
       
       const personTotals = {};
       settlements.forEach(s => {
@@ -3535,137 +3708,62 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
         }
       });
 
+      // Grand total pending (including carried)
+      const grandPending = pendingSettlements.reduce((sum, s) => sum + s.perPersonAmount, 0);
+      const carriedTotal = carriedForward.reduce((sum, s) => sum + s.perPersonAmount, 0);
+
       // Helper to build text summary for a person's history
       const generateSettlementText = (personName) => {
-        const personSettlements = settlements.filter(s => s.personName === personName);
-        const pendingTotal = personSettlements
-          .filter(s => !s.paid)
-          .reduce((sum, s) => sum + s.perPersonAmount, 0);
-        const paidTotal = personSettlements
-          .filter(s => s.paid)
-          .reduce((sum, s) => sum + s.perPersonAmount, 0);
+        const ps = settlements.filter(s => s.personName === personName);
+        const pendingTotal = ps.filter(s => !s.paid).reduce((sum, s) => sum + s.perPersonAmount, 0);
+        const paidTotal = ps.filter(s => s.paid).reduce((sum, s) => sum + s.perPersonAmount, 0);
         
         let text = `📊 SETTLEMENT HISTORY FOR ${personName.toUpperCase()}\n`;
         text += `================================\n\n`;
-        text += `💰 SUMMARY\n`;
-        text += `Total Pending: ₹${pendingTotal.toFixed(2)}\n`;
-        text += `Total Paid: ₹${paidTotal.toFixed(2)}\n`;
-        text += `Overall Balance: ₹${(pendingTotal).toFixed(2)} (owed to you)\n\n`;
-        
-        text += `📋 PENDING SETTLEMENTS\n`;
-        text += `----------------------\n`;
-        const pending = personSettlements.filter(s => !s.paid);
+        text += `💰 SUMMARY\nTotal Pending: ₹${pendingTotal.toFixed(2)}\nTotal Paid: ₹${paidTotal.toFixed(2)}\n\n`;
+        text += `📋 PENDING SETTLEMENTS\n----------------------\n`;
+        const pending = ps.filter(s => !s.paid);
         if (pending.length > 0) {
           pending.forEach((s, idx) => {
-            text += `${idx + 1}. ${s.description}\n`;
-            text += `   Date: ${s.date}\n`;
-            text += `   Amount: ₹${s.perPersonAmount.toFixed(2)}\n`;
-            text += `   Category: ${s.category}\n`;
-            text += `   Paid by: ${s.paidBy}\n\n`;
+            text += `${idx + 1}. ${s.description}\n   Date: ${s.date}\n   Amount: ₹${s.perPersonAmount.toFixed(2)}\n   Category: ${s.category}\n\n`;
           });
-        } else {
-          text += `No pending settlements\n\n`;
-        }
-        
-        text += `✅ COMPLETED SETTLEMENTS\n`;
-        text += `------------------------\n`;
-        const paid = personSettlements.filter(s => s.paid);
+        } else { text += `No pending settlements\n\n`; }
+        text += `✅ COMPLETED SETTLEMENTS\n------------------------\n`;
+        const paid = ps.filter(s => s.paid);
         if (paid.length > 0) {
           paid.forEach((s, idx) => {
-            text += `${idx + 1}. ${s.description}\n`;
-            text += `   Date: ${s.date}\n`;
-            text += `   Amount: ₹${s.perPersonAmount.toFixed(2)}\n`;
-            text += `   Paid on: ${new Date(s.paidDate || s.date).toLocaleDateString()}\n\n`;
+            text += `${idx + 1}. ${s.description}\n   Date: ${s.date}\n   Amount: ₹${s.perPersonAmount.toFixed(2)}\n\n`;
           });
-        } else {
-          text += `No completed settlements\n\n`;
-        }
-        
-        text += `================================\n`;
-        text += `Generated by MoneyWise on ${new Date().toLocaleDateString()}`;
-        
+        } else { text += `No completed settlements\n\n`; }
+        text += `================================\nGenerated by MoneyWise on ${new Date().toLocaleDateString()}`;
         return text;
       };
 
-      // share helpers
-      const shareViaWhatsApp = (personName) => {
-        const text = generateSettlementText(personName);
-        const encodedText = encodeURIComponent(text);
-        window.open(`https://wa.me/?text=${encodedText}`, '_blank');
-        setShowShareModal(false);
-      };
-
-      const shareViaEmail = (personName) => {
-        const text = generateSettlementText(personName);
-        const subject = encodeURIComponent(`Settlement History for ${personName}`);
-        const body = encodeURIComponent(text);
-        window.open(`mailto:?subject=${subject}&body=${body}`, '_blank');
-        setShowShareModal(false);
-      };
-
-      const shareViaSMS = (personName) => {
-        const text = generateSettlementText(personName);
-        const encodedText = encodeURIComponent(text);
-        window.open(`sms:?body=${encodedText}`, '_blank');
-        setShowShareModal(false);
-      };
-
-      const copyToClipboard = (personName) => {
-        const text = generateSettlementText(personName);
-        navigator.clipboard.writeText(text).then(() => {
-          alert('Settlement history copied to clipboard!');
-          setShowShareModal(false);
-        }).catch(err => {
-          console.error('Failed to copy:', err);
-          alert('Failed to copy to clipboard');
-        });
-      };
+      const shareViaWhatsApp = (p) => { window.open(`https://wa.me/?text=${encodeURIComponent(generateSettlementText(p))}`, '_blank'); setShowShareModal(false); };
+      const shareViaEmail = (p) => { window.open(`mailto:?subject=${encodeURIComponent(`Settlement History for ${p}`)}&body=${encodeURIComponent(generateSettlementText(p))}`, '_blank'); setShowShareModal(false); };
+      const shareViaSMS = (p) => { window.open(`sms:?body=${encodeURIComponent(generateSettlementText(p))}`, '_blank'); setShowShareModal(false); };
+      const copyToClipboard = (p) => { navigator.clipboard.writeText(generateSettlementText(p)).then(() => { alert('Copied!'); setShowShareModal(false); }); };
 
       const ShareModal = ({ person, onClose }) => {
         if (!person) return null;
-        
         return (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" onClick={onClose}>
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4" onClick={e => e.stopPropagation()}>
-              <h3 className="text-lg font-semibold mb-4">Share {person}'s Settlement History</h3>
-              
+            <div style={{background:'var(--mw-ivory)', borderRadius:16, padding:24, maxWidth:360, width:'90%', border:'1px solid var(--mw-border)'}} onClick={e => e.stopPropagation()}>
+              <h3 className="text-lg font-semibold mb-4" style={{color:'var(--mw-teal-dark)'}}>Share {person}'s History</h3>
               <div className="space-y-3">
-                <button
-                  onClick={() => shareViaWhatsApp(person)}
-                  className="w-full p-3 bg-green-500 text-white rounded-lg hover:bg-green-600 flex items-center justify-center gap-2"
-                >
-                  <i className="fab fa-whatsapp text-xl"></i>
-                  Share via WhatsApp
-                </button>
-                
-                <button
-                  onClick={() => shareViaEmail(person)}
-                  className="w-full p-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 flex items-center justify-center gap-2"
-                >
-                  <i className="fas fa-envelope text-xl" style={{color:"black"}}></i>
-                  Share via Email
-                </button>
-                
-                <button
-                  onClick={() => shareViaSMS(person)}
-                  className="w-full p-3 bg-purple-500 text-white rounded-lg hover:bg-purple-600 flex items-center justify-center gap-2"
-                >
-                  <i className="fas fa-comment text-xl" style={{color:"black"}}></i>
-                  Share via SMS
-                </button>
-                
-                <button
-                  onClick={() => copyToClipboard(person)}
-                  className="w-full p-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 flex items-center justify-center gap-2"
-                >
-                  <i className="fas fa-copy text-xl" style={{color:"black"}}></i>
-                  Copy to Clipboard
-                </button>
-                
-                <button
-                  onClick={onClose}
-                  className="w-full p-3 bg-red-500 text-white rounded-lg hover:bg-red-600"
-                >
+                {[
+                  { label:'WhatsApp', icon:'fab fa-whatsapp', bg:'#25D366', fn: () => shareViaWhatsApp(person) },
+                  { label:'Email', icon:'fas fa-envelope', bg:'var(--mw-teal)', fn: () => shareViaEmail(person) },
+                  { label:'SMS', icon:'fas fa-comment', bg:'var(--mw-gold)', fn: () => shareViaSMS(person) },
+                  { label:'Copy to Clipboard', icon:'fas fa-copy', bg:'#6b7280', fn: () => copyToClipboard(person) },
+                ].map(btn => (
+                  <button key={btn.label} onClick={btn.fn}
+                    style={{background:btn.bg, color:'white', border:'none', borderRadius:10, padding:'10px 16px', width:'100%', cursor:'pointer', display:'flex', alignItems:'center', gap:10, fontSize:'0.9rem', fontWeight:500}}>
+                    <i className={btn.icon}></i>{btn.label}
+                  </button>
+                ))}
+                <button onClick={onClose}
+                  style={{background:'var(--mw-sand-dark)', color:'var(--mw-text)', border:'none', borderRadius:10, padding:'10px 16px', width:'100%', cursor:'pointer', fontSize:'0.9rem'}}>
                   Cancel
                 </button>
               </div>
@@ -3674,117 +3772,190 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
         );
       };
 
+      const fmtMonth = (ym) => {
+        if (!ym || ym === 'all') return 'All Months';
+        const d = new Date(ym + '-01');
+        return d.toLocaleDateString('en-IN', { month:'long', year:'numeric' });
+      };
+
       return (
-        <div className="bg-white dark:bg-gray-800 p-4 rounded shadow">
+        <div style={{background:'white', borderRadius:16, padding:20, boxShadow:'0 4px 20px rgba(26,107,114,0.08)', border:'1px solid var(--mw-border)'}}>
           {showShareModal && (
-            <ShareModal 
-              person={selectedPersonForShare} 
-              onClose={() => {
-                setShowShareModal(false);
-                setSelectedPersonForShare(null);
-              }} 
-            />
+            <ShareModal person={selectedPersonForShare} onClose={() => { setShowShareModal(false); setSelectedPersonForShare(null); }} />
           )}
-          <div className="flex justify-between items-center mb-3">
-            <h2 className="font-semibold text-lg">👥 Person-wise Settlements</h2>
-            <select 
-              value={filterPerson} 
-              onChange={(e) => setFilterPerson(e.target.value)}
-              className="p-2 rounded bg-gray-100 dark:bg-gray-700 text-sm"
-            >
-              <option value="all">All Persons</option>
-              {personNames.map(name => (
-                <option key={name} value={name}>{name}</option>
-              ))}
-            </select>
+
+          {/* ── Header ── */}
+          <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:16, flexWrap:'wrap', gap:10}}>
+            <div>
+              <h2 style={{fontSize:'1.15rem', fontWeight:700, color:'var(--mw-teal-dark)', margin:0}}>
+                <i className="fas fa-users" style={{marginRight:8, color:'var(--mw-teal)'}}></i>Person-wise Settlements
+              </h2>
+              <div style={{fontSize:'0.8rem', color:'var(--mw-text-muted)', marginTop:3}}>Track who owes you money across months</div>
+            </div>
+            <div style={{display:'flex', gap:8, flexWrap:'wrap'}}>
+              {/* Person filter */}
+              <select value={filterPerson} onChange={e => setFilterPerson(e.target.value)}
+                style={{padding:'6px 12px', borderRadius:8, border:'1px solid var(--mw-border)', background:'var(--mw-sand)', fontSize:'0.82rem', color:'var(--mw-text)', cursor:'pointer'}}>
+                <option value="all">👥 All People</option>
+                {personNames.map(n => <option key={n} value={n}>👤 {n}</option>)}
+              </select>
+              {/* Month filter */}
+              <select value={filterMonth} onChange={e => setFilterMonth(e.target.value)}
+                style={{padding:'6px 12px', borderRadius:8, border:'1px solid var(--mw-border)', background:'var(--mw-sand)', fontSize:'0.82rem', color:'var(--mw-text)', cursor:'pointer'}}>
+                <option value="all">📅 All Months</option>
+                {settlementMonths.map(m => <option key={m} value={m}>{fmtMonth(m)}</option>)}
+              </select>
+            </div>
           </div>
-          
-          {pendingSettlements.length === 0 ? (
-            <p className="text-gray-500 dark:text-gray-400 p-2">No pending settlements</p>
-          ) : (
-            <div className="space-y-3 mb-4">
-              <h3 className="font-medium text-red-600 dark:text-red-400">Pending Payments</h3>
-              {pendingSettlements.map(settlement => (
-                <div key={settlement.id} className="p-3 bg-red-50 dark:bg-red-900/20 rounded border border-red-100 dark:border-red-800">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <div className="font-medium">{settlement.description}</div>
-                      <div className="text-sm text-gray-600 dark:text-gray-400">
-                        Date: {settlement.date} • With: {settlement.personName}
-                      </div>
-                      <div className="text-sm">
-                        Total: ₹{settlement.totalAmount.toFixed(2)} • 
-                        {settlement.numPeople} people • 
-                        Each pays: ₹{settlement.perPersonAmount.toFixed(2)}
-                      </div>
-                      <div className="text-sm text-blue-600 dark:text-blue-400">
-                        Category: {settlement.category}
-                      </div>
+
+          {/* ── Summary chips ── */}
+          <div style={{display:'flex', gap:10, marginBottom:16, flexWrap:'wrap'}}>
+            <div style={{flex:1, minWidth:130, background:'linear-gradient(135deg,var(--mw-teal-light),#e8f8f9)', borderRadius:12, padding:'12px 16px', border:'1px solid rgba(26,107,114,0.15)'}}>
+              <div style={{fontSize:'0.72rem', color:'var(--mw-teal)', fontWeight:600, textTransform:'uppercase', letterSpacing:'0.5px'}}>Current Pending</div>
+              <div style={{fontSize:'1.4rem', fontWeight:700, color:'var(--mw-teal-dark)'}}>₹{grandPending.toFixed(0)}</div>
+              <div style={{fontSize:'0.75rem', color:'var(--mw-text-muted)'}}>{pendingSettlements.length} settlement{pendingSettlements.length !== 1 ? 's' : ''}</div>
+            </div>
+            {carriedTotal > 0 && (
+              <div style={{flex:1, minWidth:130, background:'linear-gradient(135deg,#fdf4e7,#fef9f0)', borderRadius:12, padding:'12px 16px', border:'1px solid rgba(184,134,58,0.2)'}}>
+                <div style={{fontSize:'0.72rem', color:'var(--mw-gold)', fontWeight:600, textTransform:'uppercase', letterSpacing:'0.5px'}}>Carried from {fmtMonth(prevYM)}</div>
+                <div style={{fontSize:'1.4rem', fontWeight:700, color:'var(--mw-gold)'}}>₹{carriedTotal.toFixed(0)}</div>
+                <div style={{fontSize:'0.75rem', color:'var(--mw-text-muted)'}}>{carriedForward.length} unpaid from last month</div>
+              </div>
+            )}
+            <div style={{flex:1, minWidth:130, background:'linear-gradient(135deg,#e8f5ef,#f0fbf6)', borderRadius:12, padding:'12px 16px', border:'1px solid rgba(46,125,87,0.15)'}}>
+              <div style={{fontSize:'0.72rem', color:'var(--mw-success)', fontWeight:600, textTransform:'uppercase', letterSpacing:'0.5px'}}>Recovered</div>
+              <div style={{fontSize:'1.4rem', fontWeight:700, color:'var(--mw-success)'}}>₹{completedSettlements.reduce((s,x)=>s+x.perPersonAmount,0).toFixed(0)}</div>
+              <div style={{fontSize:'0.75rem', color:'var(--mw-text-muted)'}}>{completedSettlements.length} paid</div>
+            </div>
+          </div>
+
+          {/* ── Carried forward from previous month ── */}
+          {carriedForward.length > 0 && (
+            <div style={{marginBottom:18}}>
+              <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:10}}>
+                <h3 style={{fontSize:'0.9rem', fontWeight:700, color:'var(--mw-gold)', margin:0}}>
+                  <i className="fas fa-clock" style={{marginRight:6}}></i>Pending from {fmtMonth(prevYM)} (Carried Forward)
+                </h3>
+                <button onClick={() => setShowPrevPending(v => !v)}
+                  style={{fontSize:'0.75rem', color:'var(--mw-gold)', background:'var(--mw-gold-light)', border:'1px solid rgba(184,134,58,0.3)', borderRadius:6, padding:'3px 8px', cursor:'pointer'}}>
+                  {showPrevPending ? 'Hide' : 'Show'}
+                </button>
+              </div>
+              {showPrevPending && carriedForward.map(s => (
+                <div key={s.id} style={{background:'linear-gradient(135deg,#fffbf0,#fdf6e3)', border:'1px solid #e8c87a', borderRadius:12, padding:'12px 16px', marginBottom:8, display:'flex', justifyContent:'space-between', alignItems:'flex-start', gap:10}}>
+                  <div style={{flex:1}}>
+                    <div style={{fontWeight:600, color:'var(--mw-text)', marginBottom:3}}>{s.description}</div>
+                    <div style={{fontSize:'0.78rem', color:'var(--mw-text-muted)', marginBottom:4}}>
+                      <i className="fas fa-calendar-alt" style={{marginRight:4, color:'var(--mw-gold)'}}></i>{s.date}
+                      <span style={{margin:'0 8px'}}>•</span>
+                      <i className="fas fa-user" style={{marginRight:4, color:'var(--mw-gold)'}}></i>{s.personName}
                     </div>
-                    <div className="flex gap-2">
-                      <button 
-                        onClick={() => onMarkAsPaid(settlement.id)}
-                        className="px-3 py-1 bg-green-500 text-white rounded text-sm hover:bg-green-600"
-                      >
-                        Mark Paid
-                      </button>
-                      <button 
-                        onClick={() => onDelete(settlement.id)}
-                        className="px-3 py-1 bg-red-500 text-white rounded text-sm hover:bg-red-600"
-                      >
-                        Delete
-                      </button>
-                    </div>
+                    <div style={{fontSize:'0.82rem', color:'var(--mw-gold)', fontWeight:700}}>₹{s.perPersonAmount.toFixed(2)} <span style={{fontWeight:400, color:'var(--mw-text-muted)'}}>pending since last month</span></div>
+                  </div>
+                  <div style={{display:'flex', flexDirection:'column', gap:6, flexShrink:0}}>
+                    <button onClick={() => onMarkAsPaid(s.id)}
+                      style={{padding:'5px 12px', background:'var(--mw-success)', color:'white', border:'none', borderRadius:7, fontSize:'0.78rem', cursor:'pointer', fontWeight:600}}>
+                      ✓ Mark Paid
+                    </button>
+                    <button onClick={() => onDelete(s.id)}
+                      style={{padding:'5px 12px', background:'#fee2e2', color:'var(--mw-danger)', border:'none', borderRadius:7, fontSize:'0.78rem', cursor:'pointer'}}>
+                      Remove
+                    </button>
                   </div>
                 </div>
               ))}
             </div>
           )}
 
-          {completedSettlements.length > 0 && (
-            <div className="space-y-3">
-              <h3 className="font-medium text-green-600 dark:text-green-400">Completed Payments</h3>
-              {completedSettlements.map(settlement => (
-                <div key={settlement.id} className="p-3 bg-green-50 dark:bg-green-900/20 rounded border border-green-100 dark:border-green-800 opacity-75">
-                  <div className="flex justify-between">
-                    <div>
-                      <div className="font-medium line-through">{settlement.description}</div>
-                      <div className="text-sm text-gray-600 dark:text-gray-400">
-                        Date: {settlement.date} • With: {settlement.personName}
-                      </div>
+          {/* ── Current pending ── */}
+          {pendingSettlements.length === 0 ? (
+            <div style={{textAlign:'center', padding:'28px 16px', color:'var(--mw-text-muted)', background:'var(--mw-sand)', borderRadius:12}}>
+              <i className="fas fa-check-circle" style={{fontSize:'2rem', color:'var(--mw-success)', marginBottom:8, display:'block'}}></i>
+              No pending settlements for {filterPerson === 'all' ? 'anyone' : filterPerson} {filterMonth !== 'all' ? `in ${fmtMonth(filterMonth)}` : ''}
+            </div>
+          ) : (
+            <div style={{marginBottom:18}}>
+              <h3 style={{fontSize:'0.9rem', fontWeight:700, color:'var(--mw-danger)', margin:'0 0 10px 0'}}>
+                <i className="fas fa-hourglass-half" style={{marginRight:6}}></i>Pending Payments
+                {filterMonth !== 'all' && <span style={{fontWeight:400, color:'var(--mw-text-muted)', marginLeft:8}}>— {fmtMonth(filterMonth)}</span>}
+              </h3>
+              {pendingSettlements.map(s => (
+                <div key={s.id} style={{background:'linear-gradient(135deg,#fff8f8,#fff2f2)', border:'1px solid #f5c6c6', borderRadius:12, padding:'12px 16px', marginBottom:8, display:'flex', justifyContent:'space-between', alignItems:'flex-start', gap:10}}>
+                  <div style={{flex:1}}>
+                    <div style={{fontWeight:600, color:'var(--mw-text)', marginBottom:3}}>{s.description}</div>
+                    <div style={{fontSize:'0.78rem', color:'var(--mw-text-muted)', marginBottom:4}}>
+                      <i className="fas fa-calendar-alt" style={{marginRight:4, color:'var(--mw-danger)'}}></i>{s.date}
+                      <span style={{margin:'0 8px'}}>•</span>
+                      <i className="fas fa-user" style={{marginRight:4, color:'var(--mw-teal)'}}></i>{s.personName}
+                      <span style={{margin:'0 8px'}}>•</span>
+                      <i className="fas fa-tag" style={{marginRight:4}}></i>{s.category}
                     </div>
-                    <span className="text-green-600 dark:text-green-400">✓ Paid</span>
+                    <div style={{fontSize:'0.82rem'}}>
+                      <span style={{color:'var(--mw-text-muted)'}}>Total: ₹{s.totalAmount?.toFixed(2)} ({s.numPeople} people)</span>
+                      <span style={{marginLeft:12, color:'var(--mw-danger)', fontWeight:700}}>₹{s.perPersonAmount.toFixed(2)} owed</span>
+                    </div>
+                  </div>
+                  <div style={{display:'flex', flexDirection:'column', gap:6, flexShrink:0}}>
+                    <button onClick={() => onMarkAsPaid(s.id)}
+                      style={{padding:'5px 12px', background:'var(--mw-success)', color:'white', border:'none', borderRadius:7, fontSize:'0.78rem', cursor:'pointer', fontWeight:600}}>
+                      ✓ Mark Paid
+                    </button>
+                    <button onClick={() => onDelete(s.id)}
+                      style={{padding:'5px 12px', background:'#fee2e2', color:'var(--mw-danger)', border:'none', borderRadius:7, fontSize:'0.78rem', cursor:'pointer'}}>
+                      Delete
+                    </button>
                   </div>
                 </div>
               ))}
             </div>
           )}
-          
-          <div className="mt-3">
-            <h4 className="font-medium mb-2">Person-wise Summary</h4>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
-              {Object.entries(personTotals).map(([person, amount]) => (
-                <div key={person} className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded flex justify-between items-center">
+
+          {/* ── Completed ── */}
+          {completedSettlements.length > 0 && (
+            <div style={{marginBottom:18}}>
+              <h3 style={{fontSize:'0.9rem', fontWeight:700, color:'var(--mw-success)', margin:'0 0 10px 0'}}>
+                <i className="fas fa-check-double" style={{marginRight:6}}></i>Recovered Payments
+              </h3>
+              {completedSettlements.map(s => (
+                <div key={s.id} style={{background:'linear-gradient(135deg,#f0fbf6,#e8f5ef)', border:'1px solid #b4e0c8', borderRadius:12, padding:'12px 16px', marginBottom:6, display:'flex', justifyContent:'space-between', alignItems:'center', opacity:0.85}}>
                   <div>
-                    <div className="font-medium">{person}</div>
-                    <div className="text-lg font-bold text-red-600">₹{amount.toFixed(2)}</div>
-                    <div className="text-sm text-gray-600">pending</div>
+                    <div style={{fontWeight:500, textDecoration:'line-through', color:'var(--mw-text-muted)'}}>{s.description}</div>
+                    <div style={{fontSize:'0.78rem', color:'var(--mw-text-muted)'}}>
+                      {s.date} • {s.personName} • ₹{s.perPersonAmount.toFixed(2)}
+                    </div>
                   </div>
-                  <button
-                    onClick={() => {
-                      setSelectedPersonForShare(person);
-                      setShowShareModal(true);
-                    }}
-                    className="px-2 py-1 bg-blue-500 text-white rounded text-sm hover:bg-blue-600 flex items-center gap-1"
-                    title={`Share ${person}'s settlement history`}
-                  >
-                    <i className="fas fa-share-alt" style={{color:"black"}}></i>
-                    <span className="hidden sm:inline">Share</span>
-                  </button>
+                  <span style={{color:'var(--mw-success)', fontWeight:700, fontSize:'0.85rem'}}>✓ Paid</span>
                 </div>
               ))}
             </div>
-          </div>
+          )}
+          
+          {/* ── Person-wise summary cards ── */}
+          {Object.keys(personTotals).length > 0 && (
+            <div>
+              <h4 style={{fontSize:'0.9rem', fontWeight:700, color:'var(--mw-teal-dark)', marginBottom:12}}>
+                <i className="fas fa-chart-bar" style={{marginRight:6, color:'var(--mw-teal)'}}></i>Person-wise Summary (All Pending)
+              </h4>
+              <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(200px, 1fr))', gap:10}}>
+                {Object.entries(personTotals).map(([person, amount]) => (
+                  <div key={person} style={{background:'linear-gradient(135deg,var(--mw-teal-light),#edf8f9)', border:'1px solid rgba(26,107,114,0.2)', borderRadius:12, padding:'14px 16px', display:'flex', justifyContent:'space-between', alignItems:'center'}}>
+                    <div>
+                      <div style={{fontWeight:600, color:'var(--mw-teal-dark)', marginBottom:2}}>
+                        <i className="fas fa-user-circle" style={{marginRight:6, color:'var(--mw-teal)'}}></i>{person}
+                      </div>
+                      <div style={{fontSize:'1.25rem', fontWeight:700, color:'var(--mw-danger)'}}>₹{amount.toFixed(0)}</div>
+                      <div style={{fontSize:'0.72rem', color:'var(--mw-text-muted)'}}>total pending</div>
+                    </div>
+                    <button onClick={() => { setSelectedPersonForShare(person); setShowShareModal(true); }}
+                      style={{padding:'7px 12px', background:'var(--mw-teal)', color:'white', border:'none', borderRadius:8, fontSize:'0.78rem', cursor:'pointer', display:'flex', alignItems:'center', gap:5}}>
+                      <i className="fas fa-share-alt"></i>
+                      <span>Share</span>
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       );
     }
@@ -4354,23 +4525,53 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
       };
 
       return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900">
-          <form onSubmit={handleSubmit} className="p-6 max-w-md w-full mx-4 bg-white dark:bg-gray-800 shadow rounded space-y-4">
-            <h2 className="text-xl font-semibold text-center">Login to MoneyWise</h2>
-            <div className="flex gap-4 justify-center">
-              <label className="flex items-center"><input type="radio" checked={mode === "email"} onChange={() => setMode("email")} className="mr-2" /> Email</label>
-              <label className="flex items-center"><input type="radio" checked={mode === "username"} onChange={() => setMode("username")} className="mr-2" /> Guest Username</label>
+        <div style={{minHeight:'100vh', display:'flex', alignItems:'center', justifyContent:'center', background:'linear-gradient(145deg,#e8f5f6 0%,#f7f1e8 100%)'}}>
+          <div style={{width:'100%', maxWidth:420, margin:'0 20px'}}>
+            {/* Logo/Brand */}
+            <div style={{textAlign:'center', marginBottom:32}}>
+              <div style={{width:72, height:72, borderRadius:'50%', background:'linear-gradient(135deg,var(--mw-teal-dark),var(--mw-teal-mid))', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 16px', boxShadow:'0 8px 32px rgba(26,107,114,0.3)'}}>
+                <i className="fas fa-coins" style={{fontSize:'2rem', color:'var(--mw-gold-mid)'}}></i>
+              </div>
+              <h1 style={{fontFamily:"'Playfair Display',serif", fontSize:'2rem', fontWeight:800, color:'var(--mw-teal-dark)', margin:0}}>MoneyWise</h1>
+              <p style={{color:'var(--mw-gold)', fontWeight:600, fontSize:'0.8rem', letterSpacing:'1.5px', textTransform:'uppercase', marginTop:4}}>Your Personal Finance Manager</p>
             </div>
-            <input
-              type="text"
-              placeholder={mode === "email" ? "example@domain.com" : "Guest123"}
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              className="w-full p-2 rounded bg-gray-100 dark:bg-gray-700"
-              required
-            />
-            <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">Log In</button>
-          </form>
+
+            <form onSubmit={handleSubmit} style={{background:'white', borderRadius:20, padding:'32px 28px', boxShadow:'0 12px 40px rgba(26,107,114,0.12)', border:'1px solid var(--mw-border)'}}>
+              <h2 style={{fontWeight:700, fontSize:'1.25rem', color:'var(--mw-teal-dark)', marginBottom:6, textAlign:'center'}}>Welcome back</h2>
+              <p style={{fontSize:'0.82rem', color:'var(--mw-text-muted)', textAlign:'center', marginBottom:22}}>Sign in to access your financial dashboard</p>
+
+              <div style={{display:'flex', gap:16, justifyContent:'center', marginBottom:20}}>
+                <label style={{display:'flex', alignItems:'center', gap:6, cursor:'pointer', fontSize:'0.88rem', color: mode==='email' ? 'var(--mw-teal)' : 'var(--mw-text-muted)', fontWeight: mode==='email' ? 600 : 400}}>
+                  <input type="radio" checked={mode === "email"} onChange={() => setMode("email")} style={{accentColor:'var(--mw-teal)'}} /> Email
+                </label>
+                <label style={{display:'flex', alignItems:'center', gap:6, cursor:'pointer', fontSize:'0.88rem', color: mode==='username' ? 'var(--mw-teal)' : 'var(--mw-text-muted)', fontWeight: mode==='username' ? 600 : 400}}>
+                  <input type="radio" checked={mode === "username"} onChange={() => setMode("username")} style={{accentColor:'var(--mw-teal)'}} /> Guest Username
+                </label>
+              </div>
+
+              <div style={{position:'relative', marginBottom:20}}>
+                <i className={`fas ${mode==='email' ? 'fa-envelope' : 'fa-user'}`} style={{position:'absolute', left:14, top:'50%', transform:'translateY(-50%)', color:'var(--mw-teal)', fontSize:'0.9rem'}}></i>
+                <input
+                  type="text"
+                  placeholder={mode === "email" ? "you@example.com" : "Guest123"}
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  style={{width:'100%', padding:'11px 14px 11px 40px', borderRadius:10, border:'1.5px solid var(--mw-border)', fontSize:'0.95rem', background:'var(--mw-ivory)', boxSizing:'border-box', outline:'none', transition:'border-color 0.2s'}}
+                  onFocus={e => e.target.style.borderColor='var(--mw-teal)'}
+                  onBlur={e => e.target.style.borderColor='var(--mw-border)'}
+                  required
+                />
+              </div>
+
+              <button type="submit" style={{width:'100%', padding:'12px', background:'linear-gradient(135deg,var(--mw-teal-dark),var(--mw-teal-mid))', color:'white', border:'none', borderRadius:10, fontSize:'1rem', fontWeight:700, cursor:'pointer', boxShadow:'0 4px 16px rgba(26,107,114,0.3)', letterSpacing:'0.3px'}}>
+                Enter MoneyWise →
+              </button>
+
+              <p style={{textAlign:'center', fontSize:'0.73rem', color:'var(--mw-text-muted)', marginTop:16}}>
+                Your data stays on your device. No account required.
+              </p>
+            </form>
+          </div>
         </div>
       );
     }
@@ -6780,7 +6981,9 @@ ${recentTx || 'No transactions'}
 Respond helpfully. If data is insufficient, say so and suggest what to add.`;
       };
 
-      const [apiKey, setApiKey] = React.useState(() => localStorage.getItem('moneywise_apikey') || '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');
+      const [apiKey, setApiKey] = React.useState(() => localStorage.getItem('moneywise_apikey') || '');
+      const [showKeyInput, setShowKeyInput] = React.useState(false);
+      const [tempKey, setTempKey] = React.useState('');
 
       // Auto-save the API key
       React.useEffect(() => {
@@ -6859,22 +7062,64 @@ Respond helpfully. If data is insufficient, say so and suggest what to add.`;
             <div className="ask-engine-panel">
               <div className="ask-engine-header">
                 <div className="flex items-center gap-2">
-                  <span style={{ fontSize:'1.2rem' }}>🤖</span>
+                  <span style={{ fontSize:'1.25rem' }}>💰</span>
                   <div>
-                    <div className="font-semibold text-sm">MoneyWise Ask Engine</div>
-                    <div style={{ fontSize:'0.7rem', opacity:0.85 }}>Powered by Claude AI</div>
+                    <div className="font-semibold text-sm" style={{letterSpacing:'0.3px'}}>MoneyWise Ask Engine</div>
+                    <div style={{ fontSize:'0.68rem', opacity:0.8 }}>Powered by Claude AI</div>
                   </div>
                 </div>
-                <div style={{ display:'flex', gap:6, alignItems:'center' }}>
-                  <button onClick={() => setMessages([{ role:'ai', text:"Hi! Ask me anything about your finances!" }])}
-                    style={{ background:'none', border:'none', color:'rgba(255,255,255,0.8)', cursor:'pointer', fontSize:'0.75rem' }}>
+                <div style={{ display:'flex', gap:8, alignItems:'center' }}>
+                  <button onClick={() => setShowKeyInput(k => !k)}
+                    title="Set API Key"
+                    style={{ background:'rgba(255,255,255,0.18)', border:'none', color:'white', cursor:'pointer', fontSize:'0.75rem', borderRadius:'6px', padding:'4px 8px', display:'flex', alignItems:'center', gap:4 }}>
+                    <i className="fas fa-key" style={{fontSize:'0.7rem'}}></i>
+                    <span>{apiKey ? '••key' : 'Add Key'}</span>
+                  </button>
+                  <button onClick={() => setMessages([{ role:'ai', text:"Hi! Ask me anything about your finances! 💰" }])}
+                    style={{ background:'none', border:'none', color:'rgba(255,255,255,0.75)', cursor:'pointer', fontSize:'0.75rem' }}>
                     Clear
                   </button>
                 </div>
               </div>
 
-              {/* API key setup panel - REMOVED */}
-              {/* No key — prompt to add - REMOVED */}
+              {/* API Key setup panel */}
+              {showKeyInput && (
+                <div className="ask-key-input-wrap">
+                  <div style={{marginBottom:6, fontWeight:600, color: 'var(--mw-gold)'}}>
+                    <i className="fas fa-key" style={{marginRight:6}}></i>Anthropic API Key
+                  </div>
+                  <div style={{fontSize:'0.72rem', marginBottom:8, opacity:0.75}}>
+                    Get your key from <a href="https://console.anthropic.com" target="_blank" style={{color:'var(--mw-teal)', textDecoration:'underline'}}>console.anthropic.com</a>. Stored locally only.
+                  </div>
+                  <div style={{display:'flex', gap:6}}>
+                    <input
+                      type="password"
+                      placeholder="sk-ant-api03-..."
+                      value={tempKey}
+                      onChange={e => setTempKey(e.target.value)}
+                      style={{flex:1, padding:'6px 10px', borderRadius:8, border:'1px solid var(--mw-border)', fontSize:'0.8rem', background:'white'}}
+                    />
+                    <button
+                      onClick={() => { if(tempKey.trim()) { setApiKey(tempKey.trim()); localStorage.setItem('moneywise_apikey', tempKey.trim()); setTempKey(''); setShowKeyInput(false); }}}
+                      style={{padding:'6px 12px', borderRadius:8, background:'var(--mw-teal)', color:'white', border:'none', cursor:'pointer', fontSize:'0.8rem', fontWeight:600}}>
+                      Save
+                    </button>
+                    {apiKey && <button
+                      onClick={() => { setApiKey(''); localStorage.removeItem('moneywise_apikey'); setShowKeyInput(false); }}
+                      style={{padding:'6px 10px', borderRadius:8, background:'#fee2e2', color:'#b91c1c', border:'none', cursor:'pointer', fontSize:'0.8rem'}}>
+                      Clear
+                    </button>}
+                  </div>
+                </div>
+              )}
+
+              {/* No key prompt */}
+              {!apiKey && !showKeyInput && (
+                <div style={{padding:'14px 16px', background:'var(--mw-gold-light)', borderBottom:'1px solid #e0c08a', fontSize:'0.82rem'}}>
+                  <span style={{color:'var(--mw-gold)', fontWeight:600}}>⚠️ API Key required</span>
+                  <span style={{marginLeft:8, opacity:0.8}}>Tap the key button above to add your Anthropic key.</span>
+                </div>
+              )}
 
               <div className="ask-engine-messages" ref={msgsRef}>
                 {messages.map((m, i) => (
@@ -6893,13 +7138,13 @@ Respond helpfully. If data is insufficient, say so and suggest what to add.`;
               <div className="ask-engine-input-row">
                 <input
                   className="ask-engine-input"
-                  placeholder="Ask anything about your finances…"
+                  placeholder={apiKey ? "Ask anything about your finances…" : "Add API key first ↑"}
                   value={input}
                   onChange={e => setInput(e.target.value)}
                   onKeyDown={e => e.key === 'Enter' && !e.shiftKey && sendMessage()}
-                  disabled={loading}
+                  disabled={loading || !apiKey}
                 />
-                <button className="ask-engine-send" onClick={() => sendMessage()} disabled={loading || !input.trim()}>
+                <button className="ask-engine-send" onClick={() => sendMessage()} disabled={loading || !input.trim() || !apiKey}>
                   <i className="fas fa-paper-plane" style={{color:"white"}}></i>
                 </button>
               </div>
