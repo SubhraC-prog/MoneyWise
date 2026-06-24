@@ -3,937 +3,766 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MoneyWise</title>
+  <title>MoneyWise — Quantum Flux</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Playfair+Display:wght@400;700&family=Merriweather:wght@300;400;700&family=Crimson+Text:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-
   <style>
-    /* ═══════════════════════════════════════════
-       MONEYWISE — PREMIUM FINANCE THEME
-       Palette: Deep Teal · Warm Sand · Mutedd Gold
-    ═══════════════════════════════════════════ */
+    /* ═══════════════════════════════════════════════════════════════
+       MONEYWISE — QUANTUM FLUX THEME
+       Palette: Obsidian Void · Cyber Slate · Neo Mint · Electric Cyan
+    ═══════════════════════════════════════════════════════════════ */
+
+    /* ── Cross-browser compat fixes ── */
+    * { -webkit-user-select: none; user-select: text; box-sizing: border-box; }
+    input, textarea, select { -webkit-user-select: text; user-select: text; }
+    html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0B0F19; }
+    ::-webkit-scrollbar-thumb { background: #00D2FF44; border-radius: 3px; }
+
     :root {
-      --mw-teal:       #1a6b72;
-      --mw-teal-light: #e6f3f4;
-      --mw-teal-mid:   #2e8b92;
-      --mw-teal-dark:  #124d52;
-      --mw-gold:       #b8863a;
-      --mw-gold-light: #fdf4e7;
-      --mw-gold-mid:   #d4a057;
-      --mw-sand:       #f7f1e8;
-      --mw-sand-dark:  #ede5d6;
-      --mw-ivory:      #fdfaf5;
-      --mw-text:       #2c3e35;
-      --mw-text-muted: #6e7d73;
-      --mw-border:     #dde8e6;
-      --mw-success:    #2e7d57;
-      --mw-danger:     #b94040;
-      --mw-warn:       #c0832a;
+      /* ── Quantum Flux Color System ── */
+      --qf-void:          #0B0F19;   /* Primary Background — Obsidian Void */
+      --qf-slate:         #161F33;   /* Secondary Background — Cyber Slate */
+      --qf-slate-mid:     #1E2D4A;   /* Card borders / hover */
+      --qf-slate-light:   #263354;   /* Elevated surface */
+
+      --qf-mint:          #00F5A0;   /* Accent Positive — Neo Mint */
+      --qf-mint-dim:      #00F5A022; /* Glow fill */
+      --qf-cyan:          #00D2FF;   /* Accent Interactive — Electric Cyan */
+      --qf-cyan-dim:      #00D2FF22;
+      --qf-coral:         #FF4B72;   /* Alert / Negative — Pulse Coral */
+      --qf-coral-dim:     #FF4B7222;
+      --qf-gold:          #FFB547;   /* Warning / Neutral accent */
+      --qf-gold-dim:      #FFB54722;
+
+      --qf-text:          #E2E8F0;   /* Stellar White */
+      --qf-text-muted:    #94A3B8;   /* Nebula Gray */
+      --qf-border:        rgba(255,255,255,0.08);
+
+      /* Gradient shortcuts */
+      --grad-primary:     linear-gradient(135deg, #00D2FF, #00F5A0);
+      --grad-danger:      linear-gradient(135deg, #FF4B72, #FF8C42);
+      --grad-gold:        linear-gradient(135deg, #FFB547, #FFD700);
+      --grad-nav:         linear-gradient(135deg, #0D1526 0%, #161F33 100%);
+      --grad-card:        linear-gradient(135deg, rgba(22,31,51,0.65), rgba(22,31,51,0.45));
+
+      /* Glassmorphism card */
+      --glass-bg:         rgba(22, 31, 51, 0.65);
+      --glass-border:     1px solid rgba(255,255,255,0.08);
+      --glass-blur:       blur(12px);
+
+      /* Micro-glows */
+      --glow-mint:        0 0 20px rgba(0,245,160,0.25), 0 0 40px rgba(0,245,160,0.08);
+      --glow-cyan:        0 0 20px rgba(0,210,255,0.25), 0 0 40px rgba(0,210,255,0.08);
+      --glow-coral:       0 0 20px rgba(255,75,114,0.30), 0 0 40px rgba(255,75,114,0.10);
     }
 
-    body { 
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(145deg, #f0f7f7 0%, #f7f1e8 100%) !important;
-      color: var(--mw-text);
+    /* ── Reset & Base ── */
+    html, body {
+      font-family: 'Inter', 'Space Grotesk', system-ui, -apple-system, sans-serif;
+      background: var(--qf-void);
+      color: var(--qf-text);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
     }
-    
-    .dark body {
-      background: linear-gradient(145deg, #0e3035 0%, #1a2820 100%) !important;
-      color: #e8f0ed;
+
+    body {
+      background:
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(0,210,255,0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 90% 80%, rgba(0,245,160,0.04) 0%, transparent 55%),
+        var(--qf-void) !important;
     }
-  
-    .dropdown-item {
-      font-family: 'Poppins', sans-serif;
-      font-weight: 500;
+
+    /* Tailwind dark-mode overrides */
+    .dark body { background: var(--qf-void) !important; }
+
+    /* ── Typography ── */
+    h1, h2, h3 { font-family: 'Space Grotesk', 'Syne', sans-serif; font-weight: 700; color: var(--qf-text); }
+    .mono { font-variant-numeric: tabular-nums; font-feature-settings: "tnum"; letter-spacing: -0.02em; }
+
+    /* ── Glass Card ── */
+    .qf-card {
+      background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border: var(--glass-border);
+      border-radius: 16px;
     }
+    .qf-card:hover { border-color: rgba(0,210,255,0.18); }
 
     /* ── Navigation ── */
-    nav.bg-white {
-      background: linear-gradient(135deg, #ffffff 0%, #f7fbfb 100%) !important;
-      border-bottom: 2px solid var(--mw-teal-light) !important;
-      box-shadow: 0 2px 16px rgba(26,107,114,0.08) !important;
-    }
-    .dark nav.dark\:bg-gray-800 {
-      background: linear-gradient(135deg, #0a2428 0%, #0e3035 100%) !important;
-      border-bottom: 2px solid #1a4a50 !important;
+    nav.bg-white,
+    nav.dark\:bg-gray-800,
+    nav {
+      background: var(--grad-nav) !important;
+      border-bottom: 1px solid rgba(0,210,255,0.15) !important;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.4), 0 1px 0 rgba(0,210,255,0.1) !important;
     }
 
-    /* ── Cards / Panels ── */
+    /* ── Cards / Panels: all bg-white → glass ── */
     .bg-white {
-      background: #ffffff !important;
+      background: var(--glass-bg) !important;
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border: var(--glass-border) !important;
+      color: var(--qf-text) !important;
     }
-    .dark .bg-gray-800 {
-      background: #102a2e !important;
+    .dark .bg-gray-800,
+    .bg-gray-800 {
+      background: rgba(13,18,32,0.75) !important;
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border: var(--glass-border) !important;
+      color: var(--qf-text) !important;
     }
-    .bg-gray-50 {
-      background: var(--mw-sand) !important;
+    .bg-gray-50,
+    .bg-stone-50 {
+      background: rgba(22,31,51,0.5) !important;
     }
-    .dark .bg-gray-50 {
-      background: #0d2226 !important;
-    }
-
-    /* ── Quote container ── */
-    .quote-container {
-      background: linear-gradient(135deg, #fef9f0 0%, #f0f9fa 100%);
-      border-left: 5px solid var(--mw-gold-mid);
-    }
-    .dark .quote-container {
-      background: linear-gradient(135deg, #0e2a2e 0%, #162010 100%);
-      border-left: 5px solid var(--mw-gold);
-    }
-
-    /* ── Hover lift ── */
-    .hover-lift:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 20px 40px -10px rgba(26,107,114,0.15);
+    .dark .bg-gray-50,
+    .dark .bg-stone-50 {
+      background: rgba(11,15,25,0.6) !important;
     }
 
-    /* ── gradient overrides → teal/sand ── */
+    /* ── Gradient Section Cards ── */
     .bg-gradient-to-r.from-blue-50.to-indigo-50,
     .bg-gradient-to-r.from-blue-50.to-purple-50,
-    .bg-gradient-to-br.from-blue-50.to-cyan-50 {
-      background: linear-gradient(135deg, var(--mw-teal-light) 0%, #f0fbfc 100%) !important;
-    }
-    .dark .bg-gradient-to-r.from-blue-50.to-indigo-50,
-    .dark .bg-gradient-to-r.from-blue-50.to-purple-50,
-    .dark .bg-gradient-to-br.from-blue-50.to-cyan-50 {
-      background: linear-gradient(135deg, #0e2f35 0%, #0a2428 100%) !important;
+    .bg-gradient-to-br.from-blue-50.to-cyan-50,
+    .bg-gradient-to-r.from-blue-50.to-indigo-50.dark\:from-blue-900\/20 {
+      background: rgba(0,210,255,0.06) !important;
+      border: 1px solid rgba(0,210,255,0.15) !important;
     }
     .bg-gradient-to-r.from-green-50.to-emerald-50,
     .bg-gradient-to-r.from-emerald-50.to-teal-50 {
-      background: linear-gradient(135deg, #e8f5ef 0%, var(--mw-teal-light) 100%) !important;
-    }
-    .dark .bg-gradient-to-r.from-green-50.to-emerald-50,
-    .dark .bg-gradient-to-r.from-emerald-50.to-teal-50 {
-      background: linear-gradient(135deg, #102a1e 0%, #0e2f35 100%) !important;
+      background: rgba(0,245,160,0.06) !important;
+      border: 1px solid rgba(0,245,160,0.15) !important;
     }
     .bg-gradient-to-r.from-red-50.to-pink-50,
     .bg-gradient-to-br.from-red-50.to-pink-50 {
-      background: linear-gradient(135deg, #fdf0f0 0%, #fdf5f0 100%) !important;
-    }
-    .dark .bg-gradient-to-r.from-red-50.to-pink-50,
-    .dark .bg-gradient-to-br.from-red-50.to-pink-50 {
-      background: linear-gradient(135deg, #2a1010 0%, #2a1a10 100%) !important;
+      background: rgba(255,75,114,0.07) !important;
+      border: 1px solid rgba(255,75,114,0.15) !important;
     }
     .bg-gradient-to-r.from-purple-50.to-violet-50,
     .bg-gradient-to-br.from-purple-50.to-violet-50 {
-      background: linear-gradient(135deg, var(--mw-gold-light) 0%, #fdf7ee 100%) !important;
+      background: rgba(0,210,255,0.05) !important;
+      border: 1px solid rgba(0,210,255,0.12) !important;
     }
-    .dark .bg-gradient-to-r.from-purple-50.to-violet-50,
-    .dark .bg-gradient-to-br.from-purple-50.to-violet-50 {
-      background: linear-gradient(135deg, #2a2010 0%, #2a1a0a 100%) !important;
+    .bg-gradient-to-r.from-amber-50.to-orange-50,
+    .bg-gradient-to-br.from-amber-50.to-orange-50 {
+      background: rgba(255,181,71,0.07) !important;
+      border: 1px solid rgba(255,181,71,0.15) !important;
     }
 
-    /* ── Inputs ── */
-    .income-input, input, select, textarea {
-      background-color: var(--mw-ivory) !important;
-      border-color: var(--mw-border) !important;
+    /* ── Inputs / Forms ── */
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    input[type="month"],
+    input[type="file"],
+    input[type="email"],
+    select,
+    textarea,
+    .income-input {
+      background: rgba(22,31,51,0.7) !important;
+      border: 1px solid rgba(0,210,255,0.2) !important;
+      color: var(--qf-text) !important;
+      border-radius: 10px !important;
+      transition: border-color 0.2s, box-shadow 0.2s !important;
     }
-    .dark .income-input, .dark input, .dark select, .dark textarea {
-      background-color: #0e2a2e !important;
-      border-color: #1e4a50 !important;
-      color: #d8eeec !important;
-    }
-    .income-input:focus, input:focus, select:focus, textarea:focus {
-      box-shadow: 0 0 0 3px rgba(26,107,114,0.18) !important;
-      border-color: var(--mw-teal) !important;
+    input:focus,
+    select:focus,
+    textarea:focus,
+    .income-input:focus {
+      border-color: var(--qf-cyan) !important;
+      box-shadow: 0 0 0 3px rgba(0,210,255,0.15) !important;
       outline: none !important;
     }
+    input::placeholder,
+    textarea::placeholder { color: var(--qf-text-muted) !important; }
+    select option { background: var(--qf-slate); color: var(--qf-text); }
 
-    /* ── Primary action buttons ── */
-    .bg-blue-500 { background-color: var(--mw-teal) !important; }
-    .bg-blue-500:hover { background-color: var(--mw-teal-dark) !important; }
-    .bg-green-500 { background-color: var(--mw-success) !important; }
-    .bg-green-500:hover { background-color: #236145 !important; }
-    .bg-purple-500 { background-color: var(--mw-gold) !important; }
-    .bg-purple-500:hover { background-color: #9a6e2a !important; }
-
-    /* ── Status colors ── */
-    .bg-green-100 { background-color: #e8f5ef !important; }
-    .bg-yellow-100 { background-color: #fdf4e7 !important; }
-    .bg-red-100 { background-color: #fdf0f0 !important; }
-    .text-green-600 { color: var(--mw-success) !important; }
-    .text-red-600 { color: var(--mw-danger) !important; }
-    .text-blue-600 { color: var(--mw-teal) !important; }
-    .text-purple-600 { color: var(--mw-gold) !important; }
-
-/* ── Dropdown ── */
-    .dropdown-menu {
-      border: 1px solid var(--mw-border);
-      background: #ffffff;
-      box-shadow: 0 12px 40px rgba(26,107,114,0.15);
-    }
-    .dark .dropdown-menu {
-      background: #0e2a2e;
-      border-color: #1e4a50;
-      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
-    }
-    .dropdown-item:hover {
-      background-color: var(--mw-teal-light) !important;
-      color: var(--mw-teal-dark);
-    }
-    .dark .dropdown-item:hover {
-      background-color: #1a3d42 !important;
+    /* Checkbox / radio */
+    input[type="checkbox"],
+    input[type="radio"] {
+      accent-color: var(--qf-cyan) !important;
+      width: 16px !important; height: 16px !important;
     }
 
-    /* ── Share Modal Styles ── */
-.fab {
-  font-family: "Font Awesome 6 Brands";
-}
+    /* Form labels */
+    label { color: var(--qf-text-muted) !important; font-size: 0.82rem !important; font-weight: 500 !important; }
 
-.share-modal-overlay {
-  position: fixed;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10000;
-}
+    /* ── Buttons — primary ── */
+    .bg-blue-500,
+    button.bg-blue-500 {
+      background: var(--grad-primary) !important;
+      color: var(--qf-void) !important;
+      font-weight: 700 !important;
+      border: none !important;
+      box-shadow: var(--glow-cyan) !important;
+      border-radius: 10px !important;
+    }
+    .bg-blue-500:hover,
+    button.bg-blue-500:hover {
+      filter: brightness(1.1) !important;
+      box-shadow: 0 0 28px rgba(0,210,255,0.4), 0 0 56px rgba(0,210,255,0.15) !important;
+      transform: translateY(-1px) !important;
+    }
+    .bg-green-500,
+    button.bg-green-500 {
+      background: linear-gradient(135deg, var(--qf-mint), #00C87A) !important;
+      color: var(--qf-void) !important;
+      font-weight: 700 !important;
+      border: none !important;
+      border-radius: 10px !important;
+      box-shadow: var(--glow-mint) !important;
+    }
+    .bg-green-500:hover { filter: brightness(1.1) !important; transform: translateY(-1px) !important; }
+    .bg-red-500,
+    button.bg-red-500 {
+      background: var(--grad-danger) !important;
+      color: white !important;
+      font-weight: 700 !important;
+      border: none !important;
+      border-radius: 10px !important;
+    }
+    .bg-purple-500,
+    button.bg-purple-500 {
+      background: linear-gradient(135deg, #7C3AED, #A855F7) !important;
+      color: white !important; font-weight: 700 !important; border: none !important;
+      border-radius: 10px !important;
+    }
 
-.share-modal-content {
-  background: var(--mw-ivory);
-  border-radius: 16px;
-  padding: 24px;
-  max-width: 400px;
-  width: 90%;
-  max-height: 80vh;
-  overflow-y: auto;
-  border: 1px solid var(--mw-border);
-}
+    /* ── Status / tag colors ── */
+    .bg-green-100 { background: rgba(0,245,160,0.12) !important; }
+    .bg-yellow-100 { background: rgba(255,181,71,0.12) !important; }
+    .bg-red-100   { background: rgba(255,75,114,0.12) !important; }
+    .bg-blue-100  { background: rgba(0,210,255,0.12) !important; }
+    .bg-orange-100 { background: rgba(255,140,66,0.12) !important; }
+    .bg-purple-100 { background: rgba(167,85,247,0.12) !important; }
+    .bg-indigo-50, .bg-indigo-100 { background: rgba(0,210,255,0.08) !important; }
+    .bg-sky-50 { background: rgba(0,210,255,0.06) !important; }
+    .bg-amber-50 { background: rgba(255,181,71,0.07) !important; }
 
-.dark .share-modal-content {
-  background: #0e2a2e;
-  color: #d8eeec;
-}
+    .text-green-600, .text-green-700, .text-emerald-700, .text-teal-700 { color: var(--qf-mint) !important; }
+    .text-red-600, .text-red-700 { color: var(--qf-coral) !important; }
+    .text-blue-600, .text-blue-700, .text-blue-800,
+    .text-cyan-600, .text-sky-600, .text-indigo-600 { color: var(--qf-cyan) !important; }
+    .text-purple-600, .text-purple-700, .text-purple-800,
+    .text-violet-600 { color: #A78BFA !important; }
+    .text-amber-600, .text-yellow-600, .text-orange-600 { color: var(--qf-gold) !important; }
+    .text-gray-800, .text-gray-900 { color: var(--qf-text) !important; }
+    .text-gray-600, .text-gray-700 { color: var(--qf-text-muted) !important; }
+    .text-gray-400, .text-gray-500 { color: #64748B !important; }
 
-.share-button {
-  transition: all 0.2s ease;
-}
+    /* Borders */
+    .border-gray-300, .border-gray-200 { border-color: rgba(0,210,255,0.15) !important; }
+    .border-blue-500 { border-color: var(--qf-cyan) !important; }
+    .dark .border-gray-700, .border-gray-700 { border-color: rgba(255,255,255,0.07) !important; }
 
-.share-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
+    /* ── Hover lift ── */
+    .hover-lift { transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1); }
+    .hover-lift:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--glow-cyan);
+    }
 
-/* Animation for share modal */
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+    /* ── Quote card ── */
+    .quote-container {
+      background: linear-gradient(135deg, rgba(0,210,255,0.07) 0%, rgba(0,245,160,0.05) 100%);
+      border-left: 4px solid var(--qf-cyan);
+      border-radius: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+    .quote-text {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.1rem;
+      line-height: 1.65;
+      color: var(--qf-text);
+      font-style: italic;
+    }
+    .quote-author {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+      color: var(--qf-cyan);
+      letter-spacing: 0.5px;
+    }
+    .quote-icon {
+      position: absolute;
+      opacity: 0.04;
+      font-size: 8rem;
+      right: 20px;
+      top: 10px;
+      transform: rotate(15deg);
+      color: var(--qf-cyan);
+    }
+    .quote-indicator {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: rgba(0,210,255,0.2);
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+    .quote-indicator.active {
+      background: var(--qf-cyan);
+      box-shadow: 0 0 8px rgba(0,210,255,0.6);
+      transform: scale(1.3);
+    }
 
-.share-modal-content {
-  animation: slideUp 0.3s ease-out;
-}
-
-.bg-white {
-  background: #ffffff !important;
-}
-.dark .bg-gray-800 {
-  background: #2d2a26 !important;
-}
-
-.income-input, 
-input, 
-select, 
-textarea {
-  background-color: #fefaf6 !important;
-  border-color: #e7e5e4 !important;
-}
-.dark .income-input,
-.dark input,
-.dark select,
-.dark textarea {
-  background-color: #3a3630 !important;
-  border-color: #57534e !important;
-}
-
-.bg-blue-500 {
-  background-color: #8b7d6b !important;
-}
-.bg-blue-500:hover {
-  background-color: #756a5b !important;
-}
-
-.bg-green-500 {
-  background-color: #7d8b6b !important;
-}
-.bg-green-500:hover {
-  background-color: #6a755b !important;
-}
-
-.bg-purple-500 {
-  background-color: #8b6b7d !important;
-}
-.bg-purple-500:hover {
-  background-color: #755b6a !important;
-}
-
-
-.quote-icon {
-  color: #d6d3d1;
-}
-.dark .quote-icon {
-  color: #57534e;
-}
-
-.bg-green-100 {
-  background-color: #f0f2eb !important;
-}
-.bg-yellow-100 {
-  background-color: #f8f2eb !important;
-}
-.bg-red-100 {
-  background-color: #f8efeb !important;
-}
-
-.text-green-600 {
-  color: #6a755b !important;
-}
-.text-red-600 {
-  color: #755b5b !important;
-}
-.text-blue-600 {
-  color: #5b6a75 !important;
-}
-.text-purple-600 {
-  color: #755b6a !important;
-}
+    /* ── Dropdown ── */
     .dropdown-menu {
       display: none;
       position: fixed;
-      right: 16px;
-      top: 70px;
-      background: white;
-      box-shadow: 0 12px 40px rgba(26,107,114,0.18);
-      border-radius: 14px;
+      right: 16px; top: 70px;
+      background: rgba(13,18,32,0.95);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(0,210,255,0.2);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 30px rgba(0,210,255,0.08);
+      border-radius: 16px;
       z-index: 9999;
-      min-width: 240px;
+      min-width: 250px;
       overflow: hidden;
-      border: 1px solid var(--mw-border);
     }
-    
-    .dark .dropdown-menu {
-      background: #0d2226;
-      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
-      border-color: #1e4a50;
-    }
-    
     .dropdown-menu.show {
       display: block;
       animation: slideInFromTop 0.2s ease-out;
     }
-    
     .dropdown-item {
       display: flex;
       align-items: center;
-      padding: 0.8rem 1.1rem;
+      padding: 0.75rem 1.1rem;
       width: 100%;
       text-align: left;
-      border-bottom: 1px solid var(--mw-teal-light);
+      border-bottom: 1px solid rgba(255,255,255,0.04);
       font-size: 0.875rem;
-      transition: all 0.18s ease;
-      color: var(--mw-text);
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      transition: all 0.18s;
+      color: var(--qf-text);
+      background: transparent;
+      border-left: 3px solid transparent;
+      cursor: pointer;
     }
-    
-    .dark .dropdown-item {
-      border-color: #1a3d42;
-      color: #c8e8ec;
-    }
-    
     .dropdown-item:hover {
-      background: linear-gradient(90deg, var(--mw-teal-light), transparent) !important;
-      color: var(--mw-teal-dark);
+      background: rgba(0,210,255,0.08) !important;
+      border-left-color: var(--qf-cyan);
+      color: var(--qf-cyan) !important;
       padding-left: 1.4rem;
     }
-    
-    .dark .dropdown-item:hover {
-      background: linear-gradient(90deg, #1a3d42, transparent) !important;
-      color: #7dd8dc;
-    }
-    
     .dropdown-item i {
-      width: 20px;
-      margin-right: 10px;
+      width: 20px; margin-right: 10px;
       text-align: center;
-      color: var(--mw-teal);
+      color: var(--qf-cyan);
+      opacity: 0.8;
     }
-    .dark .dropdown-item i {
-      color: #5dcbcc;
-    }
-    
-    .quote-text {
-      font-family: 'Crimson Text', serif;
-      font-style: italic;
-      font-size: 1.25rem;
-      line-height: 1.6;
-      color: var(--mw-teal-dark);
-    }
-    .dark .quote-text { color: #88c9d0; }
-    .quote-author {
-      font-family: 'Playfair Display', serif;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-      color: var(--mw-gold);
-    }
-    .quote-container {
-      background: linear-gradient(135deg, #f0f9fa 0%, var(--mw-gold-light) 100%);
-      border-left: 5px solid var(--mw-gold-mid);
-      position: relative;
-      overflow: hidden;
-      border-radius: 12px;
-    }
-    .dark .quote-container {
-      background: linear-gradient(135deg, #0d2226 0%, #1a1408 100%);
-      border-left: 5px solid var(--mw-gold);
-    }
-    .quote-icon {
-      position: absolute;
-      opacity: 0.06;
-      font-size: 8rem;
-      right: 20px;
-      top: 20px;
-      transform: rotate(15deg);
-      color: var(--mw-teal);
-    }
-    .dark .quote-icon { color: var(--mw-gold); }
-    .quote-indicator {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background-color: var(--mw-border);
-      transition: all 0.3s ease;
-    }
-    .quote-indicator.active {
-      background-color: var(--mw-teal);
-      transform: scale(1.25);
-    }
-    .fade-in {
-      animation: fadeIn 1s ease-in-out;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
-    @keyframes slideInFromTop {
-      from { opacity: 0; transform: translateY(-10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
-    .animate-in {
-      animation: slideInFromTop 0.3s ease-out;
-    }
-    
-    @keyframes slideInFromLeft {
-      from { opacity: 0; transform: translateX(-20px); }
-      to { opacity: 1; transform: translateX(0); }
-    }
-    
-    @keyframes pulse-glow {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(193, 211, 239, 0.7); }
-      50% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
-    }
-    
-    .hover-lift {
-      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    
-    .hover-lift:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-    }
-    
-    @keyframes shimmer {
-      0% { background-position: -1000px 0; }
-      100% { background-position: 1000px 0; }
-    }
-    
-    .shimmer-animation {
-      animation: shimmer 2s infinite;
-    }
-    
-    button, input, select {
-      transition: all 0.2s ease;
-    }
-    
-    button:hover {
-      transition: all 0.2s ease;
-    }
-    
-    .income-input {
-      transition: all 0.3s ease;
-    }
-    .income-input:focus {
-      box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.3);
-      border-color: #8b5cf6;
-    }
-    canvas { max-height: 300px; }
-    
-    /* NEW CODE START - Additional styles for AI Coach */
-    .score-gauge {
-      width: 150px;
-      height: 150px;
-      margin: 0 auto;
-      position: relative;
-    }
-    .score-gauge-circle {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      background: conic-gradient(from 0deg, var(--mw-teal) 0deg, var(--mw-gold-mid) calc(var(--score)*3.6deg), #e5e7eb calc(var(--score)*3.6deg) 360deg);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .score-gauge-inner {
-      width: 85%;
-      height: 85%;
-      border-radius: 50%;
-      background: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2rem;
-      font-weight: bold;
-      color: var(--mw-teal-dark);
-    }
-    .dark .score-gauge-inner {
-      background: #0d2226;
-      color: #5dcbcc;
-    }
-    .insight-card {
-      transition: all 0.3s ease;
-    }
-    .insight-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
-    }
-    .progress-step {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-    }
-    .progress-line {
-      flex: 1;
-      height: 2px;
-      background: #e5e7eb;
-    }
-    .dark .progress-line {
-      background: #4b5563;
-    }
-    .progress-step.completed {
-      background: var(--mw-success);
-      color: white;
-    }
-    .progress-step.current {
-      background: var(--mw-teal);
-      color: white;
-    }
-    .progress-step.pending {
-      background: var(--mw-border);
-      color: var(--mw-text-muted);
-    }
-    .dark .progress-step.pending {
-      background: #1e4a50;
-      color: #80a8a0;
-    }
-    /* NEW CODE END */
 
-    /* Settings Modal Styles */
+    /* Dropdown section headers */
+    .dropdown-menu [style*="background:'rgba(22,31,51,0.5)'"],
+    .dropdown-menu > div[style*="background"] {
+      background: rgba(0,210,255,0.05) !important;
+      color: var(--qf-cyan) !important;
+      border-top: 1px solid rgba(0,210,255,0.1);
+    }
+
+    /* ── Settings Modal ── */
     .settings-modal {
       display: flex;
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: rgba(10, 30, 32, 0.55);
-      backdrop-filter: blur(4px);
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       justify-content: center;
       align-items: center;
       z-index: 10000;
     }
-
     .settings-content {
-      background: var(--mw-ivory);
-      border-radius: 16px;
-      box-shadow: 0 20px 60px rgba(26,107,114,0.2);
-      border: 1px solid var(--mw-border);
-      max-width: 500px;
-      width: 90%;
-      max-height: 90vh;
-      overflow-y: auto;
+      background: rgba(18,26,46,0.97);
+      border: 1px solid rgba(0,210,255,0.2);
+      border-radius: 20px;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.7), var(--glow-cyan);
+      max-width: 520px; width: 90%;
+      max-height: 90vh; overflow-y: auto;
     }
-
-    .dark .settings-content {
-      background: #0d2226;
-      border-color: #1e4a50;
-    }
-
     .settings-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1.5rem;
-      border-bottom: 1px solid var(--mw-border);
-      background: linear-gradient(90deg, var(--mw-teal-light), transparent);
+      padding: 1.5rem 1.75rem;
+      border-bottom: 1px solid rgba(0,210,255,0.12);
+      background: linear-gradient(90deg, rgba(0,210,255,0.06), transparent);
     }
-
-/* ── ASK ENGINE ─────────────────────────────────────────── */
-.ask-engine-fab {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  width: 58px;
-  height: 58px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--mw-teal) 0%, var(--mw-teal-mid) 100%);
-  color: white;
-  border: none;
-  cursor: pointer;
-  font-size: 1.4rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 20px rgba(26,107,114,0.4);
-  z-index: 9990;
-  transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
-}
-.ask-engine-fab:hover {
-  transform: scale(1.1);
-  box-shadow: 0 8px 30px rgba(26,107,114,0.55);
-}
-.ask-engine-panel {
-  position: fixed;
-  bottom: 96px;
-  right: 24px;
-  width: 370px;
-  max-height: 540px;
-  background: var(--mw-ivory);
-  border-radius: 20px;
-  box-shadow: 0 20px 60px rgba(26,107,114,0.18);
-  display: flex;
-  flex-direction: column;
-  z-index: 9989;
-  overflow: hidden;
-  animation: slideUp 0.3s ease-out;
-  border: 1px solid var(--mw-border);
-}
-.dark .ask-engine-panel {
-  background: #0d2226;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-  border-color: #1e4a50;
-}
-.ask-engine-header {
-  background: linear-gradient(135deg, var(--mw-teal-dark) 0%, var(--mw-teal-mid) 100%);
-  padding: 14px 18px;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-shrink: 0;
-}
-.ask-engine-messages {
-  flex: 1;
-  overflow-y: auto;
-  padding: 14px 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  scroll-behavior: smooth;
-  background: var(--mw-ivory);
-}
-.dark .ask-engine-messages {
-  background: #0d2226;
-}
-.ask-msg-user {
-  align-self: flex-end;
-  background: linear-gradient(135deg, var(--mw-teal), var(--mw-teal-mid));
-  color: white;
-  padding: 9px 14px;
-  border-radius: 16px 16px 3px 16px;
-  max-width: 82%;
-  font-size: 0.85rem;
-  line-height: 1.5;
-}
-.ask-msg-ai {
-  align-self: flex-start;
-  background: #edf6f7;
-  color: var(--mw-text);
-  padding: 9px 14px;
-  border-radius: 16px 16px 16px 3px;
-  max-width: 90%;
-  font-size: 0.85rem;
-  line-height: 1.55;
-  white-space: pre-wrap;
-  border: 1px solid var(--mw-teal-light);
-}
-.dark .ask-msg-ai {
-  background: #102a2e;
-  color: #d0e8ec;
-  border-color: #1e4a50;
-}
-.ask-msg-typing {
-  align-self: flex-start;
-  background: #edf6f7;
-  padding: 8px 14px;
-  border-radius: 12px;
-  font-size: 1.2rem;
-  letter-spacing: 2px;
-  border: 1px solid var(--mw-teal-light);
-}
-.dark .ask-msg-typing { background: #102a2e; }
-.ask-engine-input-row {
-  padding: 10px 14px;
-  border-top: 1px solid var(--mw-border);
-  display: flex;
-  gap: 8px;
-  flex-shrink: 0;
-  background: var(--mw-sand);
-}
-.dark .ask-engine-input-row { border-color: #1e4a50; background: #0a1e22; }
-.ask-engine-input {
-  flex: 1;
-  padding: 9px 14px;
-  border-radius: 20px;
-  border: 1px solid var(--mw-border) !important;
-  font-size: 0.85rem;
-  outline: none;
-  background: #ffffff !important;
-}
-.dark .ask-engine-input {
-  background: #0e2a2e !important;
-  border-color: #1e4a50 !important;
-  color: #d8eeec !important;
-}
-.ask-engine-send {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--mw-teal), var(--mw-teal-mid));
-  color: white;
-  border: none;
-  cursor: pointer;
-  font-size: 0.9rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  transition: all 0.2s;
-}
-.ask-engine-send:hover { transform: scale(1.08); }
-.ask-engine-send:disabled { opacity: 0.45; cursor: not-allowed; }
-.ask-chip {
-  display: inline-block;
-  padding: 5px 12px;
-  border-radius: 20px;
-  background: var(--mw-teal-light);
-  color: var(--mw-teal-dark);
-  font-size: 0.75rem;
-  cursor: pointer;
-  transition: all 0.2s;
-  border: 1px solid rgba(26,107,114,0.2);
-  white-space: nowrap;
-}
-.dark .ask-chip {
-  background: #102a2e;
-  color: #88c9d0;
-  border-color: #1e4a50;
-}
-.ask-chip:hover { background: var(--mw-teal); color: white; border-color: var(--mw-teal); }
-/* API key input inside chat */
-.ask-key-input-wrap {
-  padding: 10px 14px;
-  background: var(--mw-gold-light);
-  border-top: 1px solid #e0c08a;
-  font-size: 0.8rem;
-  flex-shrink: 0;
-}
-.dark .ask-key-input-wrap {
-  background: #1e1a08;
-  border-color: #3a2e10;
-}
-@media (max-width: 480px) {
-  .ask-engine-panel { width: calc(100vw - 32px); right: 16px; }
-}
-
-
-    .settings-header h2 {
-      margin: 0;
-    }
-
+    .settings-header h2 { color: var(--qf-text); margin: 0; }
     .settings-header button {
-      background: none;
-      border: none;
+      background: rgba(255,255,255,0.06) !important;
+      border: 1px solid rgba(255,255,255,0.1) !important;
+      border-radius: 8px !important;
+      color: var(--qf-text-muted) !important;
+      width: 32px; height: 32px;
+      display: flex; align-items: center; justify-content: center;
       cursor: pointer;
-      font-size: 1.5rem;
-      padding: 0;
     }
-
     .settings-tab {
       display: flex;
-      border-bottom: 1px solid var(--mw-border);
-      background-color: var(--mw-sand);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      background: rgba(0,0,0,0.2);
     }
-
-    .dark .settings-tab {
-      background-color: #0a1e22;
-      border-bottom-color: #1e4a50;
-    }
-
     .settings-tab button {
-      flex: 1;
-      padding: 1rem;
-      border: none;
-      background: none;
-      cursor: pointer;
-      font-size: 0.9rem;
-      color: var(--mw-text-muted);
-      border-bottom: 3px solid transparent;
-      transition: all 0.2s ease;
+      flex: 1; padding: 0.9rem 0.5rem;
+      border: none; background: transparent;
+      cursor: pointer; font-size: 0.82rem;
+      color: var(--qf-text-muted);
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+      font-family: 'Inter', sans-serif;
     }
-
-    .dark .settings-tab button {
-      color: #80a8a0;
-    }
-
+    .settings-tab button:hover { color: var(--qf-cyan); }
     .settings-tab button.active {
-      color: var(--mw-teal);
-      border-bottom-color: var(--mw-teal);
+      color: var(--qf-cyan) !important;
+      border-bottom-color: var(--qf-cyan) !important;
     }
-
-    .dark .settings-tab button.active {
-      color: #5dcbcc;
-      border-bottom-color: #5dcbcc;
-    }
-
-    .settings-section {
-      padding: 1.5rem;
-    }
-
-    .settings-section h3 {
-      margin: 0 0 1rem 0;
-      font-size: 1.1rem;
-      color: #111827;
-    }
-
-    .dark .settings-section h3 {
-      color: #f5f5f4;
-    }
-
-    .settings-field {
-      margin-bottom: 1.5rem;
-    }
-
+    .dark .settings-tab button.active { color: var(--qf-cyan) !important; border-bottom-color: var(--qf-cyan) !important; }
+    .settings-section { padding: 1.5rem 1.75rem; }
+    .settings-section h3 { color: var(--qf-text); margin: 0 0 1rem 0; font-size: 1rem; }
+    .settings-field { margin-bottom: 1.25rem; }
     .settings-field label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: 500;
-      color: #374151;
-      font-size: 0.9rem;
+      display: block; margin-bottom: 0.5rem;
+      font-weight: 600; font-size: 0.8rem;
+      color: var(--qf-text-muted) !important;
+      text-transform: uppercase; letter-spacing: 0.05em;
     }
-
-    .dark .settings-field label {
-      color: #d1d5db;
-    }
-
-    .settings-field input,
-    .settings-field select {
-      width: 100%;
-      padding: 0.75rem;
-      border: 1px solid #d1d5db;
-      border-radius: 6px;
-      font-size: 1rem;
-      background-color: #fefaf6;
-    }
-
-    .dark .settings-field input,
-    .dark .settings-field select {
-      background-color: #3a3630;
-      border-color: #57534e;
-      color: #f5f5f4;
-    }
-
-    .settings-field input:focus,
-    .settings-field select:focus {
-      outline: none;
-      ring: 2px;
-      ring-color: #2563eb;
-      border-color: #2563eb;
-    }
-
     .settings-actions {
-      display: flex;
-      gap: 1rem;
-      justify-content: flex-end;
-      margin-top: 1.5rem;
+      display: flex; gap: 0.75rem;
+      justify-content: flex-end; margin-top: 1.5rem;
     }
-
-    .btn-primary,
-    .btn-secondary {
-      padding: 0.75rem 1.5rem;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: 500;
-      transition: all 0.2s ease;
-    }
-
     .btn-primary {
-      background: linear-gradient(135deg, var(--mw-teal), var(--mw-teal-mid));
-      color: white;
-      border-radius: 8px;
+      background: var(--grad-primary) !important;
+      color: var(--qf-void) !important;
+      font-weight: 700 !important;
+      border: none !important;
+      border-radius: 10px !important;
+      padding: 0.7rem 1.5rem !important;
+      cursor: pointer !important;
+      transition: all 0.2s !important;
+      box-shadow: var(--glow-cyan);
     }
-
-    .btn-primary:hover {
-      background: linear-gradient(135deg, var(--mw-teal-dark), var(--mw-teal));
-    }
-
+    .btn-primary:hover { filter: brightness(1.1) !important; transform: translateY(-1px) !important; }
     .btn-secondary {
-      background-color: var(--mw-sand-dark);
-      color: var(--mw-text);
-      border-radius: 8px;
+      background: rgba(255,255,255,0.06) !important;
+      color: var(--qf-text-muted) !important;
+      border: 1px solid rgba(255,255,255,0.1) !important;
+      border-radius: 10px !important;
+      padding: 0.7rem 1.5rem !important;
+      cursor: pointer !important;
+      transition: all 0.2s !important;
+    }
+    .btn-secondary:hover { border-color: var(--qf-cyan) !important; color: var(--qf-cyan) !important; }
+
+    /* ── Share Modal ── */
+    .share-modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 10000;
+    }
+    .share-modal-content {
+      background: rgba(18,26,46,0.97);
+      border: 1px solid rgba(0,210,255,0.2);
+      border-radius: 20px;
+      padding: 28px;
+      max-width: 420px; width: 90%;
+      max-height: 80vh; overflow-y: auto;
+      animation: slideUp 0.3s ease-out;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.7), var(--glow-cyan);
+      color: var(--qf-text);
+    }
+    .share-button { transition: all 0.2s; }
+    .share-button:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
+
+    /* ── Score gauge ── */
+    .score-gauge { width: 150px; height: 150px; margin: 0 auto; position: relative; }
+    .score-gauge-circle {
+      width: 100%; height: 100%; border-radius: 50%;
+      background: conic-gradient(from 0deg, var(--qf-cyan) 0deg, var(--qf-mint) calc(var(--score)*3.6deg), rgba(22,31,51,0.5) calc(var(--score)*3.6deg) 360deg);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .score-gauge-inner {
+      width: 85%; height: 85%; border-radius: 50%;
+      background: var(--qf-slate);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem; font-weight: 800;
+      color: var(--qf-cyan);
+      font-family: 'Space Grotesk', sans-serif;
     }
 
-    .dark .btn-secondary {
-      background-color: #1e3a40;
-      color: #c0dde0;
+    /* ── Insight cards ── */
+    .insight-card {
+      background: var(--glass-bg) !important;
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border: var(--glass-border) !important;
+      border-radius: 16px !important;
+      box-shadow: none !important;
+      transition: all 0.25s !important;
+    }
+    .insight-card:hover {
+      border-color: rgba(0,210,255,0.2) !important;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3) !important;
+      transform: translateY(-2px) !important;
     }
 
-    .btn-secondary:hover {
-      background-color: var(--mw-border);
+    /* ── Progress bars ── */
+    .progress-line { flex: 1; height: 2px; background: rgba(255,255,255,0.08); }
+    .progress-step.completed { background: var(--qf-mint); color: var(--qf-void); }
+    .progress-step.current  { background: var(--qf-cyan); color: var(--qf-void); }
+    .progress-step.pending  { background: rgba(255,255,255,0.1); color: var(--qf-text-muted); }
+
+    /* ── Ask Engine / Chat ── */
+    .ask-engine-fab {
+      position: fixed; bottom: 24px; right: 24px;
+      width: 58px; height: 58px; border-radius: 50%;
+      background: var(--grad-primary);
+      color: var(--qf-void); border: none; cursor: pointer;
+      font-size: 1.3rem;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: var(--glow-cyan);
+      z-index: 9990;
+      transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+      title: "AI Financial Assistant";
+      aria-label: "Open AI Assistant";
+    }
+    .ask-engine-fab:hover { transform: scale(1.12); box-shadow: 0 0 40px rgba(0,210,255,0.5); }
+    .ask-engine-panel {
+      position: fixed; bottom: 96px; right: 24px;
+      width: 375px; max-height: 560px;
+      background: rgba(13,18,32,0.97);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(0,210,255,0.2);
+      border-radius: 20px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.6), var(--glow-cyan);
+      display: flex; flex-direction: column;
+      z-index: 9989; overflow: hidden;
+      animation: slideUp 0.3s ease-out;
+    }
+    .ask-engine-header {
+      background: linear-gradient(135deg, rgba(0,210,255,0.15), rgba(0,245,160,0.1));
+      border-bottom: 1px solid rgba(0,210,255,0.15);
+      padding: 14px 18px; color: var(--qf-text);
+      display: flex; align-items: center;
+      justify-content: space-between; flex-shrink: 0;
+    }
+    .ask-engine-messages {
+      flex: 1; overflow-y: auto;
+      padding: 14px 16px;
+      display: flex; flex-direction: column; gap: 10px;
+      scroll-behavior: smooth;
+      background: rgba(11,15,25,0.5);
+    }
+    .ask-msg-user {
+      align-self: flex-end;
+      background: var(--grad-primary);
+      color: var(--qf-void);
+      padding: 9px 14px;
+      border-radius: 16px 16px 3px 16px;
+      max-width: 82%; font-size: 0.85rem; line-height: 1.5; font-weight: 500;
+    }
+    .ask-msg-ai {
+      align-self: flex-start;
+      background: rgba(22,31,51,0.8);
+      color: var(--qf-text);
+      padding: 9px 14px;
+      border-radius: 16px 16px 16px 3px;
+      max-width: 90%; font-size: 0.85rem; line-height: 1.55;
+      white-space: pre-wrap;
+      border: 1px solid rgba(0,210,255,0.15);
+    }
+    .ask-msg-typing {
+      align-self: flex-start;
+      background: rgba(22,31,51,0.8);
+      border: 1px solid rgba(0,210,255,0.15);
+      padding: 8px 14px; border-radius: 12px;
+      font-size: 1.2rem; letter-spacing: 2px;
+      color: var(--qf-cyan);
+    }
+    .ask-engine-input-row {
+      padding: 10px 14px;
+      border-top: 1px solid rgba(0,210,255,0.12);
+      display: flex; gap: 8px; flex-shrink: 0;
+      background: rgba(11,15,25,0.6);
+    }
+    .ask-engine-input {
+      flex: 1; padding: 9px 14px; border-radius: 20px;
+      border: 1px solid rgba(0,210,255,0.2) !important;
+      font-size: 0.85rem; outline: none;
+      background: rgba(22,31,51,0.7) !important;
+      color: var(--qf-text) !important;
+    }
+    .ask-engine-input:focus { border-color: var(--qf-cyan) !important; box-shadow: 0 0 0 2px rgba(0,210,255,0.12) !important; }
+    .ask-engine-send {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: var(--grad-primary);
+      color: var(--qf-void); border: none; cursor: pointer;
+      font-size: 0.9rem; display: flex; align-items: center;
+      justify-content: center; flex-shrink: 0;
+      transition: all 0.2s;
+    }
+    .ask-engine-send:hover { transform: scale(1.1); }
+    .ask-engine-send:disabled { opacity: 0.35; cursor: not-allowed; }
+    .ask-chip {
+      display: inline-block; padding: 5px 12px;
+      border-radius: 20px;
+      background: rgba(0,210,255,0.1);
+      color: var(--qf-cyan);
+      font-size: 0.75rem; cursor: pointer;
+      transition: all 0.2s;
+      border: 1px solid rgba(0,210,255,0.2);
+      white-space: nowrap;
+    }
+    .ask-chip:hover { background: var(--qf-cyan); color: var(--qf-void); }
+    .ask-key-input-wrap {
+      padding: 10px 14px;
+      background: rgba(255,181,71,0.08);
+      border-top: 1px solid rgba(255,181,71,0.2);
+      font-size: 0.8rem; flex-shrink: 0;
+      color: var(--qf-text-muted);
     }
 
-    .dark .btn-secondary:hover {
-      background-color: #274a50;
+    /* ── MonthFilter bar ── */
+    .flex.justify-between.items-center.mb-4.p-3.bg-gray-50.dark\\:bg-gray-800.rounded-lg {
+      background: rgba(22,31,51,0.5) !important;
+      border: 1px solid rgba(0,210,255,0.1) !important;
+    }
+
+    /* ── Table styles ── */
+    table { border-collapse: separate; border-spacing: 0; }
+    thead tr { border-bottom: 1px solid rgba(0,210,255,0.15); }
+    th { color: var(--qf-text-muted) !important; font-size: 0.78rem !important; font-weight: 600 !important; letter-spacing: 0.06em !important; text-transform: uppercase; }
+    td { color: var(--qf-text) !important; }
+    tr:hover td { background: rgba(0,210,255,0.03) !important; }
+    .dark\\:border-gray-700 { border-color: rgba(255,255,255,0.05) !important; }
+
+    /* ── Tag pills ── */
+    .bg-green-100.dark\\:bg-green-900,
+    .bg-green-100 { background: rgba(0,245,160,0.12) !important; border: 1px solid rgba(0,245,160,0.2); }
+    .bg-orange-100.dark\\:bg-orange-900,
+    .bg-orange-100 { background: rgba(255,140,66,0.12) !important; border: 1px solid rgba(255,140,66,0.2); }
+    .bg-blue-100.dark\\:bg-blue-900,
+    .bg-blue-100 { background: rgba(0,210,255,0.10) !important; border: 1px solid rgba(0,210,255,0.2); }
+    .text-green-800 { color: var(--qf-mint) !important; }
+    .text-orange-800 { color: #FF8C42 !important; }
+    .text-blue-800 { color: var(--qf-cyan) !important; }
+
+    /* ── Login page ── */
+    .login-wrapper {
+      min-height: 100vh;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% -10%, rgba(0,210,255,0.1) 0%, transparent 55%),
+        radial-gradient(ellipse 60% 50% at 80% 90%, rgba(0,245,160,0.07) 0%, transparent 50%),
+        var(--qf-void);
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* ── Animations ── */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slideInFromTop {
+      from { opacity: 0; transform: translateY(-10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: var(--glow-cyan); }
+      50%       { box-shadow: 0 0 40px rgba(0,210,255,0.5); }
+    }
+    @keyframes shimmer {
+      0%   { background-position: -1000px 0; }
+      100% { background-position:  1000px 0; }
+    }
+
+    .fade-in { animation: fadeIn 0.8s ease-out; }
+    .animate-in { animation: slideInFromTop 0.25s ease-out; }
+    .shimmer-animation { animation: shimmer 2s infinite; }
+
+    /* ── Misc utility overrides ── */
+    .hover\\:bg-gray-50:hover { background: rgba(0,210,255,0.05) !important; }
+    .hover\\:bg-gray-700:hover { background: rgba(0,210,255,0.08) !important; }
+    .hover\\:shadow-md:hover, .hover\\:shadow-xl:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.4) !important; }
+
+    /* Dark mode redundant overrides (app never goes light) */
+    .dark .bg-white { background: var(--glass-bg) !important; }
+    .dark .text-gray-900 { color: var(--qf-text) !important; }
+    .dark .text-gray-600 { color: var(--qf-text-muted) !important; }
+
+    /* Forms within sections */
+    .bg-gray-100.dark\\:bg-gray-700,
+    .bg-gray-100 {
+      background: rgba(22,31,51,0.6) !important;
+      border-color: rgba(0,210,255,0.15) !important;
+    }
+    .bg-gray-700 { background: rgba(22,31,51,0.7) !important; }
+
+    /* Warning / info boxes */
+    .bg-yellow-50.dark\\:bg-yellow-900\/20,
+    .bg-yellow-50 { background: rgba(255,181,71,0.08) !important; border-color: rgba(255,181,71,0.2) !important; }
+    .border-yellow-200 { border-color: rgba(255,181,71,0.25) !important; }
+    .text-yellow-800 { color: var(--qf-gold) !important; }
+    .text-yellow-700 { color: #FFD060 !important; }
+
+    /* Focused button state */
+    button:focus-visible { outline: 2px solid var(--qf-cyan); outline-offset: 2px; }
+    a:focus-visible { outline: 2px solid var(--qf-cyan); outline-offset: 2px; }
+
+    /* Performance: avoid layout-triggering keyframes */
+    @keyframes pulse-glow {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.7; }
+    }
+    canvas { max-height: 300px; }
+
+    /* Responsive tweaks */
+    @media (max-width: 640px) {
+      .ask-engine-panel { width: calc(100vw - 32px); right: 16px; }
+      .dropdown-menu { min-width: 220px; right: 8px; }
+    }
+    @media (max-width: 480px) {
+      .ask-engine-panel { width: calc(100vw - 24px); right: 12px; }
     }
   </style>
 </head>
-<body class="bg-stone-50 text-gray-800 dark:bg-stone-900 dark:text-gray-100 transition-colors">
+<body class="dark transition-colors" style="background:var(--qf-void); color:var(--qf-text);">
   <div id="root"></div>
 
-  <script src="https://cdn.jsdelivr.net/npm/react@17/umd/react.development.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/react-dom@17/umd/react-dom.development.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react@17.0.2/umd/react.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.23.10/babel.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
 
-  <script type="text/babel" data-presets="es2017,react">
+  <script>
+    // Safe localStorage wrapper
+    (function() {
+      var _mem = {};
+      function testLS() { try { localStorage.setItem("__qf_t","1"); localStorage.removeItem("__qf_t"); return true; } catch(e) { return false; } }
+      if (!testLS()) {
+        var store = {};
+        Object.defineProperty(window, "localStorage", { value: { getItem: function(k){ return k in store ? store[k] : null; }, setItem: function(k,v){ store[k]=String(v); }, removeItem: function(k){ delete store[k]; }, clear: function(){ store={}; }, key: function(i){ return Object.keys(store)[i]||null; }, get length(){ return Object.keys(store).length; } }, writable: false });
+        console.info("MoneyWise: Using in-memory storage fallback");
+      }
+    })();
+  </script>
+  <script type="text/babel" data-presets="react">
     const { useState, useEffect } = React;
 
     // Global CurrencyAmount component: reads exchange rates and selected currency from localStorage
@@ -1876,7 +1705,7 @@ textarea {
                             </div>
                           </div>
                           <div className="quote-icon">💸</div>
-                            <div className="quote-icon"><i className="fas fa-coins" style={{color:"black"}}></i></div>
+                            <div className="quote-icon"><i className="fas fa-coins" style={{color:"var(--qf-text-muted)"}}></i></div>
                         </div>
                         
                         <div>
@@ -1903,7 +1732,7 @@ textarea {
                                   type="number"
                                   value={customIncome}
                                   onChange={e => setCustomIncome(parseFloat(e.target.value) || 0)}
-                                  className="income-input w-full p-2 rounded border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 focus:outline-none"
+                                  id="custom-income" name="custom-income" className="income-input w-full p-2 rounded border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 focus:outline-none"
                                   placeholder="Enter your income"
                                   step="0.01"
                                   min="0"
@@ -2048,7 +1877,7 @@ textarea {
   return (
     <div className="flex justify-between items-center mb-4 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
       <div className="relative">
-        <button className="p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition flex items-center justify-center w-10 h-10">
+        <button className="p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition flex items-center justify-center w-10 h-10" aria-label="Select month" title="Select month">
           <i className="fas fa-calendar-alt" style={{color:"white"}}></i>
         </button>
         <input
@@ -2126,21 +1955,21 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
       
       return (
         <>
-          <nav className="sticky top-0 z-50 bg-white dark:bg-gray-800 p-3 shadow-md flex justify-between items-center" style={{borderBottom:'2px solid var(--mw-teal-light)'}}>
+          <nav className="sticky top-0 z-50 bg-white dark:bg-gray-800 p-3 shadow-md flex justify-between items-center" style={{borderBottom:'2px solid rgba(0,210,255,0.1)'}}>
             <div className="flex items-center gap-3">
-              <div style={{background:'linear-gradient(135deg,var(--mw-teal-dark),var(--mw-teal-mid))', borderRadius:10, width:36, height:36, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0}}>
-                <i className="fas fa-coins" style={{color:'var(--mw-gold-mid)', fontSize:'1rem'}}></i>
+              <div style={{background:'linear-gradient(135deg,#0B0F19,#161F33)', border:'1px solid rgba(0,210,255,0.2)', borderRadius:10, width:36, height:36, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0}}>
+                <i className="fas fa-coins" style={{color:'var(--qf-gold)', fontSize:'1rem'}}></i>
               </div>
               <div>
-                <div style={{fontWeight:800, fontSize:'1.1rem', color:'var(--mw-teal-dark)', letterSpacing:'-0.3px', fontFamily:"'Playfair Display', serif"}}>MoneyWise</div>
-                <div style={{fontSize:'0.62rem', color:'var(--mw-gold)', fontWeight:600, letterSpacing:'1px', textTransform:'uppercase'}}>Finance Manager</div>
+                <div style={{fontWeight:800, fontSize:'1.1rem', color:'var(--qf-text)', letterSpacing:'-0.3px', fontFamily:"'Playfair Display', serif"}}>MoneyWise</div>
+                <div style={{fontSize:'0.62rem', color:'var(--qf-cyan)', fontWeight:600, letterSpacing:'1px', textTransform:'uppercase'}}>Finance Manager</div>
               </div>
             </div>
             <div className="flex gap-2 items-center relative">
               <button 
                 onClick={() => setActiveView("home")}
                 className="px-3 py-1 text-white rounded-lg transition text-sm flex items-center gap-2"
-                style={{background:'linear-gradient(135deg,var(--mw-teal),var(--mw-teal-mid))', fontWeight:600}}
+                style={{background:'linear-gradient(135deg,var(--qf-cyan),var(--qf-cyan))', fontWeight:600}}
               >
                 <i className="fas fa-home" style={{color:"white"}}></i>
                 <span className="hidden sm:inline">Home</span>
@@ -2149,23 +1978,23 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
                 title="Share"
                 onClick={() => setShowShare(true)}
                 className="p-2 text-white rounded-full transition text-sm"
-                style={{background:'var(--mw-success)'}}
+                style={{background:'var(--qf-mint)'}}
               >
                 <i className="fas fa-share-alt" style={{color:"white"}}></i>
               </button>
-              <span className="text-xs sm:text-sm px-2 py-1 rounded" style={{background:'var(--mw-teal-light)', color:'var(--mw-teal-dark)', fontWeight:600}}>💼 {currentUser}</span>
+              <span className="text-xs sm:text-sm px-2 py-1 rounded" style={{background:'rgba(0,210,255,0.12)', color:'var(--qf-cyan)', fontWeight:600}}>💼 {currentUser}</span>
               <div className="relative">
                 <button 
                   onClick={() => setShowDropdown(!showDropdown)}
                   className="p-2 text-white rounded-full transition"
-                  style={{background:'var(--mw-teal)'}}
-                  title="Menu"
+                  style={{background:'var(--qf-cyan)'}}
+                  title="Menu" aria-label="Open navigation menu"
                 >
                   <i className="fas fa-ellipsis-v" style={{color:"white"}}></i>
                 </button>
                 <div className={`dropdown-menu ${showDropdown ? 'show' : ''}`}>
                   {/* ─ Transactions ─ */}
-                  <div style={{padding:'6px 14px 4px', fontSize:'0.68rem', fontWeight:700, color:'var(--mw-gold)', textTransform:'uppercase', letterSpacing:'0.8px', background:'var(--mw-sand)'}}>Transactions</div>
+                  <div style={{padding:'6px 14px 4px', fontSize:'0.68rem', fontWeight:700, color:'var(--qf-gold)', textTransform:'uppercase', letterSpacing:'0.8px', background:'rgba(22,31,51,0.5)'}}>Transactions</div>
                   <button className="dropdown-item" onClick={() => { setActiveView("transactionLog"); setShowDropdown(false); }}>
                     <i className="fas fa-receipt"></i> Transaction Log
                   </button>
@@ -2176,7 +2005,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
                     <i className="fas fa-users"></i> Person-wise Settlements
                   </button>
                   {/* ─ Planning ─ */}
-                  <div style={{padding:'6px 14px 4px', fontSize:'0.68rem', fontWeight:700, color:'var(--mw-gold)', textTransform:'uppercase', letterSpacing:'0.8px', background:'var(--mw-sand)', borderTop:'1px solid var(--mw-border)'}}>Planning</div>
+                  <div style={{padding:'6px 14px 4px', fontSize:'0.68rem', fontWeight:700, color:'var(--qf-gold)', textTransform:'uppercase', letterSpacing:'0.8px', background:'rgba(22,31,51,0.5)', borderTop:'1px solid rgba(0,210,255,0.15)'}}>Planning</div>
                   <button className="dropdown-item" onClick={() => { setActiveView("budgetPlanner"); setShowDropdown(false); }}>
                     <i className="fas fa-chart-pie"></i> Budget Planner
                   </button>
@@ -2187,7 +2016,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
                     <i className="fas fa-bullseye"></i> Goals
                   </button>
                   {/* ─ Analysis ─ */}
-                  <div style={{padding:'6px 14px 4px', fontSize:'0.68rem', fontWeight:700, color:'var(--mw-gold)', textTransform:'uppercase', letterSpacing:'0.8px', background:'var(--mw-sand)', borderTop:'1px solid var(--mw-border)'}}>Analysis</div>
+                  <div style={{padding:'6px 14px 4px', fontSize:'0.68rem', fontWeight:700, color:'var(--qf-gold)', textTransform:'uppercase', letterSpacing:'0.8px', background:'rgba(22,31,51,0.5)', borderTop:'1px solid rgba(0,210,255,0.15)'}}>Analysis</div>
                   <button className="dropdown-item" onClick={() => { setActiveView("expenseBreakdown"); setShowDropdown(false); }}>
                     <i className="fas fa-chart-pie"></i> Expense Breakdown
                   </button>
@@ -2204,7 +2033,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
                     <i className="fas fa-robot"></i> AI Financial Coach
                   </button>
                   {/* ─ Misc ─ */}
-                  <div style={{padding:'6px 14px 4px', fontSize:'0.68rem', fontWeight:700, color:'var(--mw-gold)', textTransform:'uppercase', letterSpacing:'0.8px', background:'var(--mw-sand)', borderTop:'1px solid var(--mw-border)'}}>App</div>
+                  <div style={{padding:'6px 14px 4px', fontSize:'0.68rem', fontWeight:700, color:'var(--qf-gold)', textTransform:'uppercase', letterSpacing:'0.8px', background:'rgba(22,31,51,0.5)', borderTop:'1px solid rgba(0,210,255,0.15)'}}>App</div>
                   <button className="dropdown-item" onClick={() => { setShowSettings(true); setShowDropdown(false); }}>
                     <i className="fas fa-cog"></i> Settings
                   </button>
@@ -2221,8 +2050,8 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
                     <i className="fas fa-envelope"></i> Contact Us
                   </button>
                   <button className="dropdown-item" onClick={() => { logoutUser(); setShowDropdown(false); }}
-                    style={{color:'var(--mw-danger)'}}>
-                    <i className="fas fa-sign-out-alt" style={{color:'var(--mw-danger)'}}></i> Logout
+                    style={{color:'var(--qf-coral)'}}>
+                    <i className="fas fa-sign-out-alt" style={{color:'var(--qf-coral)'}}></i> Logout
                   </button>
                 </div>
               </div>
@@ -2279,7 +2108,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
             <div className="settings-header">
               <h2 className="text-xl font-semibold">Settings</h2>
               <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
-                <i className="fas fa-times" style={{color:"black"}}></i>
+                <i className="fas fa-times" style={{color:"var(--qf-text-muted)"}}></i>
               </button>
             </div>
 
@@ -2289,25 +2118,25 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
                 className={activeTab === 'profile' ? 'active' : ''} 
                 onClick={() => setActiveTab('profile')}
               >
-                <i className="fas fa-user mr-2" style={{color:"black"}}></i>Profile
+                <i className="fas fa-user mr-2" style={{color:"var(--qf-text-muted)"}}></i>Profile
               </button>
               <button 
                 className={activeTab === 'currency' ? 'active' : ''} 
                 onClick={() => setActiveTab('currency')}
               >
-                <i className="fas fa-money-bill mr-2" style={{color:"black"}}></i>Currency
+                <i className="fas fa-money-bill mr-2" style={{color:"var(--qf-text-muted)"}}></i>Currency
               </button>
               <button 
                 className={activeTab === 'financial' ? 'active' : ''} 
                 onClick={() => setActiveTab('financial')}
               >
-                <i className="fas fa-calendar mr-2" style={{color:"black"}}></i>Financial Month
+                <i className="fas fa-calendar mr-2" style={{color:"var(--qf-text-muted)"}}></i>Financial Month
               </button>
               <button 
                 className={activeTab === 'data' ? 'active' : ''} 
                 onClick={() => setActiveTab('data')}
               >
-                <i className="fas fa-database mr-2" style={{color:"black"}}></i>Data
+                <i className="fas fa-database mr-2" style={{color:"var(--qf-text-muted)"}}></i>Data
               </button>
             </div>
 
@@ -2321,7 +2150,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
                     type="text" 
                     value={profileName} 
                     onChange={(e) => setProfileName(e.target.value)}
-                    placeholder="Enter your username"
+                    id="profile-username" name="profile-username" placeholder="Enter your username"
                   />
                 </div>
                 <div className="settings-actions">
@@ -2335,7 +2164,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
                     className="w-full px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
                     onClick={() => { logoutUser(); onClose(); }}
                   >
-                    <i className="fas fa-sign-out-alt mr-2" style={{color:"black"}}></i> Logout
+                    <i className="fas fa-sign-out-alt mr-2" style={{color:"var(--qf-text-muted)"}}></i> Logout
                   </button>
                 </div>
               </div>
@@ -2421,7 +2250,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
                       a.click();
                       URL.revokeObjectURL(url);
                     }}>
-                      <i className="fas fa-download mr-2" style={{color:"black"}}></i>Export Data
+                      <i className="fas fa-download mr-2" style={{color:"var(--qf-text-muted)"}}></i>Export Data
                     </button>
                     <p className="text-xs text-gray-500 mt-1">Download all your data as a JSON file</p>
                   </div>
@@ -2471,7 +2300,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
                         alert('Failed to recover data from backup. Please try importing a backup file manually.');
                       }
                     }}>
-                      <i className="fas fa-undo mr-2" style={{color:"black"}}></i>Recover from Auto-Backup
+                      <i className="fas fa-undo mr-2" style={{color:"var(--qf-text-muted)"}}></i>Recover from Auto-Backup
                     </button>
                     <p className="text-xs text-gray-500 mt-1">Restore data from the last automatic backup</p>
                   </div>
@@ -2640,7 +2469,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
                   color: '#374151'
                 },
                 tooltip: {
-                  backgroundColor: 'rgba(17,24,39,0.93)',
+                  backgroundColor: 'rgba(13,18,32,0.95)',
                   padding: 14,
                   titleFont: { size: 13, weight: 'bold' },
                   bodyFont: { size: 12 },
@@ -2724,7 +2553,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
           {/* Month Filter */}
           <div className="flex justify-between items-center mb-4 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
             <div className="relative">
-              <button className="p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition flex items-center justify-center w-10 h-10">
+              <button className="p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition flex items-center justify-center w-10 h-10" aria-label="Select month" title="Select month">
                 <i className="fas fa-calendar-alt" style={{color:"white"}}></i>
               </button>
               <input
@@ -2774,7 +2603,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
           </div>
 
           {/* Chart */}
-          <div style={{ background:'white', borderRadius:16, padding:'20px', boxShadow:'0 2px 16px rgba(0,0,0,0.07)', border:'1px solid #f0f0f0' }} className="dark:bg-gray-800 dark:border-gray-700">
+          <div style={{ background:'rgba(22,31,51,0.5)', borderRadius:16, padding:'20px', border:'1px solid rgba(0,210,255,0.12)' }} className="dark:bg-gray-800 dark:border-gray-700">
             {sortedPeriods.length > 0 ? (
               <canvas ref={chartRef} style={{ maxHeight: '350px' }}></canvas>
             ) : (
@@ -2784,17 +2613,17 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
           
           {/* Summary stats row */}
           <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(180px,1fr))', gap:14 }}>
-            <div style={{ background:'linear-gradient(135deg,#fef3c7,#fde68a)', borderRadius:14, padding:'16px 18px', borderLeft:'4px solid #f59e0b' }}>
+            <div style={{ background:'rgba(255,181,71,0.10)', borderRadius:14, padding:'16px 18px', borderLeft:'4px solid #f59e0b' }}>
               <div style={{ fontSize:'0.72rem', textTransform:'uppercase', letterSpacing:'0.1em', color:'#92400e', marginBottom:4 }}>Peak Spend Period</div>
               <div style={{ fontWeight:800, fontSize:'1.1rem', color:'#78350f' }}>₹{Math.round(maxPeriod).toLocaleString('en-IN')}</div>
               <div style={{ fontSize:'0.75rem', color:'#b45309', marginTop:2, whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>{analysisType === 'daily' ? new Date(maxPeriodKey).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : maxPeriodKey}</div>
             </div>
-            <div style={{ background:'linear-gradient(135deg,#d1fae5,#a7f3d0)', borderRadius:14, padding:'16px 18px', borderLeft:'4px solid #10b981' }}>
+            <div style={{ background:'rgba(0,245,160,0.10)', borderRadius:14, padding:'16px 18px', borderLeft:'4px solid #10b981' }}>
               <div style={{ fontSize:'0.72rem', textTransform:'uppercase', letterSpacing:'0.1em', color:'#065f46', marginBottom:4 }}>Average / {analysisType.charAt(0).toUpperCase()+analysisType.slice(1,-2)}</div>
               <div style={{ fontWeight:800, fontSize:'1.1rem', color:'#065f46' }}>₹{Math.round(avgPeriod).toLocaleString('en-IN')}</div>
               <div style={{ fontSize:'0.75rem', color:'#047857', marginTop:2 }}>over {sortedPeriods.length} periods</div>
             </div>
-            <div style={{ background:'linear-gradient(135deg,#ede9fe,#ddd6fe)', borderRadius:14, padding:'16px 18px', borderLeft:'4px solid #8b5cf6' }}>
+            <div style={{ background:'rgba(167,85,247,0.12)', borderRadius:14, padding:'16px 18px', borderLeft:'4px solid #8b5cf6' }}>
               <div style={{ fontSize:'0.72rem', textTransform:'uppercase', letterSpacing:'0.1em', color:'#4c1d95', marginBottom:4 }}>Top Category</div>
               <div style={{ fontWeight:800, fontSize:'1rem', color:'#4c1d95', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>{sortedCategories[0] ? sortedCategories[0][0] : '—'}</div>
               <div style={{ fontSize:'0.75rem', color:'#6d28d9', marginTop:2 }}>{sortedCategories[0] ? `₹${Math.round(sortedCategories[0][1]).toLocaleString('en-IN')} spent` : 'No data'}</div>
@@ -2802,7 +2631,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
           </div>
 
           {/* Category breakdown */}
-          <div style={{ background:'white', borderRadius:16, padding:'18px 20px', boxShadow:'0 2px 12px rgba(0,0,0,0.06)', border:'1px solid #f0f0f0' }} className="dark:bg-gray-800 dark:border-gray-700">
+          <div style={{ background:'rgba(22,31,51,0.6)', borderRadius:16, padding:'18px 20px', boxShadow:'0 2px 12px rgba(0,0,0,0.06)', border:'1px solid rgba(0,210,255,0.10)' }} className="dark:bg-gray-800 dark:border-gray-700">
             <div style={{ fontWeight:700, marginBottom:14, color:'#374151', fontSize:'0.95rem' }}>💸 Spending by Category</div>
             {sortedCategories.length > 0 ? sortedCategories.map(([cat, amt], i) => (
               <div key={cat} style={{ marginBottom:10 }}>
@@ -2810,7 +2639,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
                   <span style={{ fontSize:'0.85rem', fontWeight:600, color:'#4b5563' }}>{cat}</span>
                   <span style={{ fontSize:'0.85rem', fontWeight:700, color:'#6366f1' }}>₹{Math.round(amt).toLocaleString('en-IN')}</span>
                 </div>
-                <div style={{ background:'#f3f4f6', borderRadius:8, height:8, overflow:'hidden' }}>
+                <div style={{ background:'rgba(22,31,51,0.5)', borderRadius:8, height:8, overflow:'hidden' }}>
                   <div style={{ height:'100%', borderRadius:8, width:`${totalSpent>0?Math.round((amt/totalSpent)*100):0}%`, background: i===0?'#ef4444':i===1?'#f59e0b':'#8b5cf6', transition:'width 0.6s ease' }}></div>
                 </div>
                 <div style={{ fontSize:'0.7rem', color:'#9ca3af', marginTop:2 }}>{totalSpent>0?Math.round((amt/totalSpent)*100):0}% of total spend</div>
@@ -3748,13 +3577,13 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
         if (!person) return null;
         return (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" onClick={onClose}>
-            <div style={{background:'var(--mw-ivory)', borderRadius:16, padding:24, maxWidth:360, width:'90%', border:'1px solid var(--mw-border)'}} onClick={e => e.stopPropagation()}>
-              <h3 className="text-lg font-semibold mb-4" style={{color:'var(--mw-teal-dark)'}}>Share {person}'s History</h3>
+            <div style={{background:'var(--qf-slate)', borderRadius:16, padding:24, maxWidth:360, width:'90%', border:'1px solid rgba(0,210,255,0.15)'}} onClick={e => e.stopPropagation()}>
+              <h3 className="text-lg font-semibold mb-4" style={{color:'var(--qf-void)'}}>Share {person}'s History</h3>
               <div className="space-y-3">
                 {[
                   { label:'WhatsApp', icon:'fab fa-whatsapp', bg:'#25D366', fn: () => shareViaWhatsApp(person) },
-                  { label:'Email', icon:'fas fa-envelope', bg:'var(--mw-teal)', fn: () => shareViaEmail(person) },
-                  { label:'SMS', icon:'fas fa-comment', bg:'var(--mw-gold)', fn: () => shareViaSMS(person) },
+                  { label:'Email', icon:'fas fa-envelope', bg:'var(--qf-cyan)', fn: () => shareViaEmail(person) },
+                  { label:'SMS', icon:'fas fa-comment', bg:'var(--qf-gold)', fn: () => shareViaSMS(person) },
                   { label:'Copy to Clipboard', icon:'fas fa-copy', bg:'#6b7280', fn: () => copyToClipboard(person) },
                 ].map(btn => (
                   <button key={btn.label} onClick={btn.fn}
@@ -3763,7 +3592,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
                   </button>
                 ))}
                 <button onClick={onClose}
-                  style={{background:'var(--mw-sand-dark)', color:'var(--mw-text)', border:'none', borderRadius:10, padding:'10px 16px', width:'100%', cursor:'pointer', fontSize:'0.9rem'}}>
+                  style={{background:'rgba(22,31,51,0.8)', color:'var(--qf-text)', border:'none', borderRadius:10, padding:'10px 16px', width:'100%', cursor:'pointer', fontSize:'0.9rem'}}>
                   Cancel
                 </button>
               </div>
@@ -3779,7 +3608,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
       };
 
       return (
-        <div style={{background:'white', borderRadius:16, padding:20, boxShadow:'0 4px 20px rgba(26,107,114,0.08)', border:'1px solid var(--mw-border)'}}>
+        <div style={{background:'rgba(22,31,51,0.6)', borderRadius:16, padding:20, boxShadow:'0 4px 20px rgba(26,107,114,0.08)', border:'1px solid rgba(0,210,255,0.15)'}}>
           {showShareModal && (
             <ShareModal person={selectedPersonForShare} onClose={() => { setShowShareModal(false); setSelectedPersonForShare(null); }} />
           )}
@@ -3787,21 +3616,21 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
           {/* ── Header ── */}
           <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:16, flexWrap:'wrap', gap:10}}>
             <div>
-              <h2 style={{fontSize:'1.15rem', fontWeight:700, color:'var(--mw-teal-dark)', margin:0}}>
-                <i className="fas fa-users" style={{marginRight:8, color:'var(--mw-teal)'}}></i>Person-wise Settlements
+              <h2 style={{fontSize:'1.15rem', fontWeight:700, color:'var(--qf-void)', margin:0}}>
+                <i className="fas fa-users" style={{marginRight:8, color:'var(--qf-cyan)'}}></i>Person-wise Settlements
               </h2>
-              <div style={{fontSize:'0.8rem', color:'var(--mw-text-muted)', marginTop:3}}>Track who owes you money across months</div>
+              <div style={{fontSize:'0.8rem', color:'var(--qf-text-muted)', marginTop:3}}>Track who owes you money across months</div>
             </div>
             <div style={{display:'flex', gap:8, flexWrap:'wrap'}}>
               {/* Person filter */}
               <select value={filterPerson} onChange={e => setFilterPerson(e.target.value)}
-                style={{padding:'6px 12px', borderRadius:8, border:'1px solid var(--mw-border)', background:'var(--mw-sand)', fontSize:'0.82rem', color:'var(--mw-text)', cursor:'pointer'}}>
+                style={{padding:'6px 12px', borderRadius:8, border:'1px solid rgba(0,210,255,0.15)', background:'rgba(22,31,51,0.5)', fontSize:'0.82rem', color:'var(--qf-text)', cursor:'pointer'}}>
                 <option value="all">👥 All People</option>
                 {personNames.map(n => <option key={n} value={n}>👤 {n}</option>)}
               </select>
               {/* Month filter */}
               <select value={filterMonth} onChange={e => setFilterMonth(e.target.value)}
-                style={{padding:'6px 12px', borderRadius:8, border:'1px solid var(--mw-border)', background:'var(--mw-sand)', fontSize:'0.82rem', color:'var(--mw-text)', cursor:'pointer'}}>
+                style={{padding:'6px 12px', borderRadius:8, border:'1px solid rgba(0,210,255,0.15)', background:'rgba(22,31,51,0.5)', fontSize:'0.82rem', color:'var(--qf-text)', cursor:'pointer'}}>
                 <option value="all">📅 All Months</option>
                 {settlementMonths.map(m => <option key={m} value={m}>{fmtMonth(m)}</option>)}
               </select>
@@ -3810,22 +3639,22 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
 
           {/* ── Summary chips ── */}
           <div style={{display:'flex', gap:10, marginBottom:16, flexWrap:'wrap'}}>
-            <div style={{flex:1, minWidth:130, background:'linear-gradient(135deg,var(--mw-teal-light),#e8f8f9)', borderRadius:12, padding:'12px 16px', border:'1px solid rgba(26,107,114,0.15)'}}>
-              <div style={{fontSize:'0.72rem', color:'var(--mw-teal)', fontWeight:600, textTransform:'uppercase', letterSpacing:'0.5px'}}>Current Pending</div>
-              <div style={{fontSize:'1.4rem', fontWeight:700, color:'var(--mw-teal-dark)'}}>₹{grandPending.toFixed(0)}</div>
-              <div style={{fontSize:'0.75rem', color:'var(--mw-text-muted)'}}>{pendingSettlements.length} settlement{pendingSettlements.length !== 1 ? 's' : ''}</div>
+            <div style={{flex:1, minWidth:130, background:'rgba(0,210,255,0.08)', borderRadius:12, padding:'12px 16px', border:'1px solid rgba(26,107,114,0.15)'}}>
+              <div style={{fontSize:'0.72rem', color:'var(--qf-cyan)', fontWeight:600, textTransform:'uppercase', letterSpacing:'0.5px'}}>Current Pending</div>
+              <div style={{fontSize:'1.4rem', fontWeight:700, color:'var(--qf-void)'}}>₹{grandPending.toFixed(0)}</div>
+              <div style={{fontSize:'0.75rem', color:'var(--qf-text-muted)'}}>{pendingSettlements.length} settlement{pendingSettlements.length !== 1 ? 's' : ''}</div>
             </div>
             {carriedTotal > 0 && (
-              <div style={{flex:1, minWidth:130, background:'linear-gradient(135deg,#fdf4e7,#fef9f0)', borderRadius:12, padding:'12px 16px', border:'1px solid rgba(184,134,58,0.2)'}}>
-                <div style={{fontSize:'0.72rem', color:'var(--mw-gold)', fontWeight:600, textTransform:'uppercase', letterSpacing:'0.5px'}}>Carried from {fmtMonth(prevYM)}</div>
-                <div style={{fontSize:'1.4rem', fontWeight:700, color:'var(--mw-gold)'}}>₹{carriedTotal.toFixed(0)}</div>
-                <div style={{fontSize:'0.75rem', color:'var(--mw-text-muted)'}}>{carriedForward.length} unpaid from last month</div>
+              <div style={{flex:1, minWidth:130, background:'rgba(255,181,71,0.08)', borderRadius:12, padding:'12px 16px', border:'1px solid rgba(184,134,58,0.2)'}}>
+                <div style={{fontSize:'0.72rem', color:'var(--qf-gold)', fontWeight:600, textTransform:'uppercase', letterSpacing:'0.5px'}}>Carried from {fmtMonth(prevYM)}</div>
+                <div style={{fontSize:'1.4rem', fontWeight:700, color:'var(--qf-gold)'}}>₹{carriedTotal.toFixed(0)}</div>
+                <div style={{fontSize:'0.75rem', color:'var(--qf-text-muted)'}}>{carriedForward.length} unpaid from last month</div>
               </div>
             )}
-            <div style={{flex:1, minWidth:130, background:'linear-gradient(135deg,#e8f5ef,#f0fbf6)', borderRadius:12, padding:'12px 16px', border:'1px solid rgba(46,125,87,0.15)'}}>
-              <div style={{fontSize:'0.72rem', color:'var(--mw-success)', fontWeight:600, textTransform:'uppercase', letterSpacing:'0.5px'}}>Recovered</div>
-              <div style={{fontSize:'1.4rem', fontWeight:700, color:'var(--mw-success)'}}>₹{completedSettlements.reduce((s,x)=>s+x.perPersonAmount,0).toFixed(0)}</div>
-              <div style={{fontSize:'0.75rem', color:'var(--mw-text-muted)'}}>{completedSettlements.length} paid</div>
+            <div style={{flex:1, minWidth:130, background:'rgba(0,245,160,0.07)', borderRadius:12, padding:'12px 16px', border:'1px solid rgba(46,125,87,0.15)'}}>
+              <div style={{fontSize:'0.72rem', color:'var(--qf-mint)', fontWeight:600, textTransform:'uppercase', letterSpacing:'0.5px'}}>Recovered</div>
+              <div style={{fontSize:'1.4rem', fontWeight:700, color:'var(--qf-mint)'}}>₹{completedSettlements.reduce((s,x)=>s+x.perPersonAmount,0).toFixed(0)}</div>
+              <div style={{fontSize:'0.75rem', color:'var(--qf-text-muted)'}}>{completedSettlements.length} paid</div>
             </div>
           </div>
 
@@ -3833,32 +3662,32 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
           {carriedForward.length > 0 && (
             <div style={{marginBottom:18}}>
               <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:10}}>
-                <h3 style={{fontSize:'0.9rem', fontWeight:700, color:'var(--mw-gold)', margin:0}}>
+                <h3 style={{fontSize:'0.9rem', fontWeight:700, color:'var(--qf-gold)', margin:0}}>
                   <i className="fas fa-clock" style={{marginRight:6}}></i>Pending from {fmtMonth(prevYM)} (Carried Forward)
                 </h3>
                 <button onClick={() => setShowPrevPending(v => !v)}
-                  style={{fontSize:'0.75rem', color:'var(--mw-gold)', background:'var(--mw-gold-light)', border:'1px solid rgba(184,134,58,0.3)', borderRadius:6, padding:'3px 8px', cursor:'pointer'}}>
+                  style={{fontSize:'0.75rem', color:'var(--qf-gold)', background:'rgba(255,181,71,0.1)', border:'1px solid rgba(184,134,58,0.3)', borderRadius:6, padding:'3px 8px', cursor:'pointer'}}>
                   {showPrevPending ? 'Hide' : 'Show'}
                 </button>
               </div>
               {showPrevPending && carriedForward.map(s => (
-                <div key={s.id} style={{background:'linear-gradient(135deg,#fffbf0,#fdf6e3)', border:'1px solid #e8c87a', borderRadius:12, padding:'12px 16px', marginBottom:8, display:'flex', justifyContent:'space-between', alignItems:'flex-start', gap:10}}>
+                <div key={s.id} style={{background:'rgba(255,181,71,0.08)', border:'1px solid rgba(255,181,71,0.25)', borderRadius:12, padding:'12px 16px', marginBottom:8, display:'flex', justifyContent:'space-between', alignItems:'flex-start', gap:10}}>
                   <div style={{flex:1}}>
-                    <div style={{fontWeight:600, color:'var(--mw-text)', marginBottom:3}}>{s.description}</div>
-                    <div style={{fontSize:'0.78rem', color:'var(--mw-text-muted)', marginBottom:4}}>
-                      <i className="fas fa-calendar-alt" style={{marginRight:4, color:'var(--mw-gold)'}}></i>{s.date}
+                    <div style={{fontWeight:600, color:'var(--qf-text)', marginBottom:3}}>{s.description}</div>
+                    <div style={{fontSize:'0.78rem', color:'var(--qf-text-muted)', marginBottom:4}}>
+                      <i className="fas fa-calendar-alt" style={{marginRight:4, color:'var(--qf-gold)'}}></i>{s.date}
                       <span style={{margin:'0 8px'}}>•</span>
-                      <i className="fas fa-user" style={{marginRight:4, color:'var(--mw-gold)'}}></i>{s.personName}
+                      <i className="fas fa-user" style={{marginRight:4, color:'var(--qf-gold)'}}></i>{s.personName}
                     </div>
-                    <div style={{fontSize:'0.82rem', color:'var(--mw-gold)', fontWeight:700}}>₹{s.perPersonAmount.toFixed(2)} <span style={{fontWeight:400, color:'var(--mw-text-muted)'}}>pending since last month</span></div>
+                    <div style={{fontSize:'0.82rem', color:'var(--qf-gold)', fontWeight:700}}>₹{s.perPersonAmount.toFixed(2)} <span style={{fontWeight:400, color:'var(--qf-text-muted)'}}>pending since last month</span></div>
                   </div>
                   <div style={{display:'flex', flexDirection:'column', gap:6, flexShrink:0}}>
                     <button onClick={() => onMarkAsPaid(s.id)}
-                      style={{padding:'5px 12px', background:'var(--mw-success)', color:'white', border:'none', borderRadius:7, fontSize:'0.78rem', cursor:'pointer', fontWeight:600}}>
+                      style={{padding:'5px 12px', background:'var(--qf-mint)', color:'white', border:'none', borderRadius:7, fontSize:'0.78rem', cursor:'pointer', fontWeight:600}}>
                       ✓ Mark Paid
                     </button>
                     <button onClick={() => onDelete(s.id)}
-                      style={{padding:'5px 12px', background:'#fee2e2', color:'var(--mw-danger)', border:'none', borderRadius:7, fontSize:'0.78rem', cursor:'pointer'}}>
+                      style={{padding:'5px 12px', background:'#fee2e2', color:'var(--qf-coral)', border:'none', borderRadius:7, fontSize:'0.78rem', cursor:'pointer'}}>
                       Remove
                     </button>
                   </div>
@@ -3869,39 +3698,39 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
 
           {/* ── Current pending ── */}
           {pendingSettlements.length === 0 ? (
-            <div style={{textAlign:'center', padding:'28px 16px', color:'var(--mw-text-muted)', background:'var(--mw-sand)', borderRadius:12}}>
-              <i className="fas fa-check-circle" style={{fontSize:'2rem', color:'var(--mw-success)', marginBottom:8, display:'block'}}></i>
+            <div style={{textAlign:'center', padding:'28px 16px', color:'var(--qf-text-muted)', background:'rgba(22,31,51,0.5)', borderRadius:12}}>
+              <i className="fas fa-check-circle" style={{fontSize:'2rem', color:'var(--qf-mint)', marginBottom:8, display:'block'}}></i>
               No pending settlements for {filterPerson === 'all' ? 'anyone' : filterPerson} {filterMonth !== 'all' ? `in ${fmtMonth(filterMonth)}` : ''}
             </div>
           ) : (
             <div style={{marginBottom:18}}>
-              <h3 style={{fontSize:'0.9rem', fontWeight:700, color:'var(--mw-danger)', margin:'0 0 10px 0'}}>
+              <h3 style={{fontSize:'0.9rem', fontWeight:700, color:'var(--qf-coral)', margin:'0 0 10px 0'}}>
                 <i className="fas fa-hourglass-half" style={{marginRight:6}}></i>Pending Payments
-                {filterMonth !== 'all' && <span style={{fontWeight:400, color:'var(--mw-text-muted)', marginLeft:8}}>— {fmtMonth(filterMonth)}</span>}
+                {filterMonth !== 'all' && <span style={{fontWeight:400, color:'var(--qf-text-muted)', marginLeft:8}}>— {fmtMonth(filterMonth)}</span>}
               </h3>
               {pendingSettlements.map(s => (
-                <div key={s.id} style={{background:'linear-gradient(135deg,#fff8f8,#fff2f2)', border:'1px solid #f5c6c6', borderRadius:12, padding:'12px 16px', marginBottom:8, display:'flex', justifyContent:'space-between', alignItems:'flex-start', gap:10}}>
+                <div key={s.id} style={{background:'rgba(255,75,114,0.07)', border:'1px solid rgba(255,75,114,0.25)', borderRadius:12, padding:'12px 16px', marginBottom:8, display:'flex', justifyContent:'space-between', alignItems:'flex-start', gap:10}}>
                   <div style={{flex:1}}>
-                    <div style={{fontWeight:600, color:'var(--mw-text)', marginBottom:3}}>{s.description}</div>
-                    <div style={{fontSize:'0.78rem', color:'var(--mw-text-muted)', marginBottom:4}}>
-                      <i className="fas fa-calendar-alt" style={{marginRight:4, color:'var(--mw-danger)'}}></i>{s.date}
+                    <div style={{fontWeight:600, color:'var(--qf-text)', marginBottom:3}}>{s.description}</div>
+                    <div style={{fontSize:'0.78rem', color:'var(--qf-text-muted)', marginBottom:4}}>
+                      <i className="fas fa-calendar-alt" style={{marginRight:4, color:'var(--qf-coral)'}}></i>{s.date}
                       <span style={{margin:'0 8px'}}>•</span>
-                      <i className="fas fa-user" style={{marginRight:4, color:'var(--mw-teal)'}}></i>{s.personName}
+                      <i className="fas fa-user" style={{marginRight:4, color:'var(--qf-cyan)'}}></i>{s.personName}
                       <span style={{margin:'0 8px'}}>•</span>
                       <i className="fas fa-tag" style={{marginRight:4}}></i>{s.category}
                     </div>
                     <div style={{fontSize:'0.82rem'}}>
-                      <span style={{color:'var(--mw-text-muted)'}}>Total: ₹{s.totalAmount?.toFixed(2)} ({s.numPeople} people)</span>
-                      <span style={{marginLeft:12, color:'var(--mw-danger)', fontWeight:700}}>₹{s.perPersonAmount.toFixed(2)} owed</span>
+                      <span style={{color:'var(--qf-text-muted)'}}>Total: ₹{s.totalAmount?.toFixed(2)} ({s.numPeople} people)</span>
+                      <span style={{marginLeft:12, color:'var(--qf-coral)', fontWeight:700}}>₹{s.perPersonAmount.toFixed(2)} owed</span>
                     </div>
                   </div>
                   <div style={{display:'flex', flexDirection:'column', gap:6, flexShrink:0}}>
                     <button onClick={() => onMarkAsPaid(s.id)}
-                      style={{padding:'5px 12px', background:'var(--mw-success)', color:'white', border:'none', borderRadius:7, fontSize:'0.78rem', cursor:'pointer', fontWeight:600}}>
+                      style={{padding:'5px 12px', background:'var(--qf-mint)', color:'white', border:'none', borderRadius:7, fontSize:'0.78rem', cursor:'pointer', fontWeight:600}}>
                       ✓ Mark Paid
                     </button>
                     <button onClick={() => onDelete(s.id)}
-                      style={{padding:'5px 12px', background:'#fee2e2', color:'var(--mw-danger)', border:'none', borderRadius:7, fontSize:'0.78rem', cursor:'pointer'}}>
+                      style={{padding:'5px 12px', background:'#fee2e2', color:'var(--qf-coral)', border:'none', borderRadius:7, fontSize:'0.78rem', cursor:'pointer'}}>
                       Delete
                     </button>
                   </div>
@@ -3913,18 +3742,18 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
           {/* ── Completed ── */}
           {completedSettlements.length > 0 && (
             <div style={{marginBottom:18}}>
-              <h3 style={{fontSize:'0.9rem', fontWeight:700, color:'var(--mw-success)', margin:'0 0 10px 0'}}>
+              <h3 style={{fontSize:'0.9rem', fontWeight:700, color:'var(--qf-mint)', margin:'0 0 10px 0'}}>
                 <i className="fas fa-check-double" style={{marginRight:6}}></i>Recovered Payments
               </h3>
               {completedSettlements.map(s => (
-                <div key={s.id} style={{background:'linear-gradient(135deg,#f0fbf6,#e8f5ef)', border:'1px solid #b4e0c8', borderRadius:12, padding:'12px 16px', marginBottom:6, display:'flex', justifyContent:'space-between', alignItems:'center', opacity:0.85}}>
+                <div key={s.id} style={{background:'rgba(0,245,160,0.07)', border:'1px solid rgba(0,245,160,0.2)', borderRadius:12, padding:'12px 16px', marginBottom:6, display:'flex', justifyContent:'space-between', alignItems:'center', opacity:0.85}}>
                   <div>
-                    <div style={{fontWeight:500, textDecoration:'line-through', color:'var(--mw-text-muted)'}}>{s.description}</div>
-                    <div style={{fontSize:'0.78rem', color:'var(--mw-text-muted)'}}>
+                    <div style={{fontWeight:500, textDecoration:'line-through', color:'var(--qf-text-muted)'}}>{s.description}</div>
+                    <div style={{fontSize:'0.78rem', color:'var(--qf-text-muted)'}}>
                       {s.date} • {s.personName} • ₹{s.perPersonAmount.toFixed(2)}
                     </div>
                   </div>
-                  <span style={{color:'var(--mw-success)', fontWeight:700, fontSize:'0.85rem'}}>✓ Paid</span>
+                  <span style={{color:'var(--qf-mint)', fontWeight:700, fontSize:'0.85rem'}}>✓ Paid</span>
                 </div>
               ))}
             </div>
@@ -3933,21 +3762,21 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
           {/* ── Person-wise summary cards ── */}
           {Object.keys(personTotals).length > 0 && (
             <div>
-              <h4 style={{fontSize:'0.9rem', fontWeight:700, color:'var(--mw-teal-dark)', marginBottom:12}}>
-                <i className="fas fa-chart-bar" style={{marginRight:6, color:'var(--mw-teal)'}}></i>Person-wise Summary (All Pending)
+              <h4 style={{fontSize:'0.9rem', fontWeight:700, color:'var(--qf-void)', marginBottom:12}}>
+                <i className="fas fa-chart-bar" style={{marginRight:6, color:'var(--qf-cyan)'}}></i>Person-wise Summary (All Pending)
               </h4>
               <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(200px, 1fr))', gap:10}}>
                 {Object.entries(personTotals).map(([person, amount]) => (
-                  <div key={person} style={{background:'linear-gradient(135deg,var(--mw-teal-light),#edf8f9)', border:'1px solid rgba(26,107,114,0.2)', borderRadius:12, padding:'14px 16px', display:'flex', justifyContent:'space-between', alignItems:'center'}}>
+                  <div key={person} style={{background:'rgba(0,210,255,0.08)', border:'1px solid rgba(26,107,114,0.2)', borderRadius:12, padding:'14px 16px', display:'flex', justifyContent:'space-between', alignItems:'center'}}>
                     <div>
-                      <div style={{fontWeight:600, color:'var(--mw-teal-dark)', marginBottom:2}}>
-                        <i className="fas fa-user-circle" style={{marginRight:6, color:'var(--mw-teal)'}}></i>{person}
+                      <div style={{fontWeight:600, color:'var(--qf-void)', marginBottom:2}}>
+                        <i className="fas fa-user-circle" style={{marginRight:6, color:'var(--qf-cyan)'}}></i>{person}
                       </div>
-                      <div style={{fontSize:'1.25rem', fontWeight:700, color:'var(--mw-danger)'}}>₹{amount.toFixed(0)}</div>
-                      <div style={{fontSize:'0.72rem', color:'var(--mw-text-muted)'}}>total pending</div>
+                      <div style={{fontSize:'1.25rem', fontWeight:700, color:'var(--qf-coral)'}}>₹{amount.toFixed(0)}</div>
+                      <div style={{fontSize:'0.72rem', color:'var(--qf-text-muted)'}}>total pending</div>
                     </div>
                     <button onClick={() => { setSelectedPersonForShare(person); setShowShareModal(true); }}
-                      style={{padding:'7px 12px', background:'var(--mw-teal)', color:'white', border:'none', borderRadius:8, fontSize:'0.78rem', cursor:'pointer', display:'flex', alignItems:'center', gap:5}}>
+                      style={{padding:'7px 12px', background:'var(--qf-cyan)', color:'white', border:'none', borderRadius:8, fontSize:'0.78rem', cursor:'pointer', display:'flex', alignItems:'center', gap:5}}>
                       <i className="fas fa-share-alt"></i>
                       <span>Share</span>
                     </button>
@@ -4293,7 +4122,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
       const investAmt = transactions.filter(tx => tx.necessity === 'Investment').reduce((s, tx) => s + (tx.amount || 0), 0);
 
       return (
-        <div style={{ background:'white', borderRadius:18, overflow:'hidden', boxShadow:'0 4px 24px rgba(0,0,0,0.08)' }} className="dark:bg-gray-800">
+        <div style={{ background:'rgba(22,31,51,0.6)', borderRadius:18, overflow:'hidden', boxShadow:'0 4px 24px rgba(0,0,0,0.08)' }} className="dark:bg-gray-800">
           {/* Header */}
           <div style={{ background:'linear-gradient(135deg,#1e1b4b 0%,#312e81 50%,#4c1d95 100%)', padding:'24px 28px 20px 28px' }}>
             <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', flexWrap:'wrap', gap:12 }}>
@@ -4324,9 +4153,9 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
                 onChange={(e) => setMonthFilter(e.target.value)}
                 style={{ background:'rgba(255,255,255,0.15)', border:'1px solid rgba(255,255,255,0.25)', borderRadius:8, color:'white', padding:'7px 14px', fontSize:'0.85rem', cursor:'pointer' }}
               >
-                <option value="all" style={{ color:'#1e1b4b', background:'white' }}>All Months</option>
+                <option value="all" style={{ color:'#E2E8F0', background:'#161F33' }}>All Months</option>
                 {availableMonths.map(month => (
-                  <option key={month} value={month} style={{ color:'#1e1b4b', background:'white' }}>
+                  <option key={month} value={month} style={{ color:'#E2E8F0', background:'#161F33' }}>
                     {new Date(month + '-01').toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
                   </option>
                 ))}
@@ -4388,7 +4217,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
                             <option value="Yes">Yes - Shared</option>
                           </select>
                           {editForm.groupPay === "Yes" && editForm.groupDetails && (
-                            <div style={{ marginTop:8, padding:10, background:'#f9fafb', borderRadius:8 }}>
+                            <div style={{ marginTop:8, padding:10, background:'rgba(22,31,51,0.4)', borderRadius:8 }}>
                               {(editForm.groupDetails.people || []).map((person, pIdx) => (
                                 <div key={person.id} style={{ display:'flex', gap:8, marginBottom:6 }}>
                                   <input type="text" value={person.name} onChange={(e) => handleEditPersonChange(pIdx,'name',e.target.value)} className="flex-1 p-1 border rounded text-sm" />
@@ -4402,14 +4231,14 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
                       </div>
                       <div style={{ display:'flex', gap:8 }}>
                         <button onClick={handleSaveEdit} style={{ flex:1, padding:'9px 0', background:'linear-gradient(135deg,#10b981,#059669)', color:'white', border:'none', borderRadius:9, fontWeight:600, cursor:'pointer', fontSize:'0.88rem' }}>✓ Save</button>
-                        <button onClick={handleCancelEdit} style={{ flex:1, padding:'9px 0', background:'#f3f4f6', color:'#6b7280', border:'none', borderRadius:9, fontWeight:600, cursor:'pointer', fontSize:'0.88rem' }}>✕ Cancel</button>
+                        <button onClick={handleCancelEdit} style={{ flex:1, padding:'9px 0', background:'rgba(22,31,51,0.5)', color:'#6b7280', border:'none', borderRadius:9, fontWeight:600, cursor:'pointer', fontSize:'0.88rem' }}>✕ Cancel</button>
                       </div>
                     </div>
                   ) : (
                     /* ---- VIEW ROW END ---- */
                     <div style={{ padding:'14px 18px', display:'flex', alignItems:'center', gap:14, flexWrap:'wrap' }}>
                       {/* Date bubble */}
-                      <div style={{ background:'#f3f4f6', borderRadius:10, padding:'8px 12px', textAlign:'center', minWidth:54, flexShrink:0 }} className="dark:bg-gray-600">
+                      <div style={{ background:'rgba(22,31,51,0.5)', borderRadius:10, padding:'8px 12px', textAlign:'center', minWidth:54, flexShrink:0 }} className="dark:bg-gray-600">
                         <div style={{ fontSize:'0.65rem', color:'#9ca3af', fontWeight:700, textTransform:'uppercase' }}>{new Date(tx.date).toLocaleDateString('en-US',{month:'short'})}</div>
                         <div style={{ fontWeight:800, fontSize:'1.05rem', color:'#1f2937', lineHeight:1 }} className="dark:text-gray-100">{new Date(tx.date).getDate()}</div>
                       </div>
@@ -4489,7 +4318,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
                 { label:'Group Payments', value:transactions.filter(tx => tx.groupPay==="Yes").length, color:'#8b5cf6', icon:'👥' },
                 { label:'Investments', value:'₹'+investAmt.toLocaleString('en-IN',{minimumFractionDigits:0}), color:'#14b8a6', icon:'📈' }
               ].map(item => (
-                <div key={item.label} style={{ background:'#f9fafb', borderRadius:12, padding:'12px 14px', borderLeft:`3px solid ${item.color}` }} className="dark:bg-gray-700">
+                <div key={item.label} style={{ background:'rgba(22,31,51,0.4)', borderRadius:12, padding:'12px 14px', borderLeft:`3px solid ${item.color}` }} className="dark:bg-gray-700">
                   <div style={{ fontSize:'0.65rem', color:'#9ca3af', textTransform:'uppercase', letterSpacing:'0.08em', marginBottom:2 }}>{item.icon} {item.label}</div>
                   <div style={{ fontWeight:800, fontSize:'1rem', color:item.color }}>{item.value}</div>
                 </div>
@@ -4525,49 +4354,49 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
       };
 
       return (
-        <div style={{minHeight:'100vh', display:'flex', alignItems:'center', justifyContent:'center', background:'linear-gradient(145deg,#e8f5f6 0%,#f7f1e8 100%)'}}>
+        <div style={{minHeight:'100vh', display:'flex', alignItems:'center', justifyContent:'center', background:'radial-gradient(ellipse 80% 60% at 50% -10%, rgba(0,210,255,0.12) 0%, transparent 55%), radial-gradient(ellipse 60% 50% at 80% 90%, rgba(0,245,160,0.07) 0%, transparent 50%), #0B0F19'}}>
           <div style={{width:'100%', maxWidth:420, margin:'0 20px'}}>
             {/* Logo/Brand */}
             <div style={{textAlign:'center', marginBottom:32}}>
-              <div style={{width:72, height:72, borderRadius:'50%', background:'linear-gradient(135deg,var(--mw-teal-dark),var(--mw-teal-mid))', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 16px', boxShadow:'0 8px 32px rgba(26,107,114,0.3)'}}>
-                <i className="fas fa-coins" style={{fontSize:'2rem', color:'var(--mw-gold-mid)'}}></i>
+              <div style={{width:72, height:72, borderRadius:'50%', background:'linear-gradient(135deg,var(--qf-void),var(--qf-cyan))', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 16px', boxShadow:'0 8px 32px rgba(26,107,114,0.3)'}}>
+                <i className="fas fa-coins" style={{fontSize:'2rem', color:'var(--qf-gold)'}}></i>
               </div>
-              <h1 style={{fontFamily:"'Playfair Display',serif", fontSize:'2rem', fontWeight:800, color:'var(--mw-teal-dark)', margin:0}}>MoneyWise</h1>
-              <p style={{color:'var(--mw-gold)', fontWeight:600, fontSize:'0.8rem', letterSpacing:'1.5px', textTransform:'uppercase', marginTop:4}}>Your Personal Finance Manager</p>
+              <h1 style={{fontFamily:"'Space Grotesk',sans-serif", fontSize:'2rem', fontWeight:800, color:'#E2E8F0', margin:0}}>MoneyWise</h1>
+              <p style={{color:'var(--qf-cyan)', fontWeight:600, fontSize:'0.78rem', letterSpacing:'1.5px', textTransform:'uppercase', marginTop:4}}>Your Personal Finance Manager</p>
             </div>
 
-            <form onSubmit={handleSubmit} style={{background:'white', borderRadius:20, padding:'32px 28px', boxShadow:'0 12px 40px rgba(26,107,114,0.12)', border:'1px solid var(--mw-border)'}}>
-              <h2 style={{fontWeight:700, fontSize:'1.25rem', color:'var(--mw-teal-dark)', marginBottom:6, textAlign:'center'}}>Welcome back</h2>
-              <p style={{fontSize:'0.82rem', color:'var(--mw-text-muted)', textAlign:'center', marginBottom:22}}>Sign in to access your financial dashboard</p>
+            <form onSubmit={handleSubmit} style={{background:'rgba(18,26,46,0.95)', border:'1px solid rgba(0,210,255,0.2)', borderRadius:20, padding:'32px 28px', boxShadow:'0 32px 80px rgba(0,0,0,0.6), 0 0 40px rgba(0,210,255,0.1)', border:'1px solid rgba(0,210,255,0.15)'}}>
+              <h2 style={{fontWeight:700, fontSize:'1.25rem', color:'var(--qf-void)', marginBottom:6, textAlign:'center'}}>Welcome back</h2>
+              <p style={{fontSize:'0.82rem', color:'var(--qf-text-muted)', textAlign:'center', marginBottom:22}}>Sign in to access your financial dashboard</p>
 
               <div style={{display:'flex', gap:16, justifyContent:'center', marginBottom:20}}>
-                <label style={{display:'flex', alignItems:'center', gap:6, cursor:'pointer', fontSize:'0.88rem', color: mode==='email' ? 'var(--mw-teal)' : 'var(--mw-text-muted)', fontWeight: mode==='email' ? 600 : 400}}>
-                  <input type="radio" checked={mode === "email"} onChange={() => setMode("email")} style={{accentColor:'var(--mw-teal)'}} /> Email
+                <label style={{display:'flex', alignItems:'center', gap:6, cursor:'pointer', fontSize:'0.88rem', color: mode==='email' ? 'var(--qf-cyan)' : 'var(--qf-text-muted)', fontWeight: mode==='email' ? 600 : 400}}>
+                  <input type="radio" checked={mode === "email"} onChange={() => setMode("email")} style={{accentColor:'var(--qf-cyan)'}} /> Email
                 </label>
-                <label style={{display:'flex', alignItems:'center', gap:6, cursor:'pointer', fontSize:'0.88rem', color: mode==='username' ? 'var(--mw-teal)' : 'var(--mw-text-muted)', fontWeight: mode==='username' ? 600 : 400}}>
-                  <input type="radio" checked={mode === "username"} onChange={() => setMode("username")} style={{accentColor:'var(--mw-teal)'}} /> Guest Username
+                <label style={{display:'flex', alignItems:'center', gap:6, cursor:'pointer', fontSize:'0.88rem', color: mode==='username' ? 'var(--qf-cyan)' : 'var(--qf-text-muted)', fontWeight: mode==='username' ? 600 : 400}}>
+                  <input type="radio" checked={mode === "username"} onChange={() => setMode("username")} style={{accentColor:'var(--qf-cyan)'}} /> Guest Username
                 </label>
               </div>
 
               <div style={{position:'relative', marginBottom:20}}>
-                <i className={`fas ${mode==='email' ? 'fa-envelope' : 'fa-user'}`} style={{position:'absolute', left:14, top:'50%', transform:'translateY(-50%)', color:'var(--mw-teal)', fontSize:'0.9rem'}}></i>
+                <i className={`fas ${mode==='email' ? 'fa-envelope' : 'fa-user'}`} style={{position:'absolute', left:14, top:'50%', transform:'translateY(-50%)', color:'var(--qf-cyan)', fontSize:'0.9rem'}}></i>
                 <input
                   type="text"
-                  placeholder={mode === "email" ? "you@example.com" : "Guest123"}
+                  id="login-input" name="login-input" placeholder={mode === "email" ? "you@example.com" : "Guest123"}
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  style={{width:'100%', padding:'11px 14px 11px 40px', borderRadius:10, border:'1.5px solid var(--mw-border)', fontSize:'0.95rem', background:'var(--mw-ivory)', boxSizing:'border-box', outline:'none', transition:'border-color 0.2s'}}
-                  onFocus={e => e.target.style.borderColor='var(--mw-teal)'}
-                  onBlur={e => e.target.style.borderColor='var(--mw-border)'}
+                  style={{width:'100%', padding:'11px 14px 11px 40px', borderRadius:10, border:'1.5px solid rgba(0,210,255,0.15)', fontSize:'0.95rem', background:'rgba(22,31,51,0.7)', color:'#E2E8F0', boxSizing:'border-box', outline:'none', transition:'border-color 0.2s'}}
+                  onFocus={e => e.target.style.borderColor='var(--qf-cyan)'}
+                  onBlur={e => e.target.style.borderColor='rgba(0,210,255,0.2)'}
                   required
                 />
               </div>
 
-              <button type="submit" style={{width:'100%', padding:'12px', background:'linear-gradient(135deg,var(--mw-teal-dark),var(--mw-teal-mid))', color:'white', border:'none', borderRadius:10, fontSize:'1rem', fontWeight:700, cursor:'pointer', boxShadow:'0 4px 16px rgba(26,107,114,0.3)', letterSpacing:'0.3px'}}>
+              <button type="submit" style={{width:'100%', padding:'12px', background:'linear-gradient(135deg,#00D2FF,#00F5A0)', color:'#0B0F19', border:'none', borderRadius:10, fontSize:'1rem', fontWeight:700, cursor:'pointer', boxShadow:'0 4px 16px rgba(26,107,114,0.3)', letterSpacing:'0.3px'}}>
                 Enter MoneyWise →
               </button>
 
-              <p style={{textAlign:'center', fontSize:'0.73rem', color:'var(--mw-text-muted)', marginTop:16}}>
+              <p style={{textAlign:'center', fontSize:'0.73rem', color:'var(--qf-text-muted)', marginTop:16}}>
                 Your data stays on your device. No account required.
               </p>
             </form>
@@ -5254,7 +5083,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
       const InsightCard = ({ title, icon, children, id, rationale }) => {
         const cardRationale = rationale || insightRationale[id] || '';
         return (
-          <div style={{ background:'white', borderRadius:16, overflow:'hidden', boxShadow:'0 2px 14px rgba(0,0,0,0.07)', border:'1px solid #f3f4f6', transition:'all 0.25s', marginBottom:0 }}
+          <div style={{ background:'rgba(22,31,51,0.6)', borderRadius:16, overflow:'hidden', boxShadow:'0 2px 14px rgba(0,0,0,0.07)', border:'1px solid rgba(0,210,255,0.10)', transition:'all 0.25s', marginBottom:0 }}
             className="dark:bg-gray-800 dark:border-gray-700 insight-card hover:shadow-xl">
             <button
               onClick={(e) => { e.preventDefault(); setExpandedCard(expandedCard === id ? null : id); }}
@@ -5296,7 +5125,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
         <div className="space-y-3" id="insights-section">
           {/* Hero summary cards */}
           <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(200px,1fr))', gap:16, marginBottom:8 }}>
-            <div style={{ background:'linear-gradient(135deg,#fee2e2,#fecaca)', borderRadius:16, padding:'18px 20px', borderLeft:'5px solid #ef4444', position:'relative', overflow:'hidden' }}>
+            <div style={{ background:'rgba(255,75,114,0.10)', borderRadius:16, padding:'18px 20px', borderLeft:'5px solid #ef4444', position:'relative', overflow:'hidden' }}>
               
               <div style={{ fontSize:'0.72rem', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.1em', color:'#991b1b', marginBottom:4 }}>Hidden Leaks</div>
               <div style={{ fontSize:'1.9rem', fontWeight:800, color:'#dc2626' }}>₹{insights.leaksTotal.toFixed(0)}</div>
@@ -5314,7 +5143,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
               <div style={{ fontSize:'0.7rem', marginTop:6, opacity:0.8, color: insights.monthlyTrendPercent >= 0 ? '#92400e' : '#065f46' }}>{insights.monthlyTrendPercent >= 0 ? 'Spending momentum is rising' : 'Great — costs are trending down'}</div>
             </div>
 
-            <div style={{ background:'linear-gradient(135deg,#ede9fe,#ddd6fe)', borderRadius:16, padding:'18px 20px', borderLeft:'5px solid #8b5cf6', position:'relative', overflow:'hidden' }}>
+            <div style={{ background:'rgba(167,85,247,0.12)', borderRadius:16, padding:'18px 20px', borderLeft:'5px solid #8b5cf6', position:'relative', overflow:'hidden' }}>
               
               <div style={{ fontSize:'0.72rem', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.1em', color:'#4c1d95', marginBottom:4 }}>Financial Health</div>
               <div style={{ fontSize:'1.9rem', fontWeight:800, color:'#7c3aed' }}>{insights.healthScore}<span style={{ fontSize:'1rem', fontWeight:500 }}>/100</span></div>
@@ -5326,7 +5155,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
           </div>
           
           {/* NEW CODE START - "Can I Afford This?" Simulator */}
-          <InsightCard title="Can I Afford This? Simulator" icon={<i className="fas fa-calculator" style={{color:"black"}}></i>} id="afford">
+          <InsightCard title="Can I Afford This? Simulator" icon={<i className="fas fa-calculator" style={{color:"var(--qf-text-muted)"}}></i>} id="afford">
             <div className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
@@ -5388,7 +5217,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
           
           {/* Opportunity Cost Analyzer */}
           {insights.opportunityCosts && insights.opportunityCosts.length > 0 && (
-            <InsightCard title="Opportunity Cost Alert" icon={<i className="fas fa-hourglass-half" style={{color:"black"}}></i>} id="opportunity">
+            <InsightCard title="Opportunity Cost Alert" icon={<i className="fas fa-hourglass-half" style={{color:"var(--qf-text-muted)"}}></i>} id="opportunity">
               <div className="space-y-3">
                 <p className="text-sm text-red-500">Large purchases detected (&gt;₹10,000)</p>
                 {insights.opportunityCosts.slice(0, 3).map((item, idx) => (
@@ -5414,7 +5243,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
           
           {/* Diminishing Returns Detector */}
           {Object.keys(insights.diminishingReturns || {}).length > 0 && (
-            <InsightCard title="Diminishing Returns Detector" icon={<i className="fas fa-arrow-trend-down" style={{color:"black"}}></i>} id="diminishing">
+            <InsightCard title="Diminishing Returns Detector" icon={<i className="fas fa-arrow-trend-down" style={{color:"var(--qf-text-muted)"}}></i>} id="diminishing">
               <div className="space-y-2">
                 <p className="text-sm">Spending beyond optimal utility zone in:</p>
                 {Object.keys(insights.diminishingReturns).map((cat, idx) => (
@@ -5427,7 +5256,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
           )}
           
           {/* Income Elasticity of Lifestyle */}
-          <InsightCard title="Lifestyle Elasticity" icon={<i className="fas fa-arrow-trend-up" style={{color:"black"}}></i>} id="elasticity">
+          <InsightCard title="Lifestyle Elasticity" icon={<i className="fas fa-arrow-trend-up" style={{color:"var(--qf-text-muted)"}}></i>} id="elasticity">
             <div className="text-center">
               <div className="text-3xl font-bold my-4">
                 {insights.incomeElasticity ? insights.incomeElasticity.toFixed(2) : 'N/A'}
@@ -5443,7 +5272,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
           </InsightCard>
           
           {/* Present Bias Score */}
-          <InsightCard title="Present Bias Score" icon={<i className="fas fa-clock" style={{color:"black"}}></i>} id="presentbias">
+          <InsightCard title="Present Bias Score" icon={<i className="fas fa-clock" style={{color:"var(--qf-text-muted)"}}></i>} id="presentbias">
             <div className="text-center">
               <div className="text-3xl font-bold my-4">
                 {insights.presentBiasScore}%
@@ -5461,7 +5290,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
           </InsightCard>
           
           {/* Spending Probability Prediction */}
-          <InsightCard title="Spending Probability" icon={<i className="fas fa-percent" style={{color:"black"}}></i>} id="probability">
+          <InsightCard title="Spending Probability" icon={<i className="fas fa-percent" style={{color:"var(--qf-text-muted)"}}></i>} id="probability">
             <div className="text-center">
               <div className="text-3xl font-bold my-4">
                 {insights.spendProbability}%
@@ -5483,7 +5312,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
           
           
           {/* Happiness ROI Card */}
-          <InsightCard title="Happiness ROI" icon={<i className="fas fa-heart" style={{color:"black"}}></i>} id="happiness-roi">
+          <InsightCard title="Happiness ROI" icon={<i className="fas fa-heart" style={{color:"var(--qf-text-muted)"}}></i>} id="happiness-roi">
             <div className="space-y-3">
               <p className="text-sm text-gray-600 dark:text-gray-400">
                 Happiness per ₹1000 spent on wants
@@ -5521,7 +5350,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
                   
                   {insights.happinessSpendingCorrelation < 0.3 && (
                     <div className="mt-2 p-2 bg-yellow-100 dark:bg-yellow-900/20 rounded text-sm">
-                      <i className="fas fa-lightbulb mr-2" style={{color:"black"}}></i>
+                      <i className="fas fa-lightbulb mr-2" style={{color:"var(--qf-text-muted)"}}></i>
                       Low correlation between spending and happiness. Consider focusing on high-ROI purchases.
                     </div>
                   )}
@@ -5533,7 +5362,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
           </InsightCard>
 
           {/* Goals Progress Card */}
-          <InsightCard title="Goals Progress" icon={<i className="fas fa-bullseye" style={{color:"black"}}></i>} id="goals-progress">
+          <InsightCard title="Goals Progress" icon={<i className="fas fa-bullseye" style={{color:"var(--qf-text-muted)"}}></i>} id="goals-progress">
             <div className="space-y-3">
               <div className="text-center">
                 <div className="text-4xl font-bold text-green-600 mb-2">{insights.goalsProgress}%</div>
@@ -5575,7 +5404,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
           </InsightCard>
 
           {/* Long-Term Wealth Probability */}
-          <InsightCard title="30-Year Wealth Projection" icon={<i className="fas fa-chart-line" style={{color:"black"}}></i>} id="wealth">
+          <InsightCard title="30-Year Wealth Projection" icon={<i className="fas fa-chart-line" style={{color:"var(--qf-text-muted)"}}></i>} id="wealth">
             <div className="text-center">
               <div className="text-2xl font-bold my-2">
                 ₹{(insights.projectedCorpus / 10000000).toFixed(2)} Cr
@@ -5596,7 +5425,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
           </InsightCard>
           
           {/* Asset Allocation Analyzer */}
-          <InsightCard title="Asset Allocation Score" icon={<i className="fas fa-chart-pie" style={{color:"black"}}></i>} id="allocation">
+          <InsightCard title="Asset Allocation Score" icon={<i className="fas fa-chart-pie" style={{color:"var(--qf-text-muted)"}}></i>} id="allocation">
             <div className="space-y-3">
               <div className="flex justify-between">
                 <span>Your vs Ideal</span>
@@ -5623,7 +5452,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
           </InsightCard>
           
           {/* Original insight cards continue... */}
-          <InsightCard title="Hidden Leaks" icon={<i className="fas fa-magnifying-glass" style={{color:"black"}}></i>} id="leaks">
+          <InsightCard title="Hidden Leaks" icon={<i className="fas fa-magnifying-glass" style={{color:"var(--qf-text-muted)"}}></i>} id="leaks">
             <div className="space-y-2">
               {insights.hiddenLeaks.length > 0 ? (
                 insights.hiddenLeaks.map(([desc, amount], idx) => (
@@ -5636,12 +5465,12 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
                 <p className="text-gray-500">No small recurring expenses detected</p>
               )}
               <div className="mt-3 p-2 bg-yellow-50 dark:bg-yellow-900/20 rounded text-sm">
-                 <i className="fas fa-lightbulb text-gray-700 dark:text-gray-400 mr-2" style={{color:"black"}}></i>Tip: These small expenses add up! Consider reducing or eliminating some.
+                 <i className="fas fa-lightbulb text-gray-700 dark:text-gray-400 mr-2" style={{color:"var(--qf-text-muted)"}}></i>Tip: These small expenses add up! Consider reducing or eliminating some.
               </div>
             </div>
           </InsightCard>
           
-          <InsightCard title="Monthly Trend" icon={<i className="fas fa-chart-bar" style={{color:"black"}}></i>} id="trend">
+          <InsightCard title="Monthly Trend" icon={<i className="fas fa-chart-bar" style={{color:"var(--qf-text-muted)"}}></i>} id="trend">
             <div className="text-center">
               <div className="text-3xl font-bold my-4">
                 <span className={insights.monthlyTrendPercent >= 0 ? 'text-red-600' : 'text-green-600'}>
@@ -5654,7 +5483,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
             </div>
           </InsightCard>
           
-          <InsightCard title="Category Trends" icon={<i className="fas fa-chart-line" style={{color:"black"}}></i>} id="cattrends">
+          <InsightCard title="Category Trends" icon={<i className="fas fa-chart-line" style={{color:"var(--qf-text-muted)"}}></i>} id="cattrends">
             <div className="space-y-2">
               {insights.categoryTrends.length > 0 ? (
                 insights.categoryTrends.map((trend, idx) => (
@@ -5674,7 +5503,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
             </div>
           </InsightCard>
           
-          <InsightCard title="Lifestyle Inflation" icon={insights.lifestyleStatus === 'OK' ? <i className="fas fa-check" style={{color:"black"}}></i> : <i className="fas fa-exclamation-triangle" style={{color:"black"}}></i>} id="lifestyle">
+          <InsightCard title="Lifestyle Inflation" icon={insights.lifestyleStatus === 'OK' ? <i className="fas fa-check" style={{color:"var(--qf-text-muted)"}}></i> : <i className="fas fa-exclamation-triangle" style={{color:"var(--qf-text-muted)"}}></i>} id="lifestyle">
             <div className="text-center">
               <div className={`text-3xl font-bold my-4 ${insights.lifestyleStatus === 'OK' ? 'text-green-600' : 'text-red-600'}`}>
                 {insights.lifestyleStatus}
@@ -5687,7 +5516,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
             </div>
           </InsightCard>
           
-          <InsightCard title="Budget Usage" icon={<i className="fas fa-bullseye" style={{color:"black"}}></i>} id="budget">
+          <InsightCard title="Budget Usage" icon={<i className="fas fa-bullseye" style={{color:"var(--qf-text-muted)"}}></i>} id="budget">
             <div className="space-y-3">
               {insights.budgetUsage.length > 0 ? (
                 insights.budgetUsage.map((item, idx) => (
@@ -5713,7 +5542,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
             </div>
           </InsightCard>
           
-          <InsightCard title="Overspend Prediction" icon={insights.overspendStatus === 'RED' ? <i className="fas fa-circle" style={{color:"black"}}></i> : insights.overspendStatus === 'YELLOW' ? <i className="fas fa-circle" style={{color:"black"}}></i> : <i className="fas fa-circle" style={{color:"black"}}></i>} id="overspend">
+          <InsightCard title="Overspend Prediction" icon={insights.overspendStatus === 'RED' ? <i className="fas fa-circle" style={{color:"var(--qf-text-muted)"}}></i> : insights.overspendStatus === 'YELLOW' ? <i className="fas fa-circle" style={{color:"var(--qf-text-muted)"}}></i> : <i className="fas fa-circle" style={{color:"var(--qf-text-muted)"}}></i>} id="overspend">
             <div className="text-center">
               <div className="text-3xl font-bold my-4">{insights.overspendStatus}</div>
               <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -5722,7 +5551,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
             </div>
           </InsightCard>
           
-          <InsightCard title="Pattern Detection" icon={<i className="fas fa-arrows-rotate" style={{color:"black"}}></i>} id="patterns">
+          <InsightCard title="Pattern Detection" icon={<i className="fas fa-arrows-rotate" style={{color:"var(--qf-text-muted)"}}></i>} id="patterns">
             <div className="space-y-2">
               <div className="p-2 bg-white dark:bg-gray-800 rounded">
                 <div className="text-sm text-gray-600">Busiest Day</div>
@@ -5735,7 +5564,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
             </div>
           </InsightCard>
           
-          <InsightCard title="Savings Rate" icon={<i className="fas fa-wallet" style={{color:"black"}}></i>} id="savings">
+          <InsightCard title="Savings Rate" icon={<i className="fas fa-wallet" style={{color:"var(--qf-text-muted)"}}></i>} id="savings">
             <div className="text-center">
               <div className="text-3xl font-bold my-4 text-green-600">{insights.savingsRate}%</div>
               <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -5744,14 +5573,14 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
             </div>
           </InsightCard>
           
-          <InsightCard title="Savings Streak" icon={<i className="fas fa-fire" style={{color:"black"}}></i>} id="streak">
+          <InsightCard title="Savings Streak" icon={<i className="fas fa-fire" style={{color:"var(--qf-text-muted)"}}></i>} id="streak">
             <div className="text-center">
               <div className="text-4xl font-bold my-4">{insights.streak}</div>
               <p className="text-sm text-gray-600 dark:text-gray-400">days of tracked spending</p>
             </div>
           </InsightCard>
           
-          <InsightCard title="Daily Average" icon={<i className="fas fa-calendar" style={{color:"black"}}></i>} id="daily">
+          <InsightCard title="Daily Average" icon={<i className="fas fa-calendar" style={{color:"var(--qf-text-muted)"}}></i>} id="daily">
             <div className="text-center">
               <div className="text-3xl font-bold my-4">₹{insights.dailyAverage}</div>
               <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -5763,7 +5592,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
             </div>
           </InsightCard>
           
-          <InsightCard title="Expense Ratio" icon={<i className="fas fa-chart-pie" style={{color:"black"}}></i>} id="ratio">
+          <InsightCard title="Expense Ratio" icon={<i className="fas fa-chart-pie" style={{color:"var(--qf-text-muted)"}}></i>} id="ratio">
             <div className="text-center">
               <div className="text-3xl font-bold my-4">{insights.expenseRatio}%</div>
               <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -5772,7 +5601,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
             </div>
           </InsightCard>
           
-          <InsightCard title="Subscriptions" icon={<i className="fas fa-gift" style={{color:"black"}}></i>} id="subs">
+          <InsightCard title="Subscriptions" icon={<i className="fas fa-gift" style={{color:"var(--qf-text-muted)"}}></i>} id="subs">
             <div className="space-y-2">
               {insights.subscriptions.length > 0 ? (
                 insights.subscriptions.map((sub, idx) => (
@@ -5787,7 +5616,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
             </div>
           </InsightCard>
           
-          <InsightCard title="EMI Stress" icon={insights.emiStatus === 'SAFE' ? <i className="fas fa-check" style={{color:"black"}}></i> : insights.emiStatus === 'MODERATE' ? <i className="fas fa-exclamation-triangle" style={{color:"black"}}></i> : <i className="fas fa-circle" style={{color:"black"}}></i>} id="emi">
+          <InsightCard title="EMI Stress" icon={insights.emiStatus === 'SAFE' ? <i className="fas fa-check" style={{color:"var(--qf-text-muted)"}}></i> : insights.emiStatus === 'MODERATE' ? <i className="fas fa-exclamation-triangle" style={{color:"var(--qf-text-muted)"}}></i> : <i className="fas fa-circle" style={{color:"var(--qf-text-muted)"}}></i>} id="emi">
             <div className="text-center">
               <div className={`text-3xl font-bold my-4 ${insights.emiStatus === 'SAFE' ? 'text-green-600' : insights.emiStatus === 'MODERATE' ? 'text-yellow-600' : 'text-red-600'}`}>
                 {insights.emiStatus}
@@ -5799,7 +5628,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
           </InsightCard>
 
           {/* ── PAYDAY ECHO EFFECT ── */}
-          <InsightCard title="Payday Echo Effect" icon={<i className="fas fa-money-bill-wave" style={{color:"black"}}></i>} id="payday-echo">
+          <InsightCard title="Payday Echo Effect" icon={<i className="fas fa-money-bill-wave" style={{color:"var(--qf-text-muted)"}}></i>} id="payday-echo">
             <div className="space-y-4">
               <p className="text-sm text-gray-600 dark:text-gray-400">
                 How much more do you spend in the 5 days after payday vs the rest of the month?
@@ -5886,7 +5715,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
           </InsightCard>
 
           {/* ── WEEKEND VS WEEKDAY SPEND RATIO ── */}
-          <InsightCard title="Weekend vs Weekday Spend" icon={<i className="fas fa-calendar-week" style={{color:"black"}}></i>} id="weekend-weekday">
+          <InsightCard title="Weekend vs Weekday Spend" icon={<i className="fas fa-calendar-week" style={{color:"var(--qf-text-muted)"}}></i>} id="weekend-weekday">
             <div className="space-y-4">
               <p className="text-sm text-gray-600 dark:text-gray-400">
                 Comparing your average per-transaction spend on weekends vs weekdays this month
@@ -6049,14 +5878,14 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
       };
       
       const typeEmoji = {
-          savings: <i className="fas fa-piggy-bank" style={{color:"black"}}></i>,
-          debt: <i className="fas fa-credit-card" style={{color:"black"}}></i>
+          savings: <i className="fas fa-piggy-bank" style={{color:"var(--qf-text-muted)"}}></i>,
+          debt: <i className="fas fa-credit-card" style={{color:"var(--qf-text-muted)"}}></i>
       };
       
       return (
         <div className="bg-white dark:bg-gray-800 p-4 rounded shadow">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="font-semibold text-lg"><i className="fas fa-bullseye text-gray-700 dark:text-gray-400 mr-2" style={{color:"black"}}></i>Goals System</h2>
+            <h2 className="font-semibold text-lg"><i className="fas fa-bullseye text-gray-700 dark:text-gray-400 mr-2" style={{color:"var(--qf-text-muted)"}}></i>Goals System</h2>
             <button
               onClick={() => setShowForm(!showForm)}
               className="px-3 py-1 bg-blue-500 text-white rounded text-sm hover:bg-blue-600"
@@ -6431,7 +6260,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
       
       return (
         <div className="bg-white dark:bg-gray-800 p-4 rounded shadow">
-          <h2 className="font-semibold text-lg mb-4"><i className="fas fa-robot text-gray-700 dark:text-gray-400 mr-2" style={{color:"black"}}></i>AI Financial Coach</h2>
+          <h2 className="font-semibold text-lg mb-4"><i className="fas fa-robot text-gray-700 dark:text-gray-400 mr-2" style={{color:"var(--qf-text-muted)"}}></i>AI Financial Coach</h2>
           
           <div className="flex gap-2 mb-4 flex-wrap">
             <button
@@ -6592,7 +6421,7 @@ function MonthlySummary({ selectedMonth, transactions, budgets, filterByMonth })
 
               {/* Top 3 Financial Leaks */}
               <div className="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg">
-                <h3 className="font-semibold mb-2 flex items-center"><i className="fas fa-exclamation-triangle text-red-500 mr-2" style={{color:"black"}}></i> Top 3 Financial Leaks</h3>
+                <h3 className="font-semibold mb-2 flex items-center"><i className="fas fa-exclamation-triangle text-red-500 mr-2" style={{color:"var(--qf-text-muted)"}}></i> Top 3 Financial Leaks</h3>
                 <div className="space-y-2">
                   {insights.hiddenLeaks.slice(0, 3).map(([desc, amount], idx) => (
                     <div key={idx} className="flex justify-between items-center p-2 bg-white dark:bg-gray-800 rounded">
@@ -7054,7 +6883,7 @@ Respond helpfully. If data is insufficient, say so and suggest what to add.`;
       return (
         <>
           {/* Floating action button */}
-          <button className="ask-engine-fab" onClick={() => setOpen(o => !o)} title="Ask MoneyWise AI">
+          <button className="ask-engine-fab" aria-label="Open AI Financial Assistant" title="AI Financial Assistant" onClick={() => setOpen(o => !o)} title="Ask MoneyWise AI">
             {open ? <i className="fas fa-times" style={{color:"white"}}></i> : <i className="fas fa-comments" style={{color:"white"}}></i>}
           </button>
 
@@ -7085,11 +6914,11 @@ Respond helpfully. If data is insufficient, say so and suggest what to add.`;
               {/* API Key setup panel */}
               {showKeyInput && (
                 <div className="ask-key-input-wrap">
-                  <div style={{marginBottom:6, fontWeight:600, color: 'var(--mw-gold)'}}>
+                  <div style={{marginBottom:6, fontWeight:600, color: 'var(--qf-gold)'}}>
                     <i className="fas fa-key" style={{marginRight:6}}></i>Anthropic API Key
                   </div>
                   <div style={{fontSize:'0.72rem', marginBottom:8, opacity:0.75}}>
-                    Get your key from <a href="https://console.anthropic.com" target="_blank" style={{color:'var(--mw-teal)', textDecoration:'underline'}}>console.anthropic.com</a>. Stored locally only.
+                    Get your key from <a href="https://console.anthropic.com" target="_blank" style={{color:'var(--qf-cyan)', textDecoration:'underline'}}>console.anthropic.com</a>. Stored locally only.
                   </div>
                   <div style={{display:'flex', gap:6}}>
                     <input
@@ -7097,11 +6926,11 @@ Respond helpfully. If data is insufficient, say so and suggest what to add.`;
                       placeholder="sk-ant-api03-..."
                       value={tempKey}
                       onChange={e => setTempKey(e.target.value)}
-                      style={{flex:1, padding:'6px 10px', borderRadius:8, border:'1px solid var(--mw-border)', fontSize:'0.8rem', background:'white'}}
+                      style={{flex:1, padding:'6px 10px', borderRadius:8, border:'1px solid rgba(0,210,255,0.15)', fontSize:'0.8rem', background:'rgba(22,31,51,0.6)'}}
                     />
                     <button
                       onClick={() => { if(tempKey.trim()) { setApiKey(tempKey.trim()); localStorage.setItem('moneywise_apikey', tempKey.trim()); setTempKey(''); setShowKeyInput(false); }}}
-                      style={{padding:'6px 12px', borderRadius:8, background:'var(--mw-teal)', color:'white', border:'none', cursor:'pointer', fontSize:'0.8rem', fontWeight:600}}>
+                      style={{padding:'6px 12px', borderRadius:8, background:'var(--qf-cyan)', color:'white', border:'none', cursor:'pointer', fontSize:'0.8rem', fontWeight:600}}>
                       Save
                     </button>
                     {apiKey && <button
@@ -7115,8 +6944,8 @@ Respond helpfully. If data is insufficient, say so and suggest what to add.`;
 
               {/* No key prompt */}
               {!apiKey && !showKeyInput && (
-                <div style={{padding:'14px 16px', background:'var(--mw-gold-light)', borderBottom:'1px solid #e0c08a', fontSize:'0.82rem'}}>
-                  <span style={{color:'var(--mw-gold)', fontWeight:600}}>⚠️ API Key required</span>
+                <div style={{padding:'14px 16px', background:'rgba(255,181,71,0.1)', borderBottom:'1px solid #e0c08a', fontSize:'0.82rem'}}>
+                  <span style={{color:'var(--qf-gold)', fontWeight:600}}>⚠️ API Key required</span>
                   <span style={{marginLeft:8, opacity:0.8}}>Tap the key button above to add your Anthropic key.</span>
                 </div>
               )}
